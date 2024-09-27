@@ -67,7 +67,7 @@ print("\n")
 
 //4. შექმენით მასივი პროდუქტებით სადაც მინიმუმ 15 პროდუქტი გექნებათ.
 var productsArray = [
-    Product.init(name: "პაპაია", category: .fruit, price: 10, discount: 3, mass: 0.500, caloriesPer100gr: 7, productStatus: .available),
+    Product(name: "პაპაია", category: .fruit, price: 10, discount: 3, mass: 0.500, caloriesPer100gr: 7, productStatus: .available),
     Product(name: "ცხვირს ყველი", category: .dairy, price: 27.2, mass: 1.6, caloriesPer100gr: 112, productStatus: .available),
     Product(name: "ბუშმალა", category: .fruit, price: 3.5, discount: 2, mass: 0.8, caloriesPer100gr: 7, productStatus: .sold),
     Product(name: "ბორანო", category: .dairy, price: 13, discount: 5, mass: 0.900, caloriesPer100gr: 200, productStatus: .available),
@@ -117,4 +117,4 @@ func createDict(_ arr:[Product]) -> [FoodGroup: [String]] {
     return result
 }
 
-print(createDict(productsArray))
+
