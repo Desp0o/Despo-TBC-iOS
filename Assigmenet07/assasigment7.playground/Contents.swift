@@ -2,7 +2,7 @@ import Foundation
 
 //1. შექმენით FoodGroup Enum, რომელიც მოიცავს: fruit, vegetable, protein, dairy, grain ჩამონათვალს.
 
-enum FoodGroup {
+enum FoodGroup: CaseIterable {
     case fruit
     case vegetables
     case protein
@@ -46,13 +46,14 @@ struct Product {
     }
     
     func buy() -> String {
-        if productStatus == .available {
-            return "თქვენ შეიძინეთ \(name) ფასად: \(discountedPrice())"
-        } else {
-            return "პროდუქტი არ არის მარაგში"
+        
+        switch productStatus {
+        case .available:
+            "თქვენ შეიძინეთ \(name) ფასად: \(discountedPrice())"
+        case .sold:
+            "პროდუქტი არ არის მარაგში"
         }
     }
-    
 }
 
 
@@ -95,7 +96,7 @@ var sortedByPrice = productsArray.sorted { $0.price < $1.price }
 var updatedProductsArray = productsArray.map { product in
     var updatedProduct = product
     
-    if updatedProduct.category == .grain {
+    if updatedProduct.category == FoodGroup.allCases.randomElement() {
         updatedProduct.productStatus = .available
     }
     return updatedProduct
@@ -109,7 +110,7 @@ var availableProductsPriceSum = updatedProductsArray.reduce(0) { count, product 
 
 //9. შექმენით ფუნქცია რომელიც მიიღებს პროდუქტების მასივს და დააბრუნებს dictionary-ს სადაც key იქნება კატეგორიის სახელწოდება და value იქნება იმ პროდუქტების მასივი რომლებიც შეესაბამება მოცემულ კატეგორიას.
 
-func createDict(_ arr:[Product]) -> [FoodGroup: [String]] {
+func createDict(_ arr: [Product]) -> [FoodGroup: [String]] {
     let result = arr.reduce(into: [FoodGroup: [String]]()) { curretn, product in
         curretn[product.category, default: []].append(product.name)
     }
@@ -117,4 +118,4 @@ func createDict(_ arr:[Product]) -> [FoodGroup: [String]] {
     return result
 }
 
-
+print(createDict(productsArray))
