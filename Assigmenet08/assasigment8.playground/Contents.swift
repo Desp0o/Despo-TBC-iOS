@@ -80,7 +80,7 @@ class Person {
 // MARK: 4. შექმენით კლასი Actor, რომელიც არიას Person კლასის მემკვიდრე კლასი
 //Actor-ს უნდა ჰქონდეს actedFilms  მსახიობის მიერ ნათამაშები ფილმების სია და მეთოდი რომელიც მსახიობის მიერ ნათამაშებ ფილმებს დაამატებს სიაში.
 
-class Actor: Person {
+final class Actor: Person {
     var actedFilms: [Film] = []
     
     func addActedFilm(filmTitle: Film) {
@@ -92,7 +92,7 @@ class Actor: Person {
 // MARK: 5. შექმენი Director კლასი, რომელიც ასევე Person-ის მემკვიდრეა და ექნება directedFilms რეჟისორის მიერ გადაღებული ფილმების სია და totalRevenue რეჟისორის ჯამური შემოსავალი.
 //დაამატე მეთოდი რომელიც რეჟისორის მიერ გადაღებულ ფილმებს დაამატებს და დაითვლის თითოეული ფილმისთვის ჯამურ შემოსავალს.
 
-class Director: Person {
+final class Director: Person {
     var directedFilms: [Film]
     var totalRevenue: Double = 0
     
@@ -174,7 +174,7 @@ print("\n")
 //და allies ამავე ტიპის მოკავშირეების ჩამონათვალი,
 //დაამატეთ ინიციალიზაციის და დეინიციალიზაციის მეთოდები
 
-class SuperHero {
+final class SuperHero {
     var name: String
     var superPower: [String]
     var level: PowerLevel
