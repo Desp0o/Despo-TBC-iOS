@@ -188,17 +188,29 @@ class SuperHero {
     }
     
     deinit {
-        print("\(name) now is usual 👷🏿‍♂️ in this fockin' world")
+        print("\(name) now is usual 👷🏿‍♂️ in this world")
     }
     
-    func addAlly(friend: SuperHero) {
-        allies.append(friend)
+    //ის ვინც გახდება გმირის ძმაკაცი ვისთანაც გამოვძახებთ ამ ფუნქციას, ესეც ავტომატურად უძმაკაცდება
+    func addAlly(friend: SuperHero...) {
+        friend.map { allies.append($0) }
+        
+        friend.map { bro in
+            bro.allies.append(self)
+        }
     }
     
-    func uniquePowers() -> String {
-        return "\(name)-ის სუპერ ძალები არის: \(superPower)"
+    func uniquePowers(heroes: SuperHero...) -> Set<String> {
+        var allPowers = [superPower]
+
+        heroes.map { power in
+            allPowers.append(power.superPower)
+        }
+                
+        var uniques = allPowers.reduce(Set<String>()) { Set($0).symmetricDifference(Set($1)) }
+        
+        return uniques
     }
-    
 }
 
 
@@ -224,18 +236,17 @@ enum PowerLevel {
 
 // MARK: 12.  მეთოდი addAlly დაამატებს მოკავშირეების სიას, შექმენით 2 SuperHero ობიექტი და გახადეთ ისინი მოკავშირეები.
 
-var batman = SuperHero(name: "Batman", superPower: ["intellect", "wealth", "skills"], level: .strong, allies: [])
-var aquaMan = SuperHero(name: "Aqua Man", superPower: ["breathe underwater", "telepathically"], level: .super, allies: [])
+var spiderMan = SuperHero(name: "Spider Man", superPower: ["Spider-Sense", "web shooter", "skills"], level: .strong, allies: [])
+var batman = SuperHero(name: "Batman", superPower: ["intellect", "wealth", "skills", "strength"], level: .strong, allies: [])
+var aquaMan = SuperHero(name: "Aqua Man", superPower: ["breathe underwater", "telepathically", "strength", "skills"], level: .super, allies: [])
 
-batman.addAlly(friend: aquaMan)
-aquaMan.addAlly(friend: batman)
+batman.addAlly(friend: aquaMan, spiderMan)
+
 
 // MARK: 11. uniquePowers ყველა გმირისათვის და დააბრუნებს  უნიკალური ძალების სიას
+batman.uniquePowers(heroes: aquaMan, spiderMan)
 
-print(batman.uniquePowers())
-print(aquaMan.uniquePowers())
-print("\n")
-
+//deinit doc.
 var doctorStrange: SuperHero? = SuperHero(name: "Doctor Strange", superPower: ["telepathy", "float"], level: .super, allies: [aquaMan, batman])
 
 doctorStrange = nil
