@@ -83,8 +83,8 @@ class Person {
 final class Actor: Person {
     var actedFilms: [Film] = []
     
-    func addActedFilm(filmTitle: Film) {
-        actedFilms.append(filmTitle)
+    func addActedFilm(film: Film) {
+        actedFilms.append(film)
     }
 }
 
@@ -102,7 +102,7 @@ final class Director: Person {
     }
     
     func updateCareer(movieList: [Film]) {
-        movieList.map { (movie) in
+        movieList.map { movie in
             directedFilms.append(movie)
             totalRevenue += movie.revenue
         }
@@ -127,19 +127,19 @@ var movieArray = [
 ]
 
 let brando = Actor(name: "Marlon Brando", birthYear: 1924)
-brando.addActedFilm(filmTitle: movieArray[0])
+brando.addActedFilm(film: movieArray[0])
 
 let bale = Actor(name: "Christian Bale", birthYear: 1974)
-bale.addActedFilm(filmTitle: movieArray[1])
+bale.addActedFilm(film: movieArray[1])
 
 let travolta = Actor(name: "John Travolta", birthYear: 1954)
-travolta.addActedFilm(filmTitle: movieArray[2])
+travolta.addActedFilm(film: movieArray[2])
 
 let matthew = Actor(name: "Matthew McConaughey", birthYear: 1969)
-matthew.addActedFilm(filmTitle: movieArray[4])
+matthew.addActedFilm(film: movieArray[4])
 
 let tom = Actor(name: "Tom Hanks", birthYear: 1961)
-tom.addActedFilm(filmTitle: movieArray[3])
+tom.addActedFilm(film: movieArray[3])
 
 var actorsArray = [brando, bale, travolta, matthew, tom]
 
