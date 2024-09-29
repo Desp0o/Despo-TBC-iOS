@@ -1,6 +1,6 @@
 import Foundation
 
-//შექმენით Genre ტიპის enum, რომელიც შეიცავს ფილმის ჟანრებს, მაგალითად: action, drama, comedy, thriller და სხვა. შექმენით ძირითადი კლასი Film, რომელსაც ექნება შემდეგი თვისებები:
+// MARK: 1. შექმენით Genre ტიპის enum, რომელიც შეიცავს ფილმის ჟანრებს, მაგალითად: action, drama, comedy, thriller და სხვა. შექმენით ძირითადი კლასი Film, რომელსაც ექნება შემდეგი თვისებები:
 // title - ფილმის სახელი,
 // releaseYear— გამოშვების წელი,
 // genre — ფილმის ჟანრი,
@@ -35,19 +35,11 @@ class Film {
     }
     
     func removeFilm(films: inout [String], title: String) {
-            films.removeAll { $0 == title }
-        }
+        films.removeAll { $0 == title }
+    }
 }
 
-var movieList = ["lotr", "harry potter", "Interstellar"]
-var geroge = Film(title: "lotr", releaseYear: 1993, genre: .sciFi, revenue: 209123.1)
-
-print("inited movie list is: \(movieList)")
-geroge.removeFilm(films: &movieList, title: "lotr")
-print("film removed movie list is: \(movieList))")
-print("🎥")
-
-//2. შექმენით კლასი Person, რომელსაც აქვს შემდეგი თვისებები:
+// MARK: 2. შექმენით კლასი Person, რომელსაც აქვს შემდეგი თვისებები:
 //name — პიროვნების სახელი
 //birthYear — დაბადების წელი.
 //მეთოდი getAge რომელიც დაიანგარიშებს და დააბრუნებს ამ პიროვნების ასაკს მოცემულ წელს.
@@ -68,58 +60,158 @@ class Person {
     }
 }
 
-//3. Film კლასში შექმენით ფუნქცია removeFilm რომელიც პარამეტრად მიიღებს ფილმების მასივს და დასახელებას, ფუნქციამ უნდა წაშალოს მასივში თუ მოიძებნა მსგავსი დასახელების ფილმი.
+// MARK: 3. Film კლასში შექმენით ფუნქცია removeFilm რომელიც პარამეტრად მიიღებს ფილმების მასივს და დასახელებას, ფუნქციამ უნდა წაშალოს მასივში თუ მოიძებნა მსგავსი დასახელების ფილმი.
 
-// MARK: - პირველი ამოცანში ჩავწერე ეს ფუნქცია
+// - პირველი ამოცანში ჩავწერე ეს ფუნქცია
 
-//4. შექმენით კლასი Actor, რომელიც არიას Person კლასის მემკვიდრე კლასი
+// MARK: 4. შექმენით კლასი Actor, რომელიც არიას Person კლასის მემკვიდრე კლასი
 //Actor-ს უნდა ჰქონდეს actedFilms  მსახიობის მიერ ნათამაშები ფილმების სია და მეთოდი რომელიც მსახიობის მიერ ნათამაშებ ფილმებს დაამატებს სიაში.
 
 class Actor: Person {
-    var actedFilms: [String] = []
+    var actedFilms: [Film] = []
     
-    func addActedFilm(filmTitle: String) {
+    func addActedFilm(filmTitle: Film) {
         actedFilms.append(filmTitle)
     }
 }
 
-var viggo = Actor(name: "Viggo Mortensen", birthYear: 1958)
-
-print("Actor acted movies is: \(viggo.actedFilms)")
-
-viggo.addActedFilm(filmTitle: "Lord of The Rings")
-viggo.addActedFilm(filmTitle: "Captain Fantastic")
-
-print("Actor acted movies is: \(viggo.actedFilms)")
-print("🎥")
 
 
-//5. შექმენი Director კლასი, რომელიც ასევე Person-ის მემკვიდრეა და ექნება directedFilms რეჟისორის მიერ გადაღებული ფილმების სია და totalRevenue რეჟისორის ჯამური შემოსავალი.
+// MARK: 5. შექმენი Director კლასი, რომელიც ასევე Person-ის მემკვიდრეა და ექნება directedFilms რეჟისორის მიერ გადაღებული ფილმების სია და totalRevenue რეჟისორის ჯამური შემოსავალი.
 //დაამატე მეთოდი რომელიც რეჟისორის მიერ გადაღებულ ფილმებს დაამატებს და დაითვლის თითოეული ფილმისთვის ჯამურ შემოსავალს.
 
 class Director: Person {
-    var directedFilms: [String] = []
+    var directedFilms: [Film]
     var totalRevenue: Double = 0
- 
-    func updateCareer(movieList: [String: Double]) {
-        movieList.map { (movie, revenue) in
+    
+    init(directedFilms: [Film], name: String, birthYear: Int) {
+        self.directedFilms = directedFilms
+        super.init(name: name, birthYear: birthYear)
+    }
+    
+    func updateCareer(movieList: [Film]) {
+        movieList.map { (movie) in
             directedFilms.append(movie)
-            totalRevenue += revenue
+            totalRevenue += movie.revenue
         }
     }
 }
 
-var movieListWithRevenue: [String: Double] = [
-    "LOTR" : 1137689127,
-    "Avatar" : 1017107150
+let onTheRoad = Film(title: "On The Road", releaseYear: 2012, genre: .drama, revenue: 9617000)
+let godFather = Film(title: "The Godfather", releaseYear: 1972, genre: .drama, revenue: 250342198)
+let coppola = Director(directedFilms: [onTheRoad], name: "Francis Ford Coppola", birthYear: 1920)
+coppola.updateCareer(movieList: [godFather])
+
+
+// MARK: 6. შექმენით 5 ფილმის და 5 მსახიობის ობიექტები და Dictionary, რომელშიც key იქნება მსახიობის სახელი, ხოლო მნიშვნელობებად მიიღებს იმ ფილმების სიას, რომლებშიც მონაწილეობს ეს მსახიობი.
+
+var movieArray = [
+    Film(title: "The Godfather", releaseYear: 1972, genre: .drama, revenue: 250342198),
+    Film(title: "The Dark Knight", releaseYear: 2008, genre: .thriller, revenue: 1008971236),
+    Film(title: "Pulp Fiction", releaseYear: 1994, genre: .action, revenue: 213928762),
+    Film(title: "Forrest Gump", releaseYear: 1994, genre: .drama, revenue: 678226465),
+    Film(title: "Interstellar", releaseYear: 2014, genre: .sciFi, revenue: 723791071)
 ]
 
-var peter = Director(name: "Peter Jackson", birthYear: 1961)
+let brando = Actor(name: "Marlon Brando", birthYear: 1924)
+brando.addActedFilm(filmTitle: movieArray[0])
 
-print("Peter's directed films are: \(peter.directedFilms), and total revenue is: \(peter.totalRevenue)")
+let bale = Actor(name: "Christian Bale", birthYear: 1974)
+bale.addActedFilm(filmTitle: movieArray[1])
 
-peter.updateCareer(movieList: movieListWithRevenue)
+let travolta = Actor(name: "John Travolta", birthYear: 1954)
+travolta.addActedFilm(filmTitle: movieArray[2])
 
-print("Peter's directed films are: \(peter.directedFilms), and total revenue is: \(peter.totalRevenue)")
+let matthew = Actor(name: "Matthew McConaughey", birthYear: 1969)
+matthew.addActedFilm(filmTitle: movieArray[4])
+
+let tom = Actor(name: "Tom Hanks", birthYear: 1961)
+tom.addActedFilm(filmTitle: movieArray[3])
+
+var actorsArray = [brando, bale, travolta, matthew, tom]
+
+var actorsDict = actorsArray.reduce(into: [:]) { dict, actor in
+    dict[actor.name, default: []].append(actor.actedFilms[0].title)
+}
+print(actorsDict)
+
+
+// MARK: 7. გამოიყენეთ map, იმისთვის რომ დაბეჭდოთ ყველა ფილმის სათაურების სია ამავე ფილმების მასივიდან
+
+var filmTitles = movieArray.map { $0.title }
+
+print("ფილმების სათაურების სია: \(filmTitles)")
 print("🎥")
 
+
+// MARK: 8. reduce ფუნქციის გამოყენებით დაიანგარიშეთ ამ ყველა ფილმების გამოშვების საშუალო წელი.
+var averageReleaseDate = movieArray.reduce(0) { currentYear, releaseDate in
+    return currentYear + releaseDate.releaseYear / movieArray.count
+}
+
+print("ფილმების გამოშვების საშუალო წელი: \(averageReleaseDate)")
+print("🎥")
+
+
+// MARK: 9. შექმენით კლასი SuperHero, რომელიც შეიცავს შემდეგ ველებს:
+//name სუპერ გმირის სახელი
+//superPower  სუპერ ძალა
+//level - PowerLevel enum-ის ტიპის,
+//და allies ამავე ტიპის მოკავშირეების ჩამონათვალი,
+//დაამატეთ ინიციალიზაციის და დეინიციალიზაციის მეთოდები
+class SuperHero {
+    var name: String
+    var superPower: [String]
+    var level: PowerLevel
+    var allies: [SuperHero]
+    
+    init(name: String, superPower: [String], level: PowerLevel, allies: [SuperHero]) {
+        self.name = name
+        self.superPower = superPower
+        self.level = level
+        self.allies = allies
+    }
+    
+    deinit {
+        "This super hero now is random guy from this fockin' world"
+    }
+    
+    func addAlly(friend: SuperHero) {
+        allies.append(friend)
+    }
+    
+    func uniquePowers() -> String {
+        return "\(name)-ის სუპერ ძალები არის: \(superPower)"
+    }
+    
+}
+
+// MARK: 10. შექმენით Enum PowerLevel, რომელიც მოიცავს შემდეგ დონეებს: weak, average, strong, super და დაამატეთ აღწერის მეთოდი რომელიც დააბრუნებს level-ს ტექსტური ფორმით.
+enum PowerLevel {
+    case weak, average, strong, `super`
+    
+    func description() -> String {
+        switch self {
+        case .weak:
+            return "level is weak"
+        case .average:
+            return "level is average"
+        case .strong:
+            return "level is strong"
+        case .super:
+            return "level is super"
+        }
+    }
+}
+
+
+// MARK: 12.  მეთოდი addAlly დაამატებს მოკავშირეების სიას, შექმენით 2 SuperHero ობიექტი და გახადეთ ისინი მოკავშირეები.
+let batman = SuperHero(name: "Batman", superPower: ["intellect", "wealth", "skills"], level: .strong, allies: [])
+let aquaMan = SuperHero(name: "Aqua Man", superPower: ["breathe underwater", "telepathically"], level: .super, allies: [])
+
+batman.addAlly(friend: aquaMan)
+aquaMan.addAlly(friend: batman)
+
+// MARK: 11. uniquePowers ყველა გმირისათვის და დააბრუნებს  უნიკალური ძალების სიას
+print(batman.uniquePowers())
+print(aquaMan.uniquePowers())
