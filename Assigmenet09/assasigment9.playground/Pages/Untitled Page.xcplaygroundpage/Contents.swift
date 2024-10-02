@@ -155,21 +155,22 @@ class LibraryMember {
     }
 }
 
-//WARNING
+
 //MARK: 7. შექმენით მინიმუმ 5 "Book" ობიექტი და 1 "Library" ობიექტი. დაამატეთ წიგნები ბიბლიოთეკაში "add(book:)" მეთოდის გამოყენებით. შემდეგ:
 //   - გამოიყენეთ "listBooks()" მეთოდი ყველა წიგნის ჩამოსათვლელად
 //   - წაშალეთ ერთი წიგნი "removeBookWith(title:)" მეთოდის გამოყენებით
 //   - გამოიყენეთ "filterBooks" მეთოდი და დაბეჭდეთ მხოლოდ ის წიგნები, რომლებიც გამოცემულია 2000 წლის შემდეგ
 
 let book1 = Book(title: "book1", author: "auth1", publicationYear: 1954, readingLevel: .intermediate, genre: .mystery)
-book1.read() // read ფუნქცია მეორე დავალებიდან
+book1.read()
 book1.description()
+print("\n")
 
 let book2 = Book(title: "book2", author: "auth2", publicationYear: 2001, readingLevel: .beginner, genre: .sciFi)
 let book3 = Book(title: "book3", author: "auth3", publicationYear: 2024, readingLevel: .advanced, genre: .sciFi)
 let book4 = Book(title: "book4", author: "auth4", publicationYear: 1999, readingLevel: .beginner, genre: .fiction)
 let book5 = Book(title: "book5", author: "auth5", publicationYear: 2014, readingLevel: .intermediate, genre: .nonFiciton)
-let book6 = Book(title: "book6", author: "auth6", publicationYear: 2010, readingLevel: .advanced, genre: .biography)
+let book6 = Book(title: "book6", author: "auth4", publicationYear: 2010, readingLevel: .advanced, genre: .biography)
 
 let myLib = Library(name: "My Lib")
 myLib.add(book: book1)
@@ -214,5 +215,79 @@ nerdMember.returnBook(book6, to: myLib)
 //looserMember.borrowBook(book1, from: myLib) // ვეღარ აიღებს ეს ოროსანი პირველ წიგნს რადგან უკვე კითხულობენ
 looserMember.borrowBook(book5, from: myLib)
 looserMember.returnBook(book5, to: myLib)
-
 //print(looserMember.borrowedBooks)
+
+
+//MARK: 9. გააფართოვეთ "Array" ტიპი, სადაც ელემენტი აკმაყოფილებს "Readable" პროტოკოლს (ანუ ამ ექსთენშენი მოცემული მეთოდები ხელმსიაწვდომი იქნება მხოლოდ [Readable] მასივისთვის), შემდეგი მეთოდებით:
+//   - "findByAuthor(_ author: String) -> [Readable]" - აბრუნებს ავტორის მიხედვით ნაპოვნ წიგნებს
+//   - "oldestBook() -> Readable?" - აბრუნებს ყველაზე ძველ წიგნს
+
+
+extension Array where Element: Readable {
+    func findByAuthor(_ author: String) -> [Readable] {
+        self.filter { $0.author == author }
+    }
+    
+    func oldestBook() -> Readable? {
+        
+        var sortByYear = self.sorted { $0.publicationYear < $1.publicationYear }
+        return sortByYear[0]
+    }
+}
+
+print("\nპრინტი დავალება #9 - დან")
+//print(booksArray.findByAuthor("auth2"))
+//print(booksArray.oldestBook() ?? "no book")
+
+
+//MARK: 10. შექმენით "EBook" სტრუქტურა, რომელიც დააკმაყოფილებს "Readable" პროტოკოლს და დაამატეთ "fileSize: Double" ფროფერთი.
+//  გამოიყენეთ "extension", რომ დაამატოთ "printDetails()" მეთოდი, რომელიც დაბეჭდავს ელექტრონული წიგნის დეტალებს.
+//  შექმენით მინიმუმ 2 "EBook" ობიექტი და გამოიძახეთ "printDetails()" მეთოდი თითოეულისთვის.
+
+struct EBook: Readable {
+    var fileSize: Double
+    
+    var title: String
+    var author: String
+    var publicationYear: Int
+    var readingLevel: ReadingLevel
+    
+    func read() {
+        print("სჯობს ფურცლის სუნი შეიგრძნო კითხვისას, ვიდრემ ეშმაკის შემოთავაზებულ პრიბორში იკითხო")
+    }
+    
+}
+
+extension EBook {
+    func printDetails() {
+        print("ინფორმაცია EBook-ის შესახებ: \nEBook name: \(title) \nEBook author: \(author) \nEBook publication year: \(publicationYear) \nEBook reading level: \(readingLevel) \nEBook file size: \(fileSize) \n")
+    }
+}
+
+let Ebook1 = EBook(fileSize: 10.3, title: "ელ წიგნი1", author: "c2po", publicationYear: 2024, readingLevel: .beginner)
+Ebook1.printDetails()
+
+let Ebook2 = EBook(fileSize: 10.3, title: "ელ წიგნი1", author: "r2d2", publicationYear: 2034, readingLevel: .intermediate)
+Ebook2.printDetails()
+
+
+//MARK: 11. შექმენით ჯენერიკ ფუნქცია "findMostFrequent<T: Hashable>(_ array: [T]) -> T?", რომელიც იპოვის და დააბრუნებს მასივში ყველაზე ხშირად გამეორებულ ელემენტს. თუ რამდენიმე ელემენტი თანაბრად ხშირად მეორდება, დააბრუნეთ პირველი მათგანი.
+
+
+func findMostFrequent<T: Hashable>(_ array: [T]) -> T? {
+    var myDict: [T: Int] = [:]
+    
+    array.forEach { myDict[$0, default: 0] += 1 }
+    
+    return myDict.max { $0.value < $1.value }?.key
+}
+
+
+//MARK: 12. შექმენით მასივი, რომელიც შეიცავს ყველა წიგნის ავტორს მე-7 დავალებაში შექმნილი ბიბლიოთეკიდან.
+//გამოიძახეთ "findMostFrequent" ფუნქცია ამ მასივზე, რათა იპოვოთ ყველაზე პოპულარული ავტორი.
+//დაბეჭდეთ შედეგი: "ბიბლიოთეკაში ყველაზე პოპულარული ავტორი არის: [ავტორის სახელი]".
+
+var authorsArray = booksArray.map { $0.author }
+
+let mostPopularAuthor = findMostFrequent(authorsArray)
+print("ბიბლიოთეკაში ყველაზე პოპულარული ავტორი არის: \(mostPopularAuthor ?? "არავინ, არაც ერთმა არ იცის წერა") ")
