@@ -246,7 +246,6 @@ print("\nპრინტი დავალება #9 - დან")
 
 struct EBook: Readable {
     var fileSize: Double
-    
     var title: String
     var author: String
     var publicationYear: Int
@@ -255,7 +254,6 @@ struct EBook: Readable {
     func read() {
         print("სჯობს ფურცლის სუნი შეიგრძნო კითხვისას, ვიდრემ ეშმაკის შემოთავაზებულ პრიბორში იკითხო")
     }
-    
 }
 
 extension EBook {
