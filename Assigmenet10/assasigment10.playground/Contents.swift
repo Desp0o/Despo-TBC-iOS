@@ -190,48 +190,44 @@ class CreatureShop {
     }
 }
 
-var myTrainer = Trainer(name: "despo")
+//7. შექმენით გლობალური ფუნქცია updateLeaderboard(players: [PlayerProfile]) -> [PlayerProfile], რომელიც დაალაგებს მოთამაშეებს მათი არსებების ჯამური ძალის მიხედვით.  
 
-var newNft1 = CreatureShop().purchaseRandomCreature()
-var newNft2 = CreatureShop().purchaseRandomCreature()
+class PlayerProfile {
+    var name: String
+    private var ownedCreatures: [DigitalCreature]
+    
+    init(name: String, ownedCreatures: [DigitalCreature] = []) {
+        self.name = name
+        self.ownedCreatures = ownedCreatures
+    }
+    
+    func add(creature: DigitalCreature...) {
+        creature.forEach { ownedCreatures.append($0) }
+        
+    }
+    
+    func playersAllCreatureList () -> [String] {
+        ownedCreatures.map() { $0.name }
+    }
+}
 
-newNft2.trainer = myTrainer
-newNft1.trainer = myTrainer
-
-
-var myManager = CreatureManager()
-myManager.adoptCreature(newNft2)
-myManager.adoptCreature(newNft1)
-
-
-//myManager.trainAllCreatures()
-//
-
-print("level was : \(newNft2.level)")
-print("exp was : \(newNft2.experience)")
-print("attack was : \(newNft2.attack)")
-print("defence was : \(newNft2.defense)")
-print("😜")
-print("level was : \(newNft1.level)")
-print("exp was : \(newNft1.experience)")
-print("attack was : \(newNft1.attack)")
-print("defence was : \(newNft1.defense)")
-
-
-myManager.trainAllCreatures()
-
-print("🕷️")
+var beast = CreatureShop().purchaseRandomCreature()
+var beast1 = CreatureShop().purchaseRandomCreature()
+var beast2 = CreatureShop().purchaseRandomCreature()
+var beast3 = CreatureShop().purchaseRandomCreature()
 
 
-print("level არის ეხლა : \(newNft2.level)")
-print("exp არის ეხლა : \(newNft2.experience)")
-print("attack არის ეხლა : \(newNft2.attack)")
-print("defence არის ეხლა : \(newNft2.defense)")
-print("😜")
-print("level არის ეხლა : \(newNft1.level)")
-print("exp არის ეხლა : \(newNft1.experience)")
-print("attack არის ეხლა : \(newNft1.attack)")
-print("defence არის ეხლა : \(newNft1.defense)")
+var despo = PlayerProfile(name: "despo")
+despo.add(creature: beast, beast1)
+print(despo.playersAllCreatureList())
+
+var player1 = PlayerProfile(name: "npc")
+player1.add(creature: beast2, beast3)
+
+var playersArray = [despo, player1]
+
+
+
 
 
 
