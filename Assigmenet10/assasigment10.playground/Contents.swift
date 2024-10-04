@@ -65,8 +65,26 @@ class Trainer {
     }
     
     public func add(creature: DigitalCreature){
-        creatures.append(creature)
-        creature.trainer = self
+        if creature.trainer == nil {
+            creatures.append(creature)
+            creature.trainer = self
+        } else if creatures.contains(where: { $0.name == creature.name }) {
+            print("შენ უკვე წვრთნი \(creature.name) - ს")
+        } else {
+            print("\(creature.name) - ს უკვე წვრთნიან")
+        }
+    }
+}
+
+// დავამატე არსების წასაშლელად 8 დავალებიდან გამომდინარე
+extension Trainer {
+    func removeCreature(creature: DigitalCreature) {
+        if let index = creatures.firstIndex(where: { $0.name == creature.name }) {
+            creatures.remove(at: index)
+            creature.trainer = nil
+        } else {
+            print("\(creature.name) არ არის შენ სამწვრთნელო გუნდში")
+        }
     }
 }
 
@@ -108,7 +126,6 @@ class DigitalCreature: CreatureStats {
     deinit {
         print("R.I.P \(name)")
     }
-    
 }
 
 //MARK: 5. შექმენით CreatureManager კლასი შემდეგი ფუნქციონალით:
@@ -131,28 +148,28 @@ class CreatureManager {
     
     public func trainCreature(named name: String) {
         if let index = creatures.firstIndex(where: { $0.name == name }) {
-                var creature = creatures[index]
-
-            if let trainer = creature.trainer {
-                    // ვარჯიშის დროს ემატება შეტევა და დაცვა პროცენტულად
-                    let trainedAttack = (((creature.attack * 5 / 100) + creature.attack) * 10 ).rounded() / 10
-                    let trainedDefence = (((creature.defense * 7 / 100) + creature.defense) * 10 ).rounded() / 10
-
-                    //გამოცდილების მატებისას თუ exp >= 100 გადადის ლეველზე და ზედმეტი exp არ იწვება
-                    creature.experience += 20
-                    
-                    if creature.experience >= 100 {
-                        creature.experience = creature.experience - 100
-                        creature.level += 1
-                    }
-                    
-                    creature.updateStats(attack: trainedAttack, defense: trainedDefence)
-                } else {
-                    print("თქვენ უნდა აიყვანოთ ტრენერი სავარჯიშოდ")
+            var creature = creatures[index]
+            
+            if creature.trainer != nil {
+                // ვარჯიშის დროს ემატება შეტევა და დაცვა პროცენტულად
+                let trainedAttack = (((creature.attack * 5 / 100) + creature.attack) * 10 ).rounded() / 10
+                let trainedDefence = (((creature.defense * 7 / 100) + creature.defense) * 10 ).rounded() / 10
+                
+                //გამოცდილების მატებისას თუ exp >= 100 გადადის ლეველზე და ზედმეტი exp არ იწვება
+                creature.experience += 20
+                
+                if creature.experience >= 100 {
+                    creature.experience = creature.experience - 100
+                    creature.level += 1
                 }
+                
+                creature.updateStats(attack: trainedAttack, defense: trainedDefence)
             } else {
-                print("მსგავსი ქმნილება სახელით - \(name) არ იძებნება გუნდში")
+                print("\(name) - ს ჭირდება ტრენერი სავარჯიშოდ")
             }
+        } else {
+            print("მსგავსი ქმნილება სახელით - \(name) არ იძებნება გუნდში")
+        }
     }
     
     public func listCreatures() -> [DigitalCreature] {
@@ -167,7 +184,7 @@ extension CreatureManager {
     }
 }
 
-//6. შექმენით CreatureShop კლასი მეთოდით purchaseRandomCreature() -> DigitalCreature. ეს მეთოდი დააბრუნებს რანდომიზირებულად დაგენერირებულ არსებას. 
+//MARK: 6. შექმენით CreatureShop კლასი მეთოდით purchaseRandomCreature() -> DigitalCreature. ეს მეთოდი დააბრუნებს რანდომიზირებულად დაგენერირებულ არსებას. 
 class CreatureShop {
     private var creatureNames = [ "Dragon", "Phoenix", "Griffin", "Kraken", "Basilisk", "Minotaur", "Unicorn", "Chimera", "Hydra", "Sphinx", "Pegasus", "Cerberus", "Mermaid", "Nymph", "Faun", "Gorgon", "Werewolf", "Vampire", "Cyclops", "Yeti", "Kelpie", "Lamia", "Leviathan", "Wyvern", "Banshee", "Ogre", "Troll", "Wendigo", "Fenrir", "Chupacabra", "Harpy", "Selkie", "Ghoul", "Manticore", "Imp", "Jotunn", "Ifrit", "Rakshasa", "Sasquatch", "Kitsune", "Djinn", "Peryton", "Qilin", "Amphiptere", "Ziz", "Centaurs", "Garuda", "Simurgh", "Naga", "Mothman" ]
     
@@ -190,11 +207,11 @@ class CreatureShop {
     }
 }
 
-//7. შექმენით გლობალური ფუნქცია updateLeaderboard(players: [PlayerProfile]) -> [PlayerProfile], რომელიც დაალაგებს მოთამაშეებს მათი არსებების ჯამური ძალის მიხედვით.  
+//MARK: 7. შექმენით გლობალური ფუნქცია updateLeaderboard(players: [PlayerProfile]) -> [PlayerProfile], რომელიც დაალაგებს მოთამაშეებს მათი არსებების ჯამური ძალის მიხედვით.  
 
 class PlayerProfile {
     var name: String
-    private var ownedCreatures: [DigitalCreature]
+    var ownedCreatures: [DigitalCreature]
     
     init(name: String, ownedCreatures: [DigitalCreature] = []) {
         self.name = name
@@ -209,7 +226,10 @@ class PlayerProfile {
     func playersTotalPower() -> Double {
         //აქ ლეველს ვამრალებ 100-ზე, ლეველზე გადასვლას რო ქონდეს მუღამი :D
         let totalPower = ownedCreatures.reduce(0) { result, creature in
-            let power = creature.attack + creature.experience + creature.defense + Double(creature.level * 100) + result
+            
+            //თუ არსებას არ ყავს ტრენერი არ მიეთვალოს საერთო ძალაში
+            let power = creature.trainer != nil ? creature.attack + creature.experience + creature.defense + Double(creature.level * 100) + result : 0
+            
             let finalPower = result + power
             return finalPower
         }
@@ -232,28 +252,136 @@ func updateLeaderboard(players: [PlayerProfile]) -> [PlayerProfile] {
 }
 
 
+//MARK: 8. გამოვიყენოთ წინა ტასკებში შექმნილი ყველა ფუნქციონალი:
+//    * შექმენით რამდენიმე Trainer ობიექტი
+//    * შექმენით რამდენიმე CreatureManager ობიექტი
+//    * შექმენით ერთი ან ორი CreatureShop
+//    * თითოეული მენეჯერისთვის:
+//        * შეიძინეთ რამდენიმე შემთხვევითი არსება CreatureShop-იდან
+//        * მიაბარეთ რამდენიმე არსება რომელიმე ტრენერს.
+//        * სცადეთ არსებების წვრთნა CreatureManager-ის trainCreature(named:) მეთოდით
+//    * გამოიყენეთ CreatureManager-ის trainAllCreatures() მეთოდი ყველა მოთამაშის არსებების საწვრთნელად (თუ ყავს მწვრთნელი, რა თქმა უნდა)
+//    * განაახლეთ ლიდერბორდი updateLeaderboard() ფუნქციის გამოყენებით
+//    * დაბეჭდეთ თითოეული მოთამაშის არსებების სია და მათი სტატისტიკა
+//    * წაშალეთ ერთი არსება რომელიმე Trainer-იდან და აჩვენეთ, რომ weak reference მუშაობს სწორად (დაბეჭდეთ არსების trainer property-ს მნიშვნელობა წაშლამდე და წაშლის შემდეგ)
+//    * დააკვირდით deinit მეთოდის გამოძახებას არსების წაშლისას 
+
+let trainer1 = Trainer(name: "Trainer 1")
+let trainer2 = Trainer(name: "Trainer 2")
+
+let manager1 = CreatureManager()
+let manager2 = CreatureManager()
+
+let shop = CreatureShop()
+
+let creature1 = shop.purchaseRandomCreature()
+let creature2 = shop.purchaseRandomCreature()
+let creature3 = shop.purchaseRandomCreature()
+let creature4 = shop.purchaseRandomCreature()
+var creature5 = shop.purchaseRandomCreature()
+var creature6: DigitalCreature? = shop.purchaseRandomCreature()
+
+
+//მივაბაროთ ტრენერებს
+trainer1.add(creature: creature1)
+trainer1.add(creature: creature2)
+
+trainer2.add(creature: creature3)
+trainer2.add(creature: creature4)
+trainer2.add(creature: creature6!)
+
+
+//მივაბაროთ მენჯრებს
+manager1.adoptCreature(creature1)
+manager1.adoptCreature(creature2)
+manager1.adoptCreature(creature3)
+
+manager2.adoptCreature(creature4)
+manager2.adoptCreature(creature5)
+
+
+//შემოვიყვანოთ მოთამაშეები
+let player1 = PlayerProfile(name: "Player 1")
+player1.add(creature: creature1, creature2)
+
+let player2 = PlayerProfile(name: "Player 2")
+player2.add(creature: creature3, creature4, creature5)
+
+
+//ვნახოთ საწყისი სტატისტიკა წვრთმანდე
+let startStat = updateLeaderboard(players: [player1, player2])
+
+print("საწყისი სტატისტიკა 📝")
+
+for npc in startStat {
+    print("\(npc.name) ქულით: \(npc.playersTotalPower())")
+}
+
+print("\n")
+
+
+//გავრწვთნათ
+manager1.trainCreature(named: creature1.name)
+manager1.trainCreature(named: creature2.name)
+manager1.trainCreature(named: creature4.name) // არ ყავს გუნდში
+manager1.trainAllCreatures()
+
+manager2.trainAllCreatures()
+
+
+//სტატისტიკა წვრთნის შედეგად
+let currentStat = updateLeaderboard(players: [player1, player2])
+
+print("\n")
+print("საბოლოო სტატისტიკა 📝")
+
+for npc in currentStat {
+    print("\(npc.name) ქულით: \(npc.playersTotalPower())")
+}
+
+
+//დაბეჭდეთ თითოეული მოთამაშის არსებების სია და მათი სტატისტიკა
+var playerArray = [player1, player2]
+
+print("\n")
+print("მოთამაშის არსებების სია და სტატისტიკა 🐙")
+
+playerArray.map {
+    $0.ownedCreatures.map {
+        print("სახელი: \($0.name), შეტევა: \($0.attack), დაცვა: \($0.defense), სიცოცხლე: \($0.health), exp: \($0.experience), ლეველი: \($0.level), ტიპი: \($0.type), ტრენერი: \($0.trainer?.name ?? "არ ყავს ტრენერი")")
+    }
+}
+
+
+//წაშალეთ ერთი არსება რომელიმე Trainer-იდან და აჩვენეთ, რომ weak reference მუშაობს სწორად (დაბეჭდეთ არსების trainer property-ს მნიშვნელობა წაშლამდე და წაშლის შემდეგ)
+print("\n🦑 არსების წაშლა ტრენერისგან")
+
+print("წაშლამდე: \(creature6?.trainer?.name ?? "არ ყოლია")")
+trainer2.removeCreature(creature: creature6!)
+print("წაშლის შემდეგ: \(creature6?.trainer?.name ?? "აღარ ყავს ტრენერი")")
+
+
+//დააკვირდით deinit მეთოდის გამოძახებას არსების წაშლისას 
+print("\n🦞 არსების დეინიციალიზაცია")
+creature6 = nil
 
 
 
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-print("y")
-print("y")
-print("y")
-
+//trainer1 = nil
+//var beast = CreatureShop().purchaseRandomCreature()
+//var beast1 = CreatureShop().purchaseRandomCreature()
+//var beast2 = CreatureShop().purchaseRandomCreature()
+//var beast3 = CreatureShop().purchaseRandomCreature()
+//
+//
+//var despo = PlayerProfile(name: "despo")
+//despo.add(creature: beast, beast1)
+//print(despo.playersAllCreatureList())
+//
+//var player1 = PlayerProfile(name: "npc")
+//player1.add(creature: beast2, beast3)
+//
+//var playersArray = [despo, player1]
