@@ -150,10 +150,13 @@ extension CreatureManager {
 
 //6. შექმენით CreatureShop კლასი მეთოდით purchaseRandomCreature() -> DigitalCreature. ეს მეთოდი დააბრუნებს რანდომიზირებულად დაგენერირებულ არსებას. 
 class CreatureShop {
-#warning("დაწყებული")
+    private var creatureNames = [ "Dragon", "Phoenix", "Griffin", "Kraken", "Basilisk", "Minotaur", "Unicorn", "Chimera", "Hydra", "Sphinx", "Pegasus", "Cerberus", "Mermaid", "Nymph", "Faun", "Gorgon", "Werewolf", "Vampire", "Cyclops", "Yeti", "Kelpie", "Lamia", "Leviathan", "Wyvern", "Banshee", "Ogre", "Troll", "Wendigo", "Fenrir", "Chupacabra", "Harpy", "Selkie", "Ghoul", "Manticore", "Imp", "Jotunn", "Ifrit", "Rakshasa", "Sasquatch", "Kitsune", "Djinn", "Peryton", "Qilin", "Amphiptere", "Ziz", "Centaurs", "Garuda", "Simurgh", "Naga", "Mothman" ]
+    
     func purchaseRandomCreature() -> DigitalCreature {
-        return DigitalCreature(
-            name: "1",
+        let choosenNameIndex = Int.random(in: 0...creatureNames.count)
+        
+        var generatedCreature = DigitalCreature(
+            name: creatureNames[choosenNameIndex],
             type: CreatureType.allCases.randomElement()!,
             level: 0,
             experience: 0,
@@ -161,18 +164,24 @@ class CreatureShop {
             attack: Double(Int.random(in: 0...100)),
             defense: Double(Int.random(in: 0...100))
         )
+        
+        creatureNames.remove(at: choosenNameIndex)
+        
+        return generatedCreature
     }
 }
 
+var newNft = CreatureShop().purchaseRandomCreature()
+var newNft2 = CreatureShop().purchaseRandomCreature()
 
-var beast = DigitalCreature(name: "beast", type: .air(), level: 1, experience: 1, health: 1, attack: 1, defense: 1)
-var trainer = Trainer(name: "trainer")
-trainer.add(creature: beast)
-var manager = CreatureManager()
-manager.adoptCreature(beast)
-manager.trainAllCreatures()
-print(manager.trainCreature(named: "beast"))
-print(manager.listCreatures())
+print(newNft2.attack)
+print(newNft.name)
+
+
+
+
+
+
 
 
 print("y")
