@@ -21,7 +21,7 @@ enum CreatureType: CaseIterable {
     
     var description: String {
         switch self {
-        case .fire(let rarity), .water(let rarity), .earth(let rarity), .air(let rarity), .electric(let rarity):
+        case .fire, .water, .earth, .air, .electric:
             return "Creature \(self)"
         }
     }
@@ -43,7 +43,11 @@ protocol CreatureStats {
 }
 
 extension CreatureStats {
-    func updateStats(health: Double? = 100, attack: Double, defense: Double) {}
+    mutating func updateStats(health: Double = 100, attack: Double, defense: Double) {
+        self.health = health
+        self.attack = attack
+        self.defense = defense
+    }
 }
 
 //MARK: 3. შექმენით კლასი Trainer შემდეგი ფროფერთებით:
@@ -124,16 +128,31 @@ class CreatureManager {
     public func adoptCreature(_ creature: DigitalCreature) {
         creatures.append(creature)
     }
-#warning("ხვალ მოვბრუნდე")
+    
     public func trainCreature(named name: String) {
-        if creatures.isEmpty {
-            print("there is no creatures")
-        } else if creatures.contains (where: { name == $0.name && $0.trainer != nil })
-        {
-            print("okey i will train dragon")
-        } else {
-            print("firs take trainer")
-        }
+        if let index = creatures.firstIndex(where: { $0.name == name }) {
+                var creature = creatures[index]
+
+            if let trainer = creature.trainer {
+                    // ვარჯიშის დროს ემატება შეტევა და დაცვა პროცენტულად
+                    var trainedAttack = (((creature.attack * 5 / 100) + creature.attack) * 10 ).rounded() / 10
+                    var trainedDefence = (((creature.defense * 7 / 100) + creature.defense) * 10 ).rounded() / 10
+
+                    //გამოცდილების მატებისას თუ exp >= 100 გადადის ლეველზე და ზედმეტი exp არ იწვება
+                    creature.experience += 20
+                    
+                    if creature.experience >= 100 {
+                        creature.experience = creature.experience - 100
+                        creature.level += 1
+                    }
+                    
+                    creature.updateStats(attack: trainedAttack, defense: trainedDefence)
+                } else {
+                    print("თქვენ უნდა აიყვანოთ ტრენერი სავარჯიშოდ")
+                }
+            } else {
+                print("მსგავსი ქმნილება სახელით - \(name) არ იძებნება გუნდში")
+            }
     }
     
     public func listCreatures() -> [DigitalCreature] {
@@ -153,16 +172,16 @@ class CreatureShop {
     private var creatureNames = [ "Dragon", "Phoenix", "Griffin", "Kraken", "Basilisk", "Minotaur", "Unicorn", "Chimera", "Hydra", "Sphinx", "Pegasus", "Cerberus", "Mermaid", "Nymph", "Faun", "Gorgon", "Werewolf", "Vampire", "Cyclops", "Yeti", "Kelpie", "Lamia", "Leviathan", "Wyvern", "Banshee", "Ogre", "Troll", "Wendigo", "Fenrir", "Chupacabra", "Harpy", "Selkie", "Ghoul", "Manticore", "Imp", "Jotunn", "Ifrit", "Rakshasa", "Sasquatch", "Kitsune", "Djinn", "Peryton", "Qilin", "Amphiptere", "Ziz", "Centaurs", "Garuda", "Simurgh", "Naga", "Mothman" ]
     
     func purchaseRandomCreature() -> DigitalCreature {
-        let choosenNameIndex = Int.random(in: 0...creatureNames.count)
+        let choosenNameIndex = Int.random(in: 0...creatureNames.count - 1)
         
         var generatedCreature = DigitalCreature(
             name: creatureNames[choosenNameIndex],
             type: CreatureType.allCases.randomElement()!,
             level: 0,
-            experience: 0,
+            experience: Double(Int.random(in: 0...100)),
             health: 100,
-            attack: Double(Int.random(in: 0...100)),
-            defense: Double(Int.random(in: 0...100))
+            attack: Double(Int.random(in: 50...100)),
+            defense: Double(Int.random(in: 50...100))
         )
         
         creatureNames.remove(at: choosenNameIndex)
@@ -171,11 +190,60 @@ class CreatureShop {
     }
 }
 
-var newNft = CreatureShop().purchaseRandomCreature()
+var myTrainer = Trainer(name: "despo")
+
+var newNft1 = CreatureShop().purchaseRandomCreature()
 var newNft2 = CreatureShop().purchaseRandomCreature()
 
-print(newNft2.attack)
-print(newNft.name)
+newNft2.trainer = myTrainer
+newNft1.trainer = myTrainer
+
+
+var myManager = CreatureManager()
+myManager.adoptCreature(newNft2)
+myManager.adoptCreature(newNft1)
+
+
+//myManager.trainAllCreatures()
+//
+
+print("level was : \(newNft2.level)")
+print("exp was : \(newNft2.experience)")
+print("attack was : \(newNft2.attack)")
+print("defence was : \(newNft2.defense)")
+print("😜")
+print("level was : \(newNft1.level)")
+print("exp was : \(newNft1.experience)")
+print("attack was : \(newNft1.attack)")
+print("defence was : \(newNft1.defense)")
+
+
+myManager.trainAllCreatures()
+
+print("🕷️")
+
+
+print("level არის ეხლა : \(newNft2.level)")
+print("exp არის ეხლა : \(newNft2.experience)")
+print("attack არის ეხლა : \(newNft2.attack)")
+print("defence არის ეხლა : \(newNft2.defense)")
+print("😜")
+print("level არის ეხლა : \(newNft1.level)")
+print("exp არის ეხლა : \(newNft1.experience)")
+print("attack არის ეხლა : \(newNft1.attack)")
+print("defence არის ეხლა : \(newNft1.defense)")
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
