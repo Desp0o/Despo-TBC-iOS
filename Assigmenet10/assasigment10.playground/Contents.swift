@@ -135,8 +135,8 @@ class CreatureManager {
 
             if let trainer = creature.trainer {
                     // ვარჯიშის დროს ემატება შეტევა და დაცვა პროცენტულად
-                    var trainedAttack = (((creature.attack * 5 / 100) + creature.attack) * 10 ).rounded() / 10
-                    var trainedDefence = (((creature.defense * 7 / 100) + creature.defense) * 10 ).rounded() / 10
+                    let trainedAttack = (((creature.attack * 5 / 100) + creature.attack) * 10 ).rounded() / 10
+                    let trainedDefence = (((creature.defense * 7 / 100) + creature.defense) * 10 ).rounded() / 10
 
                     //გამოცდილების მატებისას თუ exp >= 100 გადადის ლეველზე და ზედმეტი exp არ იწვება
                     creature.experience += 20
@@ -174,7 +174,7 @@ class CreatureShop {
     func purchaseRandomCreature() -> DigitalCreature {
         let choosenNameIndex = Int.random(in: 0...creatureNames.count - 1)
         
-        var generatedCreature = DigitalCreature(
+        let generatedCreature = DigitalCreature(
             name: creatureNames[choosenNameIndex],
             type: CreatureType.allCases.randomElement()!,
             level: 0,
@@ -206,25 +206,30 @@ class PlayerProfile {
         
     }
     
+    func playersTotalPower() -> Double {
+        //აქ ლეველს ვამრალებ 100-ზე, ლეველზე გადასვლას რო ქონდეს მუღამი :D
+        let totalPower = ownedCreatures.reduce(0) { result, creature in
+            let power = creature.attack + creature.experience + creature.defense + Double(creature.level * 100) + result
+            let finalPower = result + power
+            return finalPower
+        }
+        
+        return totalPower
+    }
+    
     func playersAllCreatureList () -> [String] {
         ownedCreatures.map() { $0.name }
     }
 }
 
-var beast = CreatureShop().purchaseRandomCreature()
-var beast1 = CreatureShop().purchaseRandomCreature()
-var beast2 = CreatureShop().purchaseRandomCreature()
-var beast3 = CreatureShop().purchaseRandomCreature()
 
-
-var despo = PlayerProfile(name: "despo")
-despo.add(creature: beast, beast1)
-print(despo.playersAllCreatureList())
-
-var player1 = PlayerProfile(name: "npc")
-player1.add(creature: beast2, beast3)
-
-var playersArray = [despo, player1]
+func updateLeaderboard(players: [PlayerProfile]) -> [PlayerProfile] {
+    var stats: [PlayerProfile] = players
+    
+    stats.sort { $0.playersTotalPower() > $1.playersTotalPower() }
+    
+    return stats
+}
 
 
 
