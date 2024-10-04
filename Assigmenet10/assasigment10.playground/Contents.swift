@@ -29,10 +29,10 @@ enum CreatureType: CaseIterable {
 
 
 //MARK: 2. შექმენით პროტოკოლი CreatureStats შემდეგი მოთხოვნებით:
-//    * var health: Double
-//    * var attack: Double
-//    * var defense: Double
-//    * func updateStats(health: Double, attack: Double, defense: Double) მეთოდი, რომელიც განაახლებს ამ მონაცემებს (შეგიძლიათ ფუნქციის პარამეტრები სურვილისამებრ შეცვალოთ, მაგ: დეფოლტ მნიშვნელობები გაუწეროთ 😌) 
+/* * var health: Double
+   * var attack: Double
+   * var defense: Double
+   * func updateStats(health: Double, attack: Double, defense: Double) მეთოდი, რომელიც განაახლებს ამ მონაცემებს (შეგიძლიათ ფუნქციის პარამეტრები სურვილისამებრ შეცვალოთ, მაგ: დეფოლტ მნიშვნელობები გაუწეროთ 😌) */
 
 protocol CreatureStats {
     var health: Double { get set }
@@ -184,7 +184,26 @@ extension CreatureManager {
     }
 }
 
+// ჯამური ძალის გამოსათვლელად
+extension CreatureManager {
+    func playersTotalPower() -> Double {
+        //აქ ლეველს ვამრავლებ 100-ზე, ლეველზე გადასვლას რო ქონდეს მუღამი :D
+        let totalPower = creatures.reduce(0) { result, creature in
+            
+            //თუ არსებას არ ყავს ტრენერი არ მიეთვალოს საერთო ძალაში
+            let power = creature.trainer != nil ? creature.attack + creature.experience + creature.defense + Double(creature.level * 100) + result : 0
+            
+            let finalPower = result + power
+            return finalPower
+        }
+        
+        return totalPower
+    }
+}
+
+
 //MARK: 6. შექმენით CreatureShop კლასი მეთოდით purchaseRandomCreature() -> DigitalCreature. ეს მეთოდი დააბრუნებს რანდომიზირებულად დაგენერირებულ არსებას. 
+
 class CreatureShop {
     private var creatureNames = [ "Dragon", "Phoenix", "Griffin", "Kraken", "Basilisk", "Minotaur", "Unicorn", "Chimera", "Hydra", "Sphinx", "Pegasus", "Cerberus", "Mermaid", "Nymph", "Faun", "Gorgon", "Werewolf", "Vampire", "Cyclops", "Yeti", "Kelpie", "Lamia", "Leviathan", "Wyvern", "Banshee", "Ogre", "Troll", "Wendigo", "Fenrir", "Chupacabra", "Harpy", "Selkie", "Ghoul", "Manticore", "Imp", "Jotunn", "Ifrit", "Rakshasa", "Sasquatch", "Kitsune", "Djinn", "Peryton", "Qilin", "Amphiptere", "Ziz", "Centaurs", "Garuda", "Simurgh", "Naga", "Mothman" ]
     
@@ -207,44 +226,11 @@ class CreatureShop {
     }
 }
 
+
 //MARK: 7. შექმენით გლობალური ფუნქცია updateLeaderboard(players: [PlayerProfile]) -> [PlayerProfile], რომელიც დაალაგებს მოთამაშეებს მათი არსებების ჯამური ძალის მიხედვით.  
 
-class PlayerProfile {
-    var name: String
-    var ownedCreatures: [DigitalCreature]
-    
-    init(name: String, ownedCreatures: [DigitalCreature] = []) {
-        self.name = name
-        self.ownedCreatures = ownedCreatures
-    }
-    
-    func add(creature: DigitalCreature...) {
-        creature.forEach { ownedCreatures.append($0) }
-        
-    }
-    
-    func playersTotalPower() -> Double {
-        //აქ ლეველს ვამრალებ 100-ზე, ლეველზე გადასვლას რო ქონდეს მუღამი :D
-        let totalPower = ownedCreatures.reduce(0) { result, creature in
-            
-            //თუ არსებას არ ყავს ტრენერი არ მიეთვალოს საერთო ძალაში
-            let power = creature.trainer != nil ? creature.attack + creature.experience + creature.defense + Double(creature.level * 100) + result : 0
-            
-            let finalPower = result + power
-            return finalPower
-        }
-        
-        return totalPower
-    }
-    
-    func playersAllCreatureList () -> [String] {
-        ownedCreatures.map() { $0.name }
-    }
-}
-
-
-func updateLeaderboard(players: [PlayerProfile]) -> [PlayerProfile] {
-    var stats: [PlayerProfile] = players
+func updateLeaderboard(players: [CreatureManager]) -> [CreatureManager] {
+    var stats: [CreatureManager] = players
     
     stats.sort { $0.playersTotalPower() > $1.playersTotalPower() }
     
@@ -294,27 +280,18 @@ trainer2.add(creature: creature6!)
 //მივაბაროთ მენჯრებს
 manager1.adoptCreature(creature1)
 manager1.adoptCreature(creature2)
-manager1.adoptCreature(creature3)
 
+manager2.adoptCreature(creature3)
 manager2.adoptCreature(creature4)
-manager2.adoptCreature(creature5)
-
-
-//შემოვიყვანოთ მოთამაშეები
-let player1 = PlayerProfile(name: "Player 1")
-player1.add(creature: creature1, creature2)
-
-let player2 = PlayerProfile(name: "Player 2")
-player2.add(creature: creature3, creature4, creature5)
 
 
 //ვნახოთ საწყისი სტატისტიკა წვრთმანდე
-let startStat = updateLeaderboard(players: [player1, player2])
+let startStat = updateLeaderboard(players: [manager1, manager2])
 
 print("საწყისი სტატისტიკა 📝")
 
 for npc in startStat {
-    print("\(npc.name) ქულით: \(npc.playersTotalPower())")
+    print("\(npc.self) ქულით: \(npc.playersTotalPower())")
 }
 
 print("\n")
@@ -330,24 +307,23 @@ manager2.trainAllCreatures()
 
 
 //სტატისტიკა წვრთნის შედეგად
-let currentStat = updateLeaderboard(players: [player1, player2])
+let currentStat = updateLeaderboard(players: [manager1, manager2])
 
-print("\n")
-print("საბოლოო სტატისტიკა 📝")
+print("\nსაბოლოო სტატისტიკა 📝")
 
 for npc in currentStat {
-    print("\(npc.name) ქულით: \(npc.playersTotalPower())")
+    print("\(npc) ქულით: \(npc.playersTotalPower())")
 }
 
 
 //დაბეჭდეთ თითოეული მოთამაშის არსებების სია და მათი სტატისტიკა
-var playerArray = [player1, player2]
+var playerArray = [manager1, manager2]
 
-print("\n")
-print("მოთამაშის არსებების სია და სტატისტიკა 🐙")
+print("\n\nმოთამაშის არსებების სია და სტატისტიკა 🐙")
 
-playerArray.map {
-    $0.ownedCreatures.map {
+playerArray.forEach {
+    print("\n\($0.self)")
+    $0.listCreatures().forEach {
         print("სახელი: \($0.name), შეტევა: \($0.attack), დაცვა: \($0.defense), სიცოცხლე: \($0.health), exp: \($0.experience), ლეველი: \($0.level), ტიპი: \($0.type), ტრენერი: \($0.trainer?.name ?? "არ ყავს ტრენერი")")
     }
 }
@@ -366,22 +342,110 @@ print("\n🦞 არსების დეინიციალიზაცი�
 creature6 = nil
 
 
+//MARK: 9. შექმენით BattleSimulator კლასი, რომელიც მართავს ორ DigitalCreature-ს შორის ბრძოლას.
+/*   * გამოიყენეთ weak/unowned მიმთითებლები სათანადოდ, რათა თავიდან აიცილოთ ე.წ memory leak.
+//    * დაამატეთ მეთოდი simulateBattle(between creature1: DigitalCreature, and creature2: DigitalCreature) -> DigitalCreature, რომელიც დააბრუნებს გამარჯვებულს. მეთოდის ლოგიკას როგორს გააკეთებთ თქვენს ფანტაზიაზეა დამოკიდებული 🙌
+* გამართეთ რამდენიმე ბრძოლა და დაბეჭდეთ შედეგები. 🤺 */
+
+class BattleSimulator {
+    var creature1: DigitalCreature
+    var creature2: DigitalCreature
+    
+    init(creature1: DigitalCreature, creature2: DigitalCreature) {
+        self.creature1 = creature1
+        self.creature2 = creature2
+    }
+    
+    func simulateBattle(between creature1: DigitalCreature, and creature2: DigitalCreature) -> DigitalCreature {
+        var firstCreatureHealth = creature1.health
+        var secondCreatureHealth = creature2.health
+        
+        let hitPointForFirst = (creature1.attack / 10).rounded()
+        let hitPointForSecond = (creature2.attack / 10).rounded()
+        
+        var scoreForFirst = 0
+        var scoreForSecond = 0
+        
+        var roundCount = 0
+        
+        print("\n\n\(creature1.name) ⚔️ \(creature2.name)")
+                
+        //სამამდეა თამაში :D
+        while scoreForFirst < 3 && scoreForSecond < 3 {
+            roundCount += 1
+            
+            //ვამოწმებთ პირველი ვისი სიცოცხლე ჩამოვა ნულზე და ვწყვეტთ
+            while firstCreatureHealth >= 0 && secondCreatureHealth >= 0 {
+                let random = Int.random(in: 1...2)
+                
+                if random == 1 {
+                    secondCreatureHealth -= hitPointForFirst
+                } else {
+                    firstCreatureHealth -= hitPointForSecond
+                }
+                
+                if firstCreatureHealth <= 0 {
+                    scoreForSecond += 1
+                    break
+                }
+                
+                if secondCreatureHealth <= 0 {
+                    scoreForFirst += 1
+                    break
+                }
+            }
+            
+            firstCreatureHealth = creature1.health
+            secondCreatureHealth = creature2.health
+
+            print("Round \(roundCount == 1 ? "1️⃣" : roundCount == 2 ? "2️⃣" : roundCount == 3 ? "3️⃣" : roundCount == 4 ? "4️⃣" : "5️⃣" )  \n\(scoreForFirst) : \(scoreForSecond)")
+        }
+        
+        print("Winner Winner Chicken Dinner 🏆 \(scoreForFirst > scoreForSecond ? creature1.name : creature2.name) 🏆 \n")
+
+        return scoreForFirst > scoreForSecond ? creature1 : creature2
+    }
+    
+    deinit {
+        print("\nBattle over... see u next time 🥊")
+    }
+}
+
+var fighter1: DigitalCreature? = shop.purchaseRandomCreature()
+var fighter2: DigitalCreature? = shop.purchaseRandomCreature()
+var fighter3: DigitalCreature? = shop.purchaseRandomCreature()
+var fighter4: DigitalCreature? = shop.purchaseRandomCreature()
+
+var fightClub: BattleSimulator? = BattleSimulator(creature1: creature1, creature2: creature2)
+
+fightClub?.simulateBattle(between: creature1, and: creature2)
+
+//დეინიციალიზაცია ჩატარებული ბრძოლის მონაწილეების
+fighter1 = nil
+fighter2 = nil
+
+fightClub?.simulateBattle(between: creature3, and: creature4)
+
+//დეინიციალიზაცია ჩატარებული ბრძოლის მონაწილეების
+fighter3 = nil
+fighter4 = nil
+
+//Fight night დახურვა
+fightClub = nil
 
 
 
 
-//trainer1 = nil
-//var beast = CreatureShop().purchaseRandomCreature()
-//var beast1 = CreatureShop().purchaseRandomCreature()
-//var beast2 = CreatureShop().purchaseRandomCreature()
-//var beast3 = CreatureShop().purchaseRandomCreature()
-//
-//
-//var despo = PlayerProfile(name: "despo")
-//despo.add(creature: beast, beast1)
-//print(despo.playersAllCreatureList())
-//
-//var player1 = PlayerProfile(name: "npc")
-//player1.add(creature: beast2, beast3)
-//
-//var playersArray = [despo, player1]
+
+
+
+
+
+
+
+
+
+
+
+
+print("")
