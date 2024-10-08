@@ -20,19 +20,17 @@ final class ViewController: UIViewController {
     var secondNumber = 0
     var finalResult = 0
     
-    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
     }
     
-    
-    @IBAction func changdeDividerMode() {
+    @IBAction private func changdeDividerMode() {
         dividerMode = !dividerMode
         changeTitleLabel()
     }
     
-    @IBAction func setFirstNum() {
+    @IBAction private func setFirstNum() {
         let fieldValue = firstField?.text ?? ""
         
         if checkRegex(input: fieldValue) {
@@ -40,14 +38,13 @@ final class ViewController: UIViewController {
         }
     }
     
-    @IBAction func setSecondNum() {
+    @IBAction private func setSecondNum() {
         let fieldValue = secondField?.text ?? ""
         
         if checkRegex(input: fieldValue) {
             secondNumber = Int(fieldValue) ?? 0
         }
     }
-    
     
     private func setupUI() {
         changdeDividerMode()
@@ -71,7 +68,7 @@ final class ViewController: UIViewController {
         themeIcon?.addGestureRecognizer(tapGesture)
     }
     
-    @objc func changeTheme() {
+    @objc private func changeTheme() {
         isDarkMode = !isDarkMode
         
         if isDarkMode {
@@ -94,7 +91,7 @@ final class ViewController: UIViewController {
     }
     
     private func checkRegex(input: String) -> Bool {
-        let keyAndValue = "^[1-9]+$"
+        let keyAndValue = "^[0-9]+$"
         
         if input.range(of: keyAndValue, options: .regularExpression) != nil {
             return true
@@ -107,9 +104,9 @@ final class ViewController: UIViewController {
         titleLabel?.text = dividerMode ? "ნაშთიანი გაყოფა" : "უნაშთო გაყოფა"
     }
     
-    @IBAction func calculate() {
+    @IBAction private func calculate() {
         if secondNumber == 0 {
-            result?.text = "ნულზე გაყოფა არ შეიძლება"
+            result?.text = "ნულზე გაყოფია არ შეიძლება"
         } else {
             if dividerMode {
                 finalResult = firstNumber % secondNumber
