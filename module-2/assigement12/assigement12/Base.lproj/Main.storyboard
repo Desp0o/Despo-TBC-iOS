@@ -270,11 +270,11 @@
                                 </constraints>
                             </view>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="WgQ-Rc-xJR">
-                                <rect key="frame" x="281.66666666666669" y="228.33333333333334" width="68.333333333333314" height="33.666666666666657"/>
+                                <rect key="frame" x="254" y="210.66666666666666" width="96" height="51.333333333333343"/>
                                 <attributedString key="attributedText">
                                     <fragment content="2048">
                                         <attributes>
-                                            <font key="NSFont" metaFont="system" size="28"/>
+                                            <font key="NSFont" size="48" name="ArialHebrew-Bold"/>
                                             <paragraphStyle key="NSParagraphStyle" alignment="natural" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
                                         </attributes>
                                     </fragment>
@@ -282,7 +282,7 @@
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="C56-Yb-h7p">
-                                <rect key="frame" x="241" y="199" width="109" height="21.333333333333343"/>
+                                <rect key="frame" x="241" y="181.33333333333334" width="109" height="21.333333333333343"/>
                                 <attributedString key="attributedText">
                                     <fragment content="2048 + 12910">
                                         <attributes>
@@ -299,9 +299,11 @@
                         <constraints>
                             <constraint firstItem="bQ5-MS-9Yc" firstAttribute="top" secondItem="WgQ-Rc-xJR" secondAttribute="bottom" constant="40" id="EJ5-IM-TaV"/>
                             <constraint firstItem="bQ5-MS-9Yc" firstAttribute="top" relation="lessThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="top" constant="255" id="Jcu-Hc-gMm"/>
+                            <constraint firstItem="WgQ-Rc-xJR" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="leading" symbolic="YES" id="MFN-jN-jIX"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="WgQ-Rc-xJR" secondAttribute="trailing" constant="40" id="VnX-jL-ADl"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="bQ5-MS-9Yc" secondAttribute="trailing" id="YOq-Tm-X7x"/>
                             <constraint firstItem="bQ5-MS-9Yc" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="aqa-Eo-WcX"/>
+                            <constraint firstItem="C56-Yb-h7p" firstAttribute="leading" relation="greaterThanOrEqual" secondItem="6Tk-OE-BBY" secondAttribute="leading" symbolic="YES" id="awu-X0-I4Q"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="trailing" secondItem="C56-Yb-h7p" secondAttribute="trailing" constant="40" id="hFp-eP-SPf"/>
                             <constraint firstItem="6Tk-OE-BBY" firstAttribute="bottom" secondItem="bQ5-MS-9Yc" secondAttribute="bottom" id="oFH-bF-cha"/>
                             <constraint firstItem="WgQ-Rc-xJR" firstAttribute="top" secondItem="C56-Yb-h7p" secondAttribute="bottom" constant="8" id="zyd-b6-lDR"/>
@@ -332,7 +334,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-8.3969465648854964" y="3.5211267605633805"/>
+            <point key="canvasLocation" x="-9.2307692307692299" y="2.8436018957345972"/>
         </scene>
     </scenes>
     <resources>

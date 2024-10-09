@@ -23,8 +23,6 @@ extension UIButton {
     }
 }
 
-
-
 final class ViewController: UIViewController {
     @IBOutlet weak var firstLabel: UILabel?
     @IBOutlet weak var secondLabel: UILabel?
@@ -54,7 +52,7 @@ final class ViewController: UIViewController {
         setupUI()
     }
     
-    @IBAction func changeThemeColor() {
+    @IBAction private func changeThemeColor() {
         isDarkMode = !isDarkMode
         setupInterface()
 
@@ -65,7 +63,6 @@ final class ViewController: UIViewController {
         }
     }
 
-    
     private func setupUI() {
         gradinetColor()
         addShadow()
@@ -80,10 +77,7 @@ final class ViewController: UIViewController {
         }
         
         setupInterface()
-
     }
-    
-    
     
     private func setupInterface() {
         view.backgroundColor = isDarkMode ? UIColor(hue: 220/360, saturation: 0.15, brightness: 0.15, alpha: 1) : UIColor.white
@@ -93,6 +87,8 @@ final class ViewController: UIViewController {
         numPad.layer.cornerRadius = 28
         numPad.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         numPad?.backgroundColor = isDarkMode ? UIColor(hue: 220/360, saturation: 0.15, brightness: 0.18, alpha: 1) : UIColor(hue: 0/360, saturation: 0, brightness: 0.96, alpha: 1)
+        
+        firstLabel?.textColor = isDarkMode ? UIColor(hue: 235/360, saturation: 0.05, brightness: 0.84, alpha: 1) : UIColor(hue: 208/360, saturation: 0.23, brightness: 0.51, alpha: 1)
         
         setupCustomButtons()
     }
@@ -115,6 +111,8 @@ final class ViewController: UIViewController {
         
         incrementIcon?.filledButton(isDarkMode: isDarkMode)
         incrementIcon?.setImage(UIImage(named: isDarkMode ? "incrementLight" : "increment"), for: .normal)
+        
+        acButton?.titleLabel?.textColor = UIColor(hue: 323/360, saturation: 0.94, brightness: 0.93, alpha: 1)
     }
     
     private func gradinetColor() {
@@ -128,8 +126,6 @@ final class ViewController: UIViewController {
         gradientLayr.cornerRadius = 32
         equalsButtons?.layer.addSublayer(gradientLayr)
         equalsButtons?.layer.cornerRadius = 32
-        
-        acButton?.titleLabel?.textColor = UIColor(hue: 323/360, saturation: 0.94, brightness: 0.93, alpha: 1)
     }
     
     private func addShadow() {
