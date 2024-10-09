@@ -88,6 +88,10 @@ final class ViewController: UIViewController {
     private func setupInterface() {
         view.backgroundColor = isDarkMode ? UIColor(hue: 220/360, saturation: 0.15, brightness: 0.15, alpha: 1) : UIColor.white
         
+        numPad.translatesAutoresizingMaskIntoConstraints = false
+        numPad.clipsToBounds = true
+        numPad.layer.cornerRadius = 28
+        numPad.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         numPad?.backgroundColor = isDarkMode ? UIColor(hue: 220/360, saturation: 0.15, brightness: 0.18, alpha: 1) : UIColor(hue: 0/360, saturation: 0, brightness: 0.96, alpha: 1)
         
         setupCustomButtons()
