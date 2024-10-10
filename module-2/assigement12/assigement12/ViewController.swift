@@ -7,43 +7,27 @@
 
 import UIKit
 
-extension UIButton {
-    func borderedButton(isDarkMode: Bool) {
-        self.layer.cornerRadius = 32
-        self.layer.borderWidth = 2
-        self.layer.borderColor = isDarkMode ? UIColor(hue: 220/360, saturation: 0.11, brightness: 0.22, alpha: 1).cgColor : UIColor(hue: 0, saturation: 0, brightness: 0.91, alpha: 1).cgColor
-    }
-    
-    func filledButton(isDarkMode: Bool) {
-        self.layer.cornerRadius = 32
-        self.layer.borderWidth = 2
-        self.layer.borderColor = isDarkMode ?  UIColor(hue: 220/360, saturation: 0.11, brightness: 0.22, alpha: 1).cgColor : UIColor(hue: 0, saturation: 0, brightness: 0.91, alpha: 1).cgColor
-        self.layer.backgroundColor = isDarkMode ? UIColor(hue: 220/360, saturation: 0.11, brightness: 0.22, alpha: 1).cgColor
-        :  UIColor(hue: 0, saturation: 0, brightness: 0.91, alpha: 1).cgColor
-    }
-}
-
 final class ViewController: UIViewController {
-    @IBOutlet weak var firstLabel: UILabel?
-    @IBOutlet weak var secondLabel: UILabel?
-    @IBOutlet weak var themeIcon: UIButton?
-    @IBOutlet weak var percentIcon: UIButton?
-    @IBOutlet weak var dividerIcon: UIButton?
-    @IBOutlet weak var multipleIcon: UIButton?
-    @IBOutlet weak var decrementIcon: UIButton?
-    @IBOutlet weak var incrementIcon: UIButton?
-    @IBOutlet weak var equalsButtons: UIButton?
-    @IBOutlet weak var acButton: UIButton?
-    @IBOutlet weak var number1: UIButton?
-    @IBOutlet weak var number2: UIButton?
-    @IBOutlet weak var number3: UIButton?
-    @IBOutlet weak var number4: UIButton?
-    @IBOutlet weak var number5: UIButton?
-    @IBOutlet weak var number6: UIButton?
-    @IBOutlet weak var number7: UIButton?
-    @IBOutlet weak var number8: UIButton?
-    @IBOutlet weak var number9: UIButton?
-    @IBOutlet weak var numPad: UIView!
+    @IBOutlet private weak var firstLabel: UILabel?
+    @IBOutlet private weak var secondLabel: UILabel?
+    @IBOutlet private weak var themeIcon: UIButton?
+    @IBOutlet private weak var percentIcon: UIButton?
+    @IBOutlet private weak var dividerIcon: UIButton?
+    @IBOutlet private weak var multipleIcon: UIButton?
+    @IBOutlet private weak var decrementIcon: UIButton?
+    @IBOutlet private weak var incrementIcon: UIButton?
+    @IBOutlet private weak var equalsButtons: UIButton?
+    @IBOutlet private weak var acButton: UIButton?
+    @IBOutlet private weak var number1: UIButton?
+    @IBOutlet private weak var number2: UIButton?
+    @IBOutlet private weak var number3: UIButton?
+    @IBOutlet private weak var number4: UIButton?
+    @IBOutlet private weak var number5: UIButton?
+    @IBOutlet private weak var number6: UIButton?
+    @IBOutlet private weak var number7: UIButton?
+    @IBOutlet private weak var number8: UIButton?
+    @IBOutlet private weak var number9: UIButton?
+    @IBOutlet private weak var numPad: UIView!
     
     var isDarkMode = false
     
@@ -111,8 +95,6 @@ final class ViewController: UIViewController {
         
         incrementIcon?.filledButton(isDarkMode: isDarkMode)
         incrementIcon?.setImage(UIImage(named: isDarkMode ? "incrementLight" : "increment"), for: .normal)
-        
-        acButton?.titleLabel?.textColor = UIColor(hue: 323/360, saturation: 0.94, brightness: 0.93, alpha: 1)
     }
     
     private func gradinetColor() {
