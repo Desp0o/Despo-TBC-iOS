@@ -100,14 +100,15 @@ final class ViewController: UIViewController {
     private func gradinetColor() {
         let gradientLayr = CAGradientLayer()
         gradientLayr.frame = equalsButtons?.bounds ?? CGRect.zero
-        equalsButtons?.layer.cornerRadius = 32
+        equalsButtons?.layer.cornerRadius = (equalsButtons!.bounds.width) / 2
+        
         gradientLayr.colors = [
             UIColor(hue: 323/360, saturation: 0.94, brightness: 0.93, alpha: 1).cgColor,
             UIColor(hue: 13/360, saturation: 0.82, brightness: 1, alpha: 1).cgColor,
         ]
-        gradientLayr.cornerRadius = 32
+        gradientLayr.cornerRadius = gradientLayr.bounds.width / 2
         equalsButtons?.layer.addSublayer(gradientLayr)
-        equalsButtons?.layer.cornerRadius = 32
+        equalsButtons?.layer.cornerRadius = (equalsButtons?.bounds.width ?? 0) / 2
     }
     
     private func addShadow() {
