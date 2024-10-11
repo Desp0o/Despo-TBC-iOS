@@ -30,10 +30,17 @@ final class ViewController: UIViewController {
     @IBOutlet private weak var numPad: UIView!
     
     var isDarkMode = false
-    
+    let gradientLayr = CAGradientLayer()
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        setupCustomButtons()
+        gradientLayr.frame = equalsButtons!.bounds
     }
     
     @IBAction private func changeThemeColor() {
@@ -48,9 +55,6 @@ final class ViewController: UIViewController {
     }
 
     private func setupUI() {
-        gradinetColor()
-        addShadow()
-        
         switch traitCollection.userInterfaceStyle {
         case .light:
             isDarkMode = false
@@ -61,20 +65,25 @@ final class ViewController: UIViewController {
         }
         
         setupInterface()
+        gradinetColor()
+        addShadow()
     }
     
     private func setupInterface() {
+        setupNumPad()
+        setupCustomButtons()
+
         view.backgroundColor = isDarkMode ? UIColor(hue: 220/360, saturation: 0.15, brightness: 0.15, alpha: 1) : UIColor.white
         
+        firstLabel?.textColor = isDarkMode ? UIColor(hue: 235/360, saturation: 0.05, brightness: 0.84, alpha: 1) : UIColor(hue: 208/360, saturation: 0.23, brightness: 0.51, alpha: 1)
+    }
+    
+    private func setupNumPad() {
         numPad.translatesAutoresizingMaskIntoConstraints = false
         numPad.clipsToBounds = true
         numPad.layer.cornerRadius = 28
         numPad.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         numPad?.backgroundColor = isDarkMode ? UIColor(hue: 220/360, saturation: 0.15, brightness: 0.18, alpha: 1) : UIColor(hue: 0/360, saturation: 0, brightness: 0.96, alpha: 1)
-        
-        firstLabel?.textColor = isDarkMode ? UIColor(hue: 235/360, saturation: 0.05, brightness: 0.84, alpha: 1) : UIColor(hue: 208/360, saturation: 0.23, brightness: 0.51, alpha: 1)
-        
-        setupCustomButtons()
     }
     
     private func setupCustomButtons() {
@@ -95,22 +104,22 @@ final class ViewController: UIViewController {
         
         incrementIcon?.filledButton(isDarkMode: isDarkMode)
         incrementIcon?.setImage(UIImage(named: isDarkMode ? "incrementLight" : "increment"), for: .normal)
+        
+        equalsButtons?.layer.cornerRadius = 32
     }
     
     private func gradinetColor() {
-        let gradientLayr = CAGradientLayer()
-        gradientLayr.frame = equalsButtons?.bounds ?? CGRect.zero
-        equalsButtons?.layer.cornerRadius = (equalsButtons!.bounds.width) / 2
-        
+        gradientLayr.frame = equalsButtons!.bounds
+        gradientLayr.cornerRadius = 32
         gradientLayr.colors = [
             UIColor(hue: 323/360, saturation: 0.94, brightness: 0.93, alpha: 1).cgColor,
             UIColor(hue: 13/360, saturation: 0.82, brightness: 1, alpha: 1).cgColor,
         ]
-        gradientLayr.cornerRadius = gradientLayr.bounds.width / 2
+
+        equalsButtons!.layer.sublayers?.forEach { $0.removeFromSuperlayer() }
         equalsButtons?.layer.addSublayer(gradientLayr)
-        equalsButtons?.layer.cornerRadius = (equalsButtons?.bounds.width ?? 0) / 2
     }
-    
+        
     private func addShadow() {
         equalsButtons?.layer.shadowColor = UIColor(hue: 351/360, saturation: 0.76, brightness: 0.97, alpha: 0.8).cgColor
         equalsButtons?.layer.shadowOpacity = 1
