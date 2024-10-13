@@ -13,3 +13,14 @@ class CalculatorVC: UIViewController {
         view.backgroundColor = .brown
     }
 }
+
+
+
+
+
+
+
+#Preview {
+    let vc = CalculatorVC()
+    return vc
+}
