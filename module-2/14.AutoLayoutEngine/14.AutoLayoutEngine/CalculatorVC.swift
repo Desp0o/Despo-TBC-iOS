@@ -41,6 +41,7 @@ final class CalculatorVC: UIViewController {
     
     private var isDarkMode = false
     private var isCalculatedResult = false
+    private var lastOperations: [String] = []
     
     override func willAnimateRotation(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
         gradientLayr.frame = resultButton.bounds
@@ -116,7 +117,7 @@ final class CalculatorVC: UIViewController {
     
     private func firstLabelSetup() {
         resultsView.addSubview(firstLabel)
-        firstLabel.text = "1213 + 121"
+        firstLabel.text = ""
         firstLabel.font = UIFont.systemFont(ofSize: 20)
         firstLabel.textColor = UIColor(hue: 235/360, saturation: 0.05, brightness: 0.84, alpha: 1)
         
@@ -225,17 +226,7 @@ final class CalculatorVC: UIViewController {
         
 
         resultButton.addAction(UIAction(handler: { [weak self] action  in
-            guard let secLbl = self?.secondLabel.text else { return }
-            
-            let expn = NSExpression(format: secLbl)
-            
-            
-            guard let result = expn.expressionValue(with: nil, context: nil) as? NSNumber else { return }
-            self?.firstLabel.text = String(describing: expn)
-            self?.secondLabel.text = String(reflecting: result.floatValue)
-                
-            
-            self?.isCalculatedResult = true
+            self?.useCalculator()
         }), for: .touchUpInside)
         
     }
@@ -321,6 +312,20 @@ final class CalculatorVC: UIViewController {
     
     
     
+    
+    
+    private func useCalculator() {
+        guard let resText = secondLabel.text else { return }
+        
+        let expn = NSExpression(format: resText)
+        
+        firstLabel.text = String(describing: secondLabel.text ?? "")
+        secondLabel.text = String(reflecting: expn.expressionValue(with: nil, context: nil) ?? "0")
+            
+        isCalculatedResult = true
+        lastOperations.append(firstLabel.text ?? "")
+    }
+    
     private func addButtonAction(value: String) {
         let symbols = ["%", "/", "*",  "-", "+", "."]
         
@@ -340,9 +345,9 @@ final class CalculatorVC: UIViewController {
 
 
 
-
-
 #Preview {
     let vc = CalculatorVC()
     return vc
 }
+
+
