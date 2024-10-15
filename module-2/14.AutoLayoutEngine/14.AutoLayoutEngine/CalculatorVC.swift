@@ -46,15 +46,25 @@ final class CalculatorVC: UIViewController {
     
     private var isDarkMode = false
     
-    override func viewDidLoad() {
-        super.viewDidLoad()
-        setupUI()
+    override func willAnimateRotation(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
+        gradientLayr.frame = resultButton.bounds
+//        addShadow()
+    }
+    
+    override func viewWillLayoutSubviews() {
+        super.viewWillLayoutSubviews()
+        setupMainNumStackView()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
-        addShadow()
         gradinetColor()
+//        addShadow()
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupUI()
     }
     
     @objc private func changeThemeMode() {
@@ -87,8 +97,8 @@ final class CalculatorVC: UIViewController {
         addHorizontalStacks()
         setupButtons()
         setupStacks()
-        addShadow()
         gradinetColor()
+        addShadow()
     }
     
     private func setupLabels() {
@@ -126,10 +136,12 @@ final class CalculatorVC: UIViewController {
         pad.layer.cornerRadius = 28
         pad.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         
-        pad.leftAnchor.constraint(equalTo: view.leftAnchor, constant: 0).isActive = true
-        pad.rightAnchor.constraint(equalTo: view.rightAnchor, constant: 0).isActive = true
-        pad.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0).isActive = true
-        pad.topAnchor.constraint(lessThanOrEqualTo: view.topAnchor, constant: 302).isActive = true
+        NSLayoutConstraint.activate([
+            pad.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 0),
+            pad.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: 0),
+            pad.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
+            pad.topAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor, constant: 255)
+        ])
     }
     
     private func setupMainNumStackView() {
@@ -140,10 +152,38 @@ final class CalculatorVC: UIViewController {
         mainNumStackView.distribution = .fillEqually
         mainNumStackView.spacing = 16
         
-        mainNumStackView.leftAnchor.constraint(equalTo: pad.leftAnchor, constant: 42).isActive = true
-        mainNumStackView.rightAnchor.constraint(equalTo: pad.rightAnchor, constant: -42).isActive = true
-        mainNumStackView.topAnchor.constraint(equalTo: pad.topAnchor, constant: 48).isActive = true
-        mainNumStackView.bottomAnchor.constraint(equalTo: pad.bottomAnchor, constant: -66).isActive = true
+//        NSLayoutConstraint.deactivate(mainNumStackView.constraints)
+        
+        NSLayoutConstraint.activate([
+            mainNumStackView.leftAnchor.constraint(equalTo: pad.leftAnchor, constant: 42),
+            mainNumStackView.rightAnchor.constraint(equalTo: pad.rightAnchor, constant: -42),
+            mainNumStackView.topAnchor.constraint(equalTo: pad.topAnchor, constant: 48),
+            mainNumStackView.bottomAnchor.constraint(equalTo: pad.bottomAnchor, constant: -66)
+        ])
+
+        // Determine if the device is in landscape mode
+//        let isLandscape = UIScreen.main.bounds.width > UIScreen.main.bounds.height
+
+//         Activate the appropriate constraints based on orientation
+//        if isLandscape {
+//            NSLayoutConstraint.deactivate(mainNumStackView.constraints)
+//
+//            NSLayoutConstraint.activate([
+//                mainNumStackView.leftAnchor.constraint(equalTo: pad.leftAnchor, constant: 42),
+//                mainNumStackView.rightAnchor.constraint(equalTo: pad.rightAnchor, constant: -42),
+//                mainNumStackView.topAnchor.constraint(equalTo: pad.topAnchor, constant: 48),
+//                mainNumStackView.bottomAnchor.constraint(equalTo: pad.bottomAnchor, constant: -66)
+//            ])
+//        } else {
+//            NSLayoutConstraint.deactivate(mainNumStackView.constraints)
+//
+//            NSLayoutConstraint.activate([
+//                mainNumStackView.leftAnchor.constraint(equalTo: pad.leftAnchor, constant: 42),
+//                mainNumStackView.rightAnchor.constraint(equalTo: pad.rightAnchor, constant: -42),
+//                mainNumStackView.topAnchor.constraint(equalTo: pad.topAnchor, constant: 10),
+//                mainNumStackView.bottomAnchor.constraint(equalTo: pad.bottomAnchor, constant: -10)
+//            ])
+//        }
     }
     
     private func addHorizontalStacks() {
@@ -158,7 +198,6 @@ final class CalculatorVC: UIViewController {
     }
     
     private func setupButtons() {
-        resultButton.setupButtonsUI(name: "=")
         acButton.setupButtonsUI(name: "AC")
         button0.setupButtonsUI(name: "0")
         button1.setupButtonsUI(name: "1")
@@ -171,6 +210,7 @@ final class CalculatorVC: UIViewController {
         button8.setupButtonsUI(name: "8")
         button9.setupButtonsUI(name: "9")
         dotButton.setupButtonsUI(name: ".")
+        resultButton.setupButtonsUI(name: "=")
         
         themeButton.addTarget(self, action: #selector(changeThemeMode), for: .touchUpInside)
     }
@@ -219,26 +259,25 @@ final class CalculatorVC: UIViewController {
         secondLine.forEach { button in
             secondNumbersStack.addArrangedSubview(button)
             secondNumbersStack.distribution = .fillEqually
-            
         }
         
         let thirdLine = [divideIcon, button9, button6, button3, dotButton]
         thirdLine.forEach { button in
             thirdNumbersStack.addArrangedSubview(button)
             thirdNumbersStack.distribution = .fillEqually
-            
         }
         
         let fourthLine = [mulitpleIcon, decrementIcon, incrementIcon, resultButton]
         fourthLine.forEach { button in
             fourthNumbersStack.addArrangedSubview(button)
             fourthNumbersStack.distribution = .fillProportionally
+            fourthNumbersStack.spacing = 18
         }
     }
     
     private func gradinetColor() {
         gradientLayr.frame = resultButton.bounds
-        gradientLayr.cornerRadius = 32
+        gradientLayr.cornerRadius = resultButton.layer.cornerRadius
         gradientLayr.colors = [
             UIColor(hue: 323/360, saturation: 0.94, brightness: 0.93, alpha: 1).cgColor,
             UIColor(hue: 13/360, saturation: 0.82, brightness: 1, alpha: 1).cgColor,
