@@ -9,7 +9,10 @@ import UIKit
 
 final class CalcButton: UIButton {
     
-    init() {
+    var value: String
+    
+    init(value: String = "") {
+        self.value = value
         super.init(frame: .zero)
         buttonCornerRadius()
     }
@@ -42,9 +45,11 @@ final class CalcButton: UIButton {
         let darkModeColor = UIColor(hue: 220/360, saturation: 0.11, brightness: 0.22, alpha: 1).cgColor
         let lightModeColor = UIColor(hue: 0, saturation: 0, brightness: 0.91, alpha: 1).cgColor
         
+        
         if !name.isEmpty {
             self.setTitle(name, for: .normal)
             self.titleLabel?.font = UIFont.systemFont(ofSize: 24)
+            value = name
         }
         
         if isFilled {

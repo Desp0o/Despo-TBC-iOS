@@ -1,14 +1,9 @@
-//
-//  CalculatorVC.swift
-//  14.AutoLayoutEngine
-//
-//  Created by Despo on 13.10.24.
-//
-
 import UIKit
 
 
 final class CalculatorVC: UIViewController {
+    private let resultsView = UIView()
+    
     private let firstLabel = UILabel()
     private let secondLabel = UILabel()
     
@@ -36,30 +31,31 @@ final class CalculatorVC: UIViewController {
     private let button9 = CalcButton()
     private let dotButton = CalcButton()
     private let themeButton = CalcButton()
-    private let percentIcon = CalcButton()
-    private let divideIcon = CalcButton()
-    private let mulitpleIcon = CalcButton()
-    private let decrementIcon = CalcButton()
-    private let incrementIcon = CalcButton()
+    private let percentIcon = CalcButton(value: "%")
+    private let divideIcon = CalcButton(value: "/")
+    private let mulitpleIcon = CalcButton(value: "*")
+    private let decrementIcon = CalcButton(value: "-")
+    private let incrementIcon = CalcButton(value: "+")
     private let acButton = CalcButton()
     private let resultButton = CalcButton()
     
     private var isDarkMode = false
+    private var isCalculatedResult = false
     
     override func willAnimateRotation(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
         gradientLayr.frame = resultButton.bounds
-//        addShadow()
+        //        addShadow()
     }
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        setupMainNumStackView()
+//        setupMainNumStackView()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
         gradinetColor()
-//        addShadow()
+        //        addShadow()
     }
     
     override func viewDidLoad() {
@@ -91,8 +87,9 @@ final class CalculatorVC: UIViewController {
         }
         
         changeThemeMode()
-        setupNumpad()
+        setupResultsView()
         setupLabels()
+        setupNumpad()
         setupMainNumStackView()
         addHorizontalStacks()
         setupButtons()
@@ -106,8 +103,19 @@ final class CalculatorVC: UIViewController {
         firstLabelSetup()
     }
     
+    private func setupResultsView() {
+        view.addSubview(resultsView)
+        resultsView.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            resultsView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            resultsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            resultsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
+        ])
+    }
+    
     private func firstLabelSetup() {
-        view.addSubview(firstLabel)
+        resultsView.addSubview(firstLabel)
         firstLabel.text = "1213 + 121"
         firstLabel.font = UIFont.systemFont(ofSize: 20)
         firstLabel.textColor = UIColor(hue: 235/360, saturation: 0.05, brightness: 0.84, alpha: 1)
@@ -118,14 +126,14 @@ final class CalculatorVC: UIViewController {
     }
     
     private func secondLabelSetup() {
-        view.addSubview(secondLabel)
+        resultsView.addSubview(secondLabel)
         
-        secondLabel.text = "11234"
+        secondLabel.text = "0"
         secondLabel.font = UIFont.systemFont(ofSize: 48)
         secondLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        secondLabel.rightAnchor.constraint(equalTo: view.rightAnchor, constant: -43).isActive = true
-        secondLabel.bottomAnchor.constraint(equalTo: pad.topAnchor, constant: -40).isActive = true
+        secondLabel.trailingAnchor.constraint(equalTo: resultsView.trailingAnchor, constant: -43).isActive = true
+        secondLabel.bottomAnchor.constraint(equalTo: resultsView.bottomAnchor, constant: -40).isActive = true
     }
     
     private func setupNumpad() {
@@ -137,10 +145,10 @@ final class CalculatorVC: UIViewController {
         pad.layer.maskedCorners = [.layerMaxXMinYCorner, .layerMinXMinYCorner]
         
         NSLayoutConstraint.activate([
-            pad.leftAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leftAnchor, constant: 0),
-            pad.rightAnchor.constraint(equalTo: view.safeAreaLayoutGuide.rightAnchor, constant: 0),
-            pad.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0),
-            pad.topAnchor.constraint(lessThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor, constant: 255)
+            pad.topAnchor.constraint(equalTo: resultsView.bottomAnchor, constant: 16),
+            pad.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 0),
+            pad.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: 0),
+            pad.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0)
         ])
     }
     
@@ -151,39 +159,13 @@ final class CalculatorVC: UIViewController {
         mainNumStackView.axis = .horizontal
         mainNumStackView.distribution = .fillEqually
         mainNumStackView.spacing = 16
-        
-//        NSLayoutConstraint.deactivate(mainNumStackView.constraints)
-        
+                
         NSLayoutConstraint.activate([
             mainNumStackView.leftAnchor.constraint(equalTo: pad.leftAnchor, constant: 42),
             mainNumStackView.rightAnchor.constraint(equalTo: pad.rightAnchor, constant: -42),
             mainNumStackView.topAnchor.constraint(equalTo: pad.topAnchor, constant: 48),
             mainNumStackView.bottomAnchor.constraint(equalTo: pad.bottomAnchor, constant: -66)
         ])
-
-        // Determine if the device is in landscape mode
-//        let isLandscape = UIScreen.main.bounds.width > UIScreen.main.bounds.height
-
-//         Activate the appropriate constraints based on orientation
-//        if isLandscape {
-//            NSLayoutConstraint.deactivate(mainNumStackView.constraints)
-//
-//            NSLayoutConstraint.activate([
-//                mainNumStackView.leftAnchor.constraint(equalTo: pad.leftAnchor, constant: 42),
-//                mainNumStackView.rightAnchor.constraint(equalTo: pad.rightAnchor, constant: -42),
-//                mainNumStackView.topAnchor.constraint(equalTo: pad.topAnchor, constant: 48),
-//                mainNumStackView.bottomAnchor.constraint(equalTo: pad.bottomAnchor, constant: -66)
-//            ])
-//        } else {
-//            NSLayoutConstraint.deactivate(mainNumStackView.constraints)
-//
-//            NSLayoutConstraint.activate([
-//                mainNumStackView.leftAnchor.constraint(equalTo: pad.leftAnchor, constant: 42),
-//                mainNumStackView.rightAnchor.constraint(equalTo: pad.rightAnchor, constant: -42),
-//                mainNumStackView.topAnchor.constraint(equalTo: pad.topAnchor, constant: 10),
-//                mainNumStackView.bottomAnchor.constraint(equalTo: pad.bottomAnchor, constant: -10)
-//            ])
-//        }
     }
     
     private func addHorizontalStacks() {
@@ -212,7 +194,50 @@ final class CalculatorVC: UIViewController {
         dotButton.setupButtonsUI(name: ".")
         resultButton.setupButtonsUI(name: "=")
         
+        let buttonsArray: [CalcButton] = [
+            button0,
+            button1,
+            button2,
+            button3,
+            button4,
+            button5,
+            button6,
+            button7,
+            button8,
+            button9,
+            dotButton,
+            acButton,
+            percentIcon,
+            divideIcon,
+            mulitpleIcon,
+            decrementIcon,
+            incrementIcon
+        ]
+        
+        for button in buttonsArray {
+            button.addAction(UIAction(handler: { [weak self] action  in
+                self?.addButtonAction(value: button.value )
+            }), for: .touchUpInside)
+        }
+        
+        
         themeButton.addTarget(self, action: #selector(changeThemeMode), for: .touchUpInside)
+        
+
+        resultButton.addAction(UIAction(handler: { [weak self] action  in
+            guard let secLbl = self?.secondLabel.text else { return }
+            
+            let expn = NSExpression(format: secLbl)
+            
+            
+            guard let result = expn.expressionValue(with: nil, context: nil) as? NSNumber else { return }
+            self?.firstLabel.text = String(describing: expn)
+            self?.secondLabel.text = String(reflecting: result.floatValue)
+                
+            
+            self?.isCalculatedResult = true
+        }), for: .touchUpInside)
+        
     }
     
     private func updateUI() {
@@ -292,6 +317,22 @@ final class CalculatorVC: UIViewController {
         resultButton.layer.shadowRadius = 6
         resultButton.layer.shadowOffset = CGSize(width: 0, height: 0)
         resultButton.layer.masksToBounds = false
+    }
+    
+    
+    
+    private func addButtonAction(value: String) {
+        let symbols = ["%", "/", "*",  "-", "+", "."]
+        
+        if value == "AC" {
+            secondLabel.text = "0"
+        } else if secondLabel.text == "0" || isCalculatedResult && !symbols.contains(value) {
+            secondLabel.text! = value
+            isCalculatedResult = false
+        } else {
+            secondLabel.text! += value
+            isCalculatedResult = false
+        }
     }
 }
 
