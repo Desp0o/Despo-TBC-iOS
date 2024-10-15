@@ -5,7 +5,7 @@ final class CalculatorVC: UIViewController {
     private let resultsView = UIView()
     
     private let firstLabel = UILabel()
-    private let secondLabel = UILabel()
+    private var secondLabel = UILabel()
     
     let gradientLayr = CAGradientLayer()
     
@@ -50,7 +50,7 @@ final class CalculatorVC: UIViewController {
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-//        setupMainNumStackView()
+        //        setupMainNumStackView()
     }
     
     override func viewDidLayoutSubviews() {
@@ -160,7 +160,7 @@ final class CalculatorVC: UIViewController {
         mainNumStackView.axis = .horizontal
         mainNumStackView.distribution = .fillEqually
         mainNumStackView.spacing = 16
-                
+        
         NSLayoutConstraint.activate([
             mainNumStackView.leftAnchor.constraint(equalTo: pad.leftAnchor, constant: 42),
             mainNumStackView.rightAnchor.constraint(equalTo: pad.rightAnchor, constant: -42),
@@ -215,16 +215,14 @@ final class CalculatorVC: UIViewController {
             incrementIcon
         ]
         
+        themeButton.addTarget(self, action: #selector(changeThemeMode), for: .touchUpInside)
+        
         for button in buttonsArray {
             button.addAction(UIAction(handler: { [weak self] action  in
                 self?.addButtonAction(value: button.value )
             }), for: .touchUpInside)
         }
         
-        
-        themeButton.addTarget(self, action: #selector(changeThemeMode), for: .touchUpInside)
-        
-
         resultButton.addAction(UIAction(handler: { [weak self] action  in
             self?.useCalculator()
         }), for: .touchUpInside)
@@ -321,13 +319,18 @@ final class CalculatorVC: UIViewController {
         
         firstLabel.text = String(describing: secondLabel.text ?? "")
         secondLabel.text = String(reflecting: expn.expressionValue(with: nil, context: nil) ?? "0")
-            
+        
         isCalculatedResult = true
         lastOperations.append(firstLabel.text ?? "")
     }
     
     private func addButtonAction(value: String) {
         let symbols = ["%", "/", "*",  "-", "+", "."]
+        
+        if symbols.contains(String(secondLabel.text?.last ?? ".")) && symbols.contains(value) {
+            let droppedWord = secondLabel.text!.dropLast()
+            secondLabel.text = String(Substring(droppedWord))
+        }
         
         if value == "AC" {
             secondLabel.text = "0"
