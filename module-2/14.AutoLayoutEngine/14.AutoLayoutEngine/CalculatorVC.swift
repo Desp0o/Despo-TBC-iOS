@@ -130,7 +130,7 @@ final class CalculatorVC: UIViewController {
         resultsView.addSubview(firstLabel)
         firstLabel.text = ""
         firstLabel.font = UIFont.systemFont(ofSize: 20)
-        firstLabel.textColor = UIColor(hue: 235/360, saturation: 0.05, brightness: 0.84, alpha: 1)
+        firstLabel.textColor = actionsTextColor
         
         firstLabel.translatesAutoresizingMaskIntoConstraints = false
         firstLabel.trailingAnchor.constraint(equalTo: secondLabel.trailingAnchor).isActive = true
@@ -288,9 +288,9 @@ final class CalculatorVC: UIViewController {
     }
     
     private func updateUI() {
-        view.backgroundColor = isDarkMode ? UIColor(hue: 220/360, saturation: 0.15, brightness: 0.15, alpha: 1) : UIColor.white
+        view.backgroundColor = isDarkMode ? darkThemeBackgroundColor : lightThemeBackgroundColor
         
-        pad.backgroundColor = isDarkMode ? UIColor(hue: 220/360, saturation: 0.15, brightness: 0.18, alpha: 1) : UIColor(hue: 0/360, saturation: 0, brightness: 0.96, alpha: 1)
+        pad.backgroundColor = isDarkMode ? padDarkColor : padLightColor
         
         historyButton.setImage(UIImage(named: isDarkMode ? "historyLight" : "historyDark"), for: .normal)
         
@@ -353,15 +353,15 @@ final class CalculatorVC: UIViewController {
         gradientLayr.frame = resultButton.bounds
         gradientLayr.cornerRadius = resultButton.layer.cornerRadius
         gradientLayr.colors = [
-            UIColor(hue: 323/360, saturation: 0.94, brightness: 0.93, alpha: 1).cgColor,
-            UIColor(hue: 13/360, saturation: 0.82, brightness: 1, alpha: 1).cgColor,
+            gradientColor1,
+            gradientColor2
         ]
         
         resultButton.layer.insertSublayer(gradientLayr, at: 0)
     }
     
     private func addShadow() {
-        resultButton.layer.shadowColor = UIColor(hue: 351/360, saturation: 0.76, brightness: 0.97, alpha: 0.8).cgColor
+        resultButton.layer.shadowColor = shadowColor
         resultButton.layer.shadowOpacity = 1
         resultButton.layer.shadowRadius = 6
         resultButton.layer.shadowOffset = CGSize(width: 0, height: 0)
@@ -369,9 +369,9 @@ final class CalculatorVC: UIViewController {
     }
     
     private func navigateToHistoryVC() {
-        self.navigationController?.pushViewController(HistoryVC(), animated: true)
+        let vc = HistoryVC(isDarkMode: isDarkMode)
+        self.navigationController?.pushViewController(vc, animated: true)
     }
-    
     
     private func useCalculator() {
         guard let resText = secondLabel.text else { return }
