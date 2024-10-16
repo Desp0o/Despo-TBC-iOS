@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "backArrowDark.svg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
