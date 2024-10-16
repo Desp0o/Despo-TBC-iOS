@@ -39,24 +39,32 @@ final class CalculatorVC: UIViewController {
     private let acButton = CalcButton()
     private let resultButton = CalcButton()
     
+    private var mainStackTopAnchorValue: NSLayoutConstraint!
+    private var mainStackBottomAnchorValue: NSLayoutConstraint!
+    private var secondLabelBottomValue: NSLayoutConstraint!
+    
+    private var isLandscapeMode = false
     private var isDarkMode = false
     private var isCalculatedResult = false
     private var lastOperations: [String] = []
     
     override func willAnimateRotation(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
         gradientLayr.frame = resultButton.bounds
-        //        addShadow()
     }
     
     override func viewWillLayoutSubviews() {
         super.viewWillLayoutSubviews()
-        //        setupMainNumStackView()
     }
     
     override func viewDidLayoutSubviews() {
         super.viewDidLayoutSubviews()
+        
+        isLandscapeMode = UIScreen.main.bounds.width > UIScreen.main.bounds.height ? true : false
+        updateMainNumStackViewConstraints()
+        updateSecondLabel()
+        view.layoutIfNeeded()
+        
         gradinetColor()
-        //        addShadow()
     }
     
     override func viewDidLoad() {
@@ -109,9 +117,9 @@ final class CalculatorVC: UIViewController {
         resultsView.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            resultsView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
+            resultsView.topAnchor.constraint(greaterThanOrEqualTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
             resultsView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            resultsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16)
+            resultsView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
         ])
     }
     
@@ -133,8 +141,22 @@ final class CalculatorVC: UIViewController {
         secondLabel.font = UIFont.systemFont(ofSize: 48)
         secondLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        secondLabel.trailingAnchor.constraint(equalTo: resultsView.trailingAnchor, constant: -43).isActive = true
-        secondLabel.bottomAnchor.constraint(equalTo: resultsView.bottomAnchor, constant: -40).isActive = true
+        secondLabelBottomValue = secondLabel.bottomAnchor.constraint(equalTo: resultsView.bottomAnchor, constant: -40 )
+        
+        NSLayoutConstraint.activate([
+            secondLabel.trailingAnchor.constraint(equalTo: resultsView.trailingAnchor, constant: -43),
+            secondLabelBottomValue
+        ])
+    }
+    
+    private func updateSecondLabel() {
+        if isLandscapeMode {
+            secondLabelBottomValue.constant = -10
+            secondLabel.font = UIFont.systemFont(ofSize: 30)
+        } else {
+            secondLabelBottomValue.constant = -40
+            secondLabel.font = UIFont.systemFont(ofSize: 48)
+        }
     }
     
     private func setupNumpad() {
@@ -161,12 +183,25 @@ final class CalculatorVC: UIViewController {
         mainNumStackView.distribution = .fillEqually
         mainNumStackView.spacing = 16
         
+        mainStackTopAnchorValue = mainNumStackView.topAnchor.constraint(equalTo: pad.topAnchor, constant: 48)
+        mainStackBottomAnchorValue = mainNumStackView.bottomAnchor.constraint(equalTo: pad.bottomAnchor, constant: -66)
+        
         NSLayoutConstraint.activate([
             mainNumStackView.leftAnchor.constraint(equalTo: pad.leftAnchor, constant: 42),
             mainNumStackView.rightAnchor.constraint(equalTo: pad.rightAnchor, constant: -42),
-            mainNumStackView.topAnchor.constraint(equalTo: pad.topAnchor, constant: 48),
-            mainNumStackView.bottomAnchor.constraint(equalTo: pad.bottomAnchor, constant: -66)
+            mainStackTopAnchorValue,
+            mainStackBottomAnchorValue
         ])
+    }
+    
+    private func updateMainNumStackViewConstraints() {
+        if isLandscapeMode {
+            mainStackTopAnchorValue.constant = 12
+            mainStackBottomAnchorValue.constant = -12
+        } else {
+            mainStackTopAnchorValue.constant = 48
+            mainStackBottomAnchorValue.constant = -66
+        }
     }
     
     private func addHorizontalStacks() {
@@ -334,6 +369,7 @@ final class CalculatorVC: UIViewController {
         
         if value == "AC" {
             secondLabel.text = "0"
+            firstLabel.text = ""
         } else if secondLabel.text == "0" || isCalculatedResult && !symbols.contains(value) {
             secondLabel.text! = value
             isCalculatedResult = false
@@ -343,10 +379,6 @@ final class CalculatorVC: UIViewController {
         }
     }
 }
-
-
-
-
 
 #Preview {
     let vc = CalculatorVC()
