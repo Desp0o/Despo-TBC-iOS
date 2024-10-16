@@ -42,8 +42,6 @@ final class CalcButton: UIButton {
     }
     
     func setupButtonsUI(name: String = "", isDarkMode: Bool = false, isFilled: Bool = false, isBordered: Bool = false, iconLight: String = "", iconDark: String = "") {
-        let darkModeColor = UIColor(hue: 220/360, saturation: 0.11, brightness: 0.22, alpha: 1).cgColor
-        let lightModeColor = UIColor(hue: 0, saturation: 0, brightness: 0.91, alpha: 1).cgColor
         
         if !name.isEmpty {
             self.setTitle(name, for: .normal)
@@ -52,12 +50,12 @@ final class CalcButton: UIButton {
         }
         
         if isFilled {
-            self.layer.backgroundColor = isDarkMode ? darkModeColor : lightModeColor
+            self.layer.backgroundColor = isDarkMode ? buttonsDarkMode : buttonsLightMode
         }
         
         if isBordered {
             self.layer.borderWidth = 2
-            self.layer.borderColor = isDarkMode ? darkModeColor : lightModeColor
+            self.layer.borderColor = isDarkMode ? buttonsDarkMode : buttonsLightMode
         }
         
         if !iconDark.isEmpty {
