@@ -7,7 +7,7 @@ final class CalculatorVC: UIViewController {
     private let firstLabel = UILabel()
     private var secondLabel = UILabel()
     
-    let gradientLayr = CAGradientLayer()
+    private let gradientLayr = CAGradientLayer()
     
     private let pad = UIView()
     
@@ -38,6 +38,7 @@ final class CalculatorVC: UIViewController {
     private let incrementIcon = CalcButton(value: "+")
     private let acButton = CalcButton()
     private let resultButton = CalcButton()
+    private let historyButton = UIButton()
     
     private var mainStackTopAnchorValue: NSLayoutConstraint!
     private var mainStackBottomAnchorValue: NSLayoutConstraint!
@@ -47,6 +48,7 @@ final class CalculatorVC: UIViewController {
     private var isDarkMode = false
     private var isCalculatedResult = false
     private var lastOperations: [String] = []
+    
     
     override func willAnimateRotation(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
         gradientLayr.frame = resultButton.bounds
@@ -97,6 +99,7 @@ final class CalculatorVC: UIViewController {
         
         changeThemeMode()
         setupResultsView()
+        setupHistoryButton()
         setupLabels()
         setupNumpad()
         setupMainNumStackView()
@@ -148,6 +151,26 @@ final class CalculatorVC: UIViewController {
             secondLabelBottomValue
         ])
     }
+    
+    private func setupHistoryButton() {
+#warning("გავიგო რატო არ მუშაობს რეზალტზე")
+        view.addSubview(historyButton)
+        view.bringSubviewToFront(historyButton)
+
+        historyButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            historyButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
+            historyButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15),
+        ])
+        
+        historyButton.addAction(UIAction(handler: {[weak self] action in
+            self?.navigateToHistoryVC()
+        }), for: .touchUpInside)
+    }
+    
+    
+    
     
     private func updateSecondLabel() {
         if isLandscapeMode {
@@ -269,6 +292,8 @@ final class CalculatorVC: UIViewController {
         
         pad.backgroundColor = isDarkMode ? UIColor(hue: 220/360, saturation: 0.15, brightness: 0.18, alpha: 1) : UIColor(hue: 0/360, saturation: 0, brightness: 0.96, alpha: 1)
         
+        historyButton.setImage(UIImage(named: isDarkMode ? "historyLight" : "historyDark"), for: .normal)
+        
         updateButtonIconsColor()
         updateButtonTitleColor()
     }
@@ -343,8 +368,9 @@ final class CalculatorVC: UIViewController {
         resultButton.layer.masksToBounds = false
     }
     
-    
-    
+    private func navigateToHistoryVC() {
+        self.navigationController?.pushViewController(HistoryVC(), animated: true)
+    }
     
     
     private func useCalculator() {
