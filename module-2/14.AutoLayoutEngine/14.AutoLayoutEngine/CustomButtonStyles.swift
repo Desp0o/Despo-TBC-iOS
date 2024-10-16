@@ -8,7 +8,6 @@
 import UIKit
 
 final class CalcButton: UIButton {
-    
     var value: String
     
     init(value: String = "") {

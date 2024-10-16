@@ -1,15 +1,17 @@
 import UIKit
 
+protocol HistoryDelegate: AnyObject {
+    func historyOperations(operations: [String], theme: Bool)
+}
 
 final class CalculatorVC: UIViewController {
     private let resultsView = UIView()
+    private let pad = UIView()
     
     private let firstLabel = UILabel()
     private var secondLabel = UILabel()
     
     private let gradientLayr = CAGradientLayer()
-    
-    private let pad = UIView()
     
     private let mainNumStackView = UIStackView()
     private let firstNumbersStack = UIStackView()
@@ -43,12 +45,12 @@ final class CalculatorVC: UIViewController {
     private var mainStackTopAnchorValue: NSLayoutConstraint!
     private var mainStackBottomAnchorValue: NSLayoutConstraint!
     private var secondLabelBottomValue: NSLayoutConstraint!
+    private var historyButtonTopAnchor: NSLayoutConstraint!
     
     private var isLandscapeMode = false
     private var isDarkMode = false
     private var isCalculatedResult = false
-    private var lastOperations: [String] = []
-    
+    private var lastOperations: [String] = [""]
     
     override func willAnimateRotation(to toInterfaceOrientation: UIInterfaceOrientation, duration: TimeInterval) {
         gradientLayr.frame = resultButton.bounds
@@ -64,6 +66,7 @@ final class CalculatorVC: UIViewController {
         isLandscapeMode = UIScreen.main.bounds.width > UIScreen.main.bounds.height ? true : false
         updateMainNumStackViewConstraints()
         updateSecondLabel()
+        updateHistoryButtonContraint()
         view.layoutIfNeeded()
         
         gradinetColor()
@@ -88,6 +91,8 @@ final class CalculatorVC: UIViewController {
     }
     
     private func setupUI(){
+        self.navigationController?.navigationBar.isHidden = true
+        
         switch traitCollection.userInterfaceStyle {
         case .light:
             isDarkMode = false
@@ -110,9 +115,15 @@ final class CalculatorVC: UIViewController {
         addShadow()
     }
     
-    private func setupLabels() {
-        secondLabelSetup()
-        firstLabelSetup()
+    private func updateUI() {
+        view.backgroundColor = isDarkMode ? darkThemeBackgroundColor : lightThemeBackgroundColor
+        
+        pad.backgroundColor = isDarkMode ? padDarkColor : padLightColor
+        
+        historyButton.setImage(UIImage(named: isDarkMode ? "historyLight" : "historyDark"), for: .normal)
+        
+        updateButtonIconsColor()
+        updateButtonTitleColor()
     }
     
     private func setupResultsView() {
@@ -126,6 +137,11 @@ final class CalculatorVC: UIViewController {
         ])
     }
     
+    private func setupLabels() {
+        secondLabelSetup()
+        firstLabelSetup()
+    }
+    
     private func firstLabelSetup() {
         resultsView.addSubview(firstLabel)
         firstLabel.text = ""
@@ -133,8 +149,11 @@ final class CalculatorVC: UIViewController {
         firstLabel.textColor = actionsTextColor
         
         firstLabel.translatesAutoresizingMaskIntoConstraints = false
-        firstLabel.trailingAnchor.constraint(equalTo: secondLabel.trailingAnchor).isActive = true
-        firstLabel.bottomAnchor.constraint(equalTo: secondLabel.topAnchor, constant: -8).isActive = true
+        
+        NSLayoutConstraint.activate([
+            firstLabel.trailingAnchor.constraint(equalTo: secondLabel.trailingAnchor),
+            firstLabel.bottomAnchor.constraint(equalTo: secondLabel.topAnchor, constant: -8)
+        ])
     }
     
     private func secondLabelSetup() {
@@ -152,26 +171,6 @@ final class CalculatorVC: UIViewController {
         ])
     }
     
-    private func setupHistoryButton() {
-#warning("გავიგო რატო არ მუშაობს რეზალტზე")
-        view.addSubview(historyButton)
-        view.bringSubviewToFront(historyButton)
-
-        historyButton.translatesAutoresizingMaskIntoConstraints = false
-        
-        NSLayoutConstraint.activate([
-            historyButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
-            historyButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15),
-        ])
-        
-        historyButton.addAction(UIAction(handler: {[weak self] action in
-            self?.navigateToHistoryVC()
-        }), for: .touchUpInside)
-    }
-    
-    
-    
-    
     private func updateSecondLabel() {
         if isLandscapeMode {
             secondLabelBottomValue.constant = -10
@@ -180,6 +179,28 @@ final class CalculatorVC: UIViewController {
             secondLabelBottomValue.constant = -40
             secondLabel.font = UIFont.systemFont(ofSize: 48)
         }
+    }
+    
+    private func setupHistoryButton() {
+        view.addSubview(historyButton)
+        view.bringSubviewToFront(historyButton)
+        
+        historyButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        historyButtonTopAnchor = historyButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30)
+        
+        NSLayoutConstraint.activate([
+            historyButtonTopAnchor,
+            historyButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15),
+        ])
+        
+        historyButton.addAction(UIAction(handler: {[weak self] action in
+            self?.navigateToHistoryVC()
+        }), for: .touchUpInside)
+    }
+    
+    private func updateHistoryButtonContraint() {
+        historyButtonTopAnchor.constant = isLandscapeMode ? 50 : 30
     }
     
     private func setupNumpad() {
@@ -284,18 +305,6 @@ final class CalculatorVC: UIViewController {
         resultButton.addAction(UIAction(handler: { [weak self] action  in
             self?.useCalculator()
         }), for: .touchUpInside)
-        
-    }
-    
-    private func updateUI() {
-        view.backgroundColor = isDarkMode ? darkThemeBackgroundColor : lightThemeBackgroundColor
-        
-        pad.backgroundColor = isDarkMode ? padDarkColor : padLightColor
-        
-        historyButton.setImage(UIImage(named: isDarkMode ? "historyLight" : "historyDark"), for: .normal)
-        
-        updateButtonIconsColor()
-        updateButtonTitleColor()
     }
     
     private func updateButtonIconsColor() {
@@ -369,7 +378,7 @@ final class CalculatorVC: UIViewController {
     }
     
     private func navigateToHistoryVC() {
-        let vc = HistoryVC(isDarkMode: isDarkMode)
+        let vc = HistoryVC(isDarkMode: isDarkMode, operationsArray: lastOperations)
         self.navigationController?.pushViewController(vc, animated: true)
     }
     
@@ -382,11 +391,15 @@ final class CalculatorVC: UIViewController {
         secondLabel.text = String(reflecting: expn.expressionValue(with: nil, context: nil) ?? "0")
         
         isCalculatedResult = true
-        lastOperations.append(firstLabel.text ?? "")
+        
+        if firstLabel.text != "0" {
+            lastOperations.append(firstLabel.text ?? "")
+        }
     }
     
     private func addButtonAction(value: String) {
         let symbols = ["%", "/", "*",  "-", "+", "."]
+        let noStart = ["%", "/", "*",  "-", "+"]
         
         if symbols.contains(String(secondLabel.text?.last ?? ".")) && symbols.contains(value) {
             let droppedWord = secondLabel.text!.dropLast()
@@ -394,17 +407,22 @@ final class CalculatorVC: UIViewController {
         }
         
         if value == "AC" {
+            lastOperations.append(value)
             secondLabel.text = "0"
             firstLabel.text = ""
+        } else if secondLabel.text == "0" && noStart.contains(value)  {
+            secondLabel.text = "0"
         } else if secondLabel.text == "0" || isCalculatedResult && !symbols.contains(value) {
             secondLabel.text! = value
             isCalculatedResult = false
-        } else {
+        }  else {
             secondLabel.text! += value
             isCalculatedResult = false
         }
     }
 }
+
+
 
 #Preview {
     let vc = CalculatorVC()
