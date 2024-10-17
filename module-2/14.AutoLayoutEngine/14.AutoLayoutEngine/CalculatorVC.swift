@@ -42,10 +42,10 @@ final class CalculatorVC: UIViewController {
     private let resultButton = CalcButton()
     private let historyButton = UIButton()
     
-    private var mainStackTopAnchorValue: NSLayoutConstraint!
-    private var mainStackBottomAnchorValue: NSLayoutConstraint!
-    private var secondLabelBottomValue: NSLayoutConstraint!
-    private var historyButtonTopAnchor: NSLayoutConstraint!
+    private var mainStackTopAnchorValue: NSLayoutConstraint?
+    private var mainStackBottomAnchorValue: NSLayoutConstraint?
+    private var secondLabelBottomValue: NSLayoutConstraint?
+    private var historyButtonTopAnchor: NSLayoutConstraint?
     
     private var isLandscapeMode = false
     private var isDarkMode = false
@@ -163,20 +163,20 @@ final class CalculatorVC: UIViewController {
         secondLabel.font = UIFont.systemFont(ofSize: 48)
         secondLabel.translatesAutoresizingMaskIntoConstraints = false
         
-        secondLabelBottomValue = secondLabel.bottomAnchor.constraint(equalTo: resultsView.bottomAnchor, constant: -40 )
+        secondLabelBottomValue = secondLabel.bottomAnchor.constraint(equalTo: resultsView.bottomAnchor, constant: -40)
         
         NSLayoutConstraint.activate([
             secondLabel.trailingAnchor.constraint(equalTo: resultsView.trailingAnchor, constant: -43),
-            secondLabelBottomValue
+            secondLabelBottomValue ?? secondLabel.bottomAnchor.constraint(equalTo: resultsView.bottomAnchor, constant: -40)
         ])
     }
     
     private func updateSecondLabel() {
         if isLandscapeMode {
-            secondLabelBottomValue.constant = -10
+            secondLabelBottomValue?.constant = -10
             secondLabel.font = UIFont.systemFont(ofSize: 30)
         } else {
-            secondLabelBottomValue.constant = -40
+            secondLabelBottomValue?.constant = -40
             secondLabel.font = UIFont.systemFont(ofSize: 48)
         }
     }
@@ -190,7 +190,7 @@ final class CalculatorVC: UIViewController {
         historyButtonTopAnchor = historyButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30)
         
         NSLayoutConstraint.activate([
-            historyButtonTopAnchor,
+            historyButtonTopAnchor ?? historyButton.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 30),
             historyButton.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 15),
         ])
         
@@ -200,7 +200,7 @@ final class CalculatorVC: UIViewController {
     }
     
     private func updateHistoryButtonContraint() {
-        historyButtonTopAnchor.constant = isLandscapeMode ? 50 : 30
+        historyButtonTopAnchor?.constant = isLandscapeMode ? 50 : 30
     }
     
     private func setupNumpad() {
@@ -233,18 +233,18 @@ final class CalculatorVC: UIViewController {
         NSLayoutConstraint.activate([
             mainNumStackView.leftAnchor.constraint(equalTo: pad.leftAnchor, constant: 42),
             mainNumStackView.rightAnchor.constraint(equalTo: pad.rightAnchor, constant: -42),
-            mainStackTopAnchorValue,
-            mainStackBottomAnchorValue
+            mainStackTopAnchorValue ?? mainNumStackView.topAnchor.constraint(equalTo: pad.topAnchor, constant: 48),
+            mainStackBottomAnchorValue ?? mainNumStackView.bottomAnchor.constraint(equalTo: pad.bottomAnchor, constant: -66)
         ])
     }
     
     private func updateMainNumStackViewConstraints() {
         if isLandscapeMode {
-            mainStackTopAnchorValue.constant = 12
-            mainStackBottomAnchorValue.constant = -12
+            mainStackTopAnchorValue?.constant = 12
+            mainStackBottomAnchorValue?.constant = -12
         } else {
-            mainStackTopAnchorValue.constant = 48
-            mainStackBottomAnchorValue.constant = -66
+            mainStackTopAnchorValue?.constant = 48
+            mainStackBottomAnchorValue?.constant = -66
         }
     }
     
@@ -414,10 +414,10 @@ final class CalculatorVC: UIViewController {
         } else if secondLabel.text == "0" && noStart.contains(value)  {
             secondLabel.text = "0"
         } else if secondLabel.text == "0" || isCalculatedResult && !symbols.contains(value) {
-            secondLabel.text! = value
+            secondLabel.text? = value
             isCalculatedResult = false
         }  else {
-            secondLabel.text! += value
+            secondLabel.text? += value
             isCalculatedResult = false
         }
     }
