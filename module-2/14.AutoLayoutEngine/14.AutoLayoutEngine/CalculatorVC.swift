@@ -385,10 +385,11 @@ final class CalculatorVC: UIViewController {
     private func useCalculator() {
         guard let resText = secondLabel.text else { return }
         
-        let expn = NSExpression(format: resText)
+        let replacedText = resText.replacingOccurrences(of: "%", with: "/100")
+        let expn = NSExpression(format: replacedText)
         
         firstLabel.text = String(describing: secondLabel.text ?? "")
-        secondLabel.text = String(reflecting: expn.expressionValue(with: nil, context: nil) ?? "0")
+        secondLabel.text = String(reflecting: expn.expressionValue(with: nil, context: nil) ?? "0" )
         
         isCalculatedResult = true
         
