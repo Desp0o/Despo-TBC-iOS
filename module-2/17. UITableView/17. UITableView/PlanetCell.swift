@@ -13,6 +13,8 @@ final class PlanetCell: UITableViewCell {
     private var planetTitle = UILabel()
     private var planetArea = UILabel()
     private var arrowIocn = UIImageView()
+    private let favIcon = UIImageView()
+    private var isFaved = false
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -24,7 +26,6 @@ final class PlanetCell: UITableViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-
     
     private func setupUI() {
         setupMainStack()
@@ -32,6 +33,7 @@ final class PlanetCell: UITableViewCell {
         setupInfoStack()
         setupPlanetInfo()
         setupArrowIcon()
+        setupFavorite()
     }
     
     private func setupImage() {
@@ -39,6 +41,36 @@ final class PlanetCell: UITableViewCell {
             planetImg.widthAnchor.constraint(equalToConstant: 100),
             planetImg.heightAnchor.constraint(equalToConstant: 100),
         ])
+    }
+    
+    private func setupFavorite() {
+        favIcon.image = UIImage(systemName: "star")
+        contentView.addSubview(favIcon)
+        contentView.bringSubviewToFront(favIcon)
+        
+        favIcon.tintColor = .gray
+        favIcon.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            favIcon.trailingAnchor.constraint(equalTo: arrowIocn.leadingAnchor, constant: -20),
+            favIcon.centerYAnchor.constraint(equalTo: infoStack.centerYAnchor),
+            favIcon.heightAnchor.constraint(equalToConstant: 24),
+            favIcon.widthAnchor.constraint(equalToConstant: 24)
+        ])
+        
+        let tapGesture = UITapGestureRecognizer(target: self, action: #selector(favIconTapped))
+        favIcon.isUserInteractionEnabled = true
+        favIcon.addGestureRecognizer(tapGesture)
+    }
+    
+    @objc private func favIconTapped() {
+        isFaved = !isFaved        
+        updateFavIconOnTap()
+    }
+    
+    private func updateFavIconOnTap() {
+        favIcon.image = UIImage(systemName: isFaved ? "star.fill" : "star")
+        favIcon.tintColor = isFaved ? .systemYellow : .gray
     }
     
     private func setupMainStack() {
@@ -95,3 +127,4 @@ final class PlanetCell: UITableViewCell {
         self.planetArea.text = planetArea
     }
 }
+

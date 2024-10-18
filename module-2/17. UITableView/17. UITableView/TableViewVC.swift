@@ -7,35 +7,35 @@
 
 import UIKit
 
-class ViewController: UIViewController, UITableViewDataSource {
+protocol PlanetPositionsDelegate: AnyObject {
+    func updatePlanetPositionInArray(array: [(String, String, UIImage?, String, String)])
+}
+
+final class TableViewVC: UIViewController, UITableViewDataSource {
     private var pageTitle = UILabel()
-    
-    private let planetsArray = [
-        ("Mars", "1,258,250 km²", UIImage(named: "mars")),
-        ("Jupiter", "64E10 km²", UIImage(named: "jupiter")),
-        ("Earth", "500,100,100 km²", UIImage(named: "earth")),
-        ("Saturn", "2,608,250 km²", UIImage(named: "saturn")),
-        ("Venus", "460,234,300 km²", UIImage(named: "venus")),
-        ("Mercury", "74,800,000 km²", UIImage(named: "mercury")),
-        ("Neptune", "7,618,300,000 km²", UIImage(named: "neptune")),
-        ("Uranus", "8,100,400,000 km²", UIImage(named: "uranus")),
-        ("Pluto", "1,654,500 km²", UIImage(named: "pluto")),
-        ("Eris", "1,663,000 km²", UIImage(named: "eris")),
-        ("Haumea", "1,949,000 km²", UIImage(named: "haumea")),
-        ("Makemake", "1,430,000 km²", UIImage(named: "makemake")),
-        ("Ceres", "2,770,000 km²", UIImage(named: "ceres"))
-    ]
-    
-    
     private let tableView = UITableView()
     
+    var planetsArray = [
+        ("Mars", "1,258,250 km²", UIImage(named: "mars"), "-60°C", "144.798.500"),
+        ("Jupiter", "64E10 km²", UIImage(named: "jupiter"), "-108°C", "61.418.738.571"),
+        ("Earth", "500,100,100 km²", UIImage(named: "earth"), "15°C", "510.072.000"),
+        ("Saturn", "2,608,250 km²", UIImage(named: "saturn"), "-139°C", "42.700.000.000"),
+        ("Venus", "460,234,300 km²", UIImage(named: "venus"), "462°C", "460.234.317"),
+        ("Mars", "1,258,250 km²", UIImage(named: "mars"), "-60°C", "144.798.500"),
+        ("Jupiter", "64E10 km²", UIImage(named: "jupiter"), "-108°C", "61.418.738.571"),
+        ("Earth", "500,100,100 km²", UIImage(named: "earth"), "15°C", "510.072.000"),
+        ("Saturn", "2,608,250 km²", UIImage(named: "saturn"), "-139°C", "42.700.000.000"),
+        ("Venus", "460,234,300 km²", UIImage(named: "venus"), "462°C", "460.234.317"),
+    ]
+    
     override func viewDidLoad() {
+        self.navigationController?.navigationBar.isHidden = true
         super.viewDidLoad()
         view.backgroundColor = backgorundColor
         setupPageTitle()
         setupTableView()
     }
-    
+
     private func setupPageTitle() {
         view.addSubview(pageTitle)
         
@@ -57,7 +57,10 @@ class ViewController: UIViewController, UITableViewDataSource {
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.register(PlanetCell.self, forCellReuseIdentifier: "PlanetCell")
         tableView.dataSource = self
+        tableView.delegate = self
         tableView.backgroundColor = .clear
+        tableView.separatorStyle = .none
+        tableView.separatorInset = UIEdgeInsets(top: 40, left: 0, bottom: -40, right: 0)
         
         NSLayoutConstraint.activate([
             tableView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor),
@@ -66,15 +69,5 @@ class ViewController: UIViewController, UITableViewDataSource {
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor)
         ])
     }
-    
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        planetsArray.count
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "PlanetCell", for: indexPath) as! PlanetCell
-        let planet = planetsArray[indexPath.row]
-        cell.setupPlanetCell(planetImage: planet.2 ?? UIImage(), planetTitle: planet.0, planetArea: planet.1)
-        return cell
-    }
 }
+
