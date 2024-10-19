@@ -1,0 +1,155 @@
+//
+//  DetailsVC.swift
+//  17. UiCollectionView
+//
+//  Created by Despo on 19.10.24.
+//
+
+import UIKit
+
+class DetailsVC: UITableViewController {
+    private let navStack = UIStackView()
+    private let detailImg = UIImageView()
+    private let table = UITableView()
+    private var screenTitle = UILabel()
+    private let backButton = UIButton()
+    private let favButton = UIButton()
+    
+    private let planet: Planet
+    
+    init(_ planet: Planet) {
+        self.planet = planet
+        super.init(nibName: nil, bundle: nil)
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupUI()
+    }
+
+    private func setupUI() {
+        view.backgroundColor = UIColor(hue: 18/360, saturation: 0.88, brightness: 0.13, alpha: 1)
+        view.isUserInteractionEnabled = true
+        setupNavigationBar()
+        setupDetailsImage()
+        setupDetailsTable()
+    }
+
+    private func setupNavigationBar() {
+        view.addSubview(navStack)
+        
+        navStack.axis = .horizontal
+        navStack.distribution = .equalSpacing
+        navStack.layoutMargins = UIEdgeInsets(top: 0, left: 30, bottom: 0, right: 30)
+        navStack.isLayoutMarginsRelativeArrangement = true
+        
+        navStack.translatesAutoresizingMaskIntoConstraints = false
+        NSLayoutConstraint.activate([
+            navStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 23),
+            navStack.leftAnchor.constraint(equalTo: view.leftAnchor),
+            navStack.rightAnchor.constraint(equalTo: view.rightAnchor),
+            navStack.widthAnchor.constraint(equalTo: view.widthAnchor)
+        ])
+        
+        setupBackButton()
+        setupDetailScreenTitle()
+        setupFavIcon()
+    }
+    
+    private func setupBackButton() {
+        navStack.addArrangedSubview(backButton)
+        
+        backButton.setImage(UIImage(named: "backIcon"), for: .normal)
+        backButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        backButton.addAction(UIAction(handler: { action in
+            self.navigationController?.popViewController(animated: true)
+        }), for: .touchUpInside)
+    }
+    
+    private func setupFavIcon() {
+        navStack.addArrangedSubview(favButton)
+        
+        favButton.setImage(UIImage(named: planet.isFaved ? "starActive" : "starInactive"), for: .normal)
+        
+        favButton.translatesAutoresizingMaskIntoConstraints = false
+        favButton.imageView?.translatesAutoresizingMaskIntoConstraints = false
+
+        NSLayoutConstraint.activate([
+            favButton.imageView?.widthAnchor.constraint(equalToConstant: 25) ?? NSLayoutConstraint(),
+            favButton.imageView?.heightAnchor.constraint(equalToConstant: 25) ?? NSLayoutConstraint()
+        ])
+        
+        favButton.addAction(UIAction(handler: { action in
+            print("test detail")
+        }), for: .touchUpInside)
+    }
+    
+    private func setupDetailScreenTitle() {
+        navStack.addArrangedSubview(screenTitle)
+        screenTitle.text = planet.name
+        screenTitle.screenTitle()
+
+        NSLayoutConstraint.activate([
+            screenTitle.centerXAnchor.constraint(equalTo: navStack.centerXAnchor),
+            screenTitle.centerYAnchor.constraint(equalTo: navStack.centerYAnchor)
+        ])
+    }
+    
+    private func setupDetailsImage() {
+        view.addSubview(detailImg)
+        
+        detailImg.image = planet.image
+        detailImg.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            detailImg.topAnchor.constraint(equalTo: navStack.bottomAnchor, constant: 86),
+            detailImg.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            detailImg.widthAnchor.constraint(equalToConstant: 280),
+            detailImg.heightAnchor.constraint(equalToConstant: 280)
+        ])
+    }
+    
+    private func setupDetailsTable() {
+        view.addSubview(table)
+        
+        table.translatesAutoresizingMaskIntoConstraints = false
+        table.register(DetailCell.self, forCellReuseIdentifier: "DetailCell")
+        table.dataSource = self
+        table.backgroundColor = UIColor.gray
+        
+        NSLayoutConstraint.activate([
+            table.topAnchor.constraint(equalTo: detailImg.bottomAnchor, constant: 112),
+            table.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
+            table.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
+            table.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0)
+        ])
+    }
+
+}
+
+
+extension DetailsVC {
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        return 3
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        
+        let cell = table.dequeueReusableCell(withIdentifier: "DetailCell") as? DetailCell
+        
+        
+        return cell ?? UITableViewCell()
+    }
+}
+
+//
+//#Preview{
+//    let vc = DetailsVC()
+//    
+//    return vc
+//}
