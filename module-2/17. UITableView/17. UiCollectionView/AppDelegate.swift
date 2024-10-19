@@ -1,8 +1,8 @@
 //
 //  AppDelegate.swift
-//  17. UITableView
+//  17. UiCollectionView
 //
-//  Created by Despo on 18.10.24.
+//  Created by Despo on 19.10.24.
 //
 
 import UIKit
