@@ -14,7 +14,6 @@ extension TableViewVC {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "PlanetCell", for: indexPath) as! PlanetCell
         let planet = planetsArray[indexPath.row]
-        
         cell.setupPlanetCell(planetImage: planet.2 ?? UIImage(), planetTitle: planet.0, planetArea: planet.1)
         return cell
     }
