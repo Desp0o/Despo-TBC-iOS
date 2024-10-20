@@ -16,7 +16,6 @@ extension UILabel {
     }
 }
 
-
 extension UIButton {
     func configureButtonIcon(with icon: String, size: CGFloat) {
         self.setImage(UIImage(named: icon ), for: .normal)
