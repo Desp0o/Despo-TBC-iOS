@@ -29,7 +29,6 @@ class SolarVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
         (image: UIImage(named: "earth"), name: "Earth", area: "510,100,000 km²", temperature: "15°C", mass: "5.972×10^24 kg", isFaved: false),
         (image: UIImage(named: "mars"), name: "Mars", area: "144,800,000 km²", temperature: "-63°C", mass: "641.71×10^21 kg", isFaved: false),
         (image: UIImage(named: "jupiter"), name: "Jupiter", area: "61,418,738,571 km²", temperature: "-145°C", mass: "1.898×10^27 kg", isFaved: false),
-        (image: UIImage(named: "saturn"), name: "Saturn", area: "42,700,000,000 km²", temperature: "-178°C", mass: "5.683×10^26 kg", isFaved: false),
         (image: UIImage(named: "uranus"), name: "Uranus", area: "8,115,600,000 km²", temperature: "-224°C", mass: "8.681×10^25 kg", isFaved: false),
         (image: UIImage(named: "neptune"), name: "Neptune", area: "7,618,300,000 km²", temperature: "-214°C", mass: "1.024×10^26 kg", isFaved: false),
         (image: UIImage(named: "pluto"), name: "Pluto", area: "16,647,940 km²", temperature: "-229°C", mass: "1.303×10^22 kg", isFaved: false),
@@ -118,14 +117,12 @@ extension SolarVC: favPlanetDelegate {
 
         if currentPlanet.isFaved  {
             planetsArray.insert(currentPlanet, at: 0)
-            currentIndex = 0
         } else {
             planetsArray.append(currentPlanet)
-            currentIndex = planetsArray.count
         }
         
         collectionView.reloadData()
-        print(planetsArray[index].name, currentIndex)
+        print(planetsArray[currentIndex].name, currentIndex)
     }
 }
 

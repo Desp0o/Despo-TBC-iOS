@@ -16,9 +16,10 @@ class DetailsVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     private var isIconActive = false
     private let planet: Planet
     
-    init(_ planet: Planet, index: Int) {
+    init(_ planet: Planet, index: Int, isIconActive: Bool = false) {
         self.index = index
         self.planet = planet
+        self.isIconActive = planet.isFaved
         super.init(nibName: nil, bundle: nil)
     }
     
