@@ -1,23 +1,21 @@
 import UIKit
 
-protocol favPlanetDelegate: AnyObject {
-    func addPlanetInFavourites(index: Int)
+protocol makeFavFromDetailDelegate: AnyObject {
+    func addPlanetInFavourites(name: String)
 }
 
 class DetailsVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
-    weak var delegate: favPlanetDelegate?
+    weak var delegate: makeFavFromDetailDelegate?
     private let navStack = UIStackView()
     private let detailImg = UIImageView()
     private let table = UITableView()
     private var screenTitle = UILabel()
     private let backButton = UIButton()
     private let favButton = UIButton()
-    private var index: Int?
     private var isIconActive = false
     private let planet: Planet
     
     init(_ planet: Planet, index: Int, isIconActive: Bool = false) {
-        self.index = index
         self.planet = planet
         self.isIconActive = planet.isFaved
         super.init(nibName: nil, bundle: nil)
@@ -131,8 +129,7 @@ class DetailsVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     }
     
     private func updatePlanetStatus() {
-        guard let index = index else { return }
-        self.delegate?.addPlanetInFavourites(index: index)
+        self.delegate?.addPlanetInFavourites(name: planet.name)
     }
     
     private func updateFavButtonIcon() {
