@@ -10,7 +10,6 @@ import UIKit
 class SolarVC: UIViewController, UICollectionViewDataSource, UICollectionViewDelegate {
     private let collectionView: UICollectionView = {
         let collection: UICollectionView
-        
         let collectionLayout = UICollectionViewFlowLayout()
         collectionLayout.itemSize = CGSize(width: 168, height: 180)
         collectionLayout.minimumLineSpacing = 38
@@ -22,6 +21,7 @@ class SolarVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
     }()
     
     private var screenTitleLbl = UILabel()
+    private let vectors = UIImageView()
     
     var planetsArray = [
         (image: UIImage(named: "mercury"), name: "Mercury", area: "1,258,250 km²", temperature: "-60°C", mass: "460.234.317", isFaved: false),
@@ -43,8 +43,9 @@ class SolarVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
     
     private func setupUI() {
         self.navigationController?.isNavigationBarHidden = true
-        view.addSubview(collectionView)
         view.backgroundColor = UIColor(hue: 18/360, saturation: 0.88, brightness: 0.13, alpha: 1)
+
+        view.addSubview(collectionView)
     
         setupScreenTitle()
         setupCollectionView()
@@ -107,6 +108,27 @@ extension SolarVC: makePlanetFavDelegate {
     }
 }
 
+extension SolarVC: favPlanetDelegate {
+    func addPlanetInFavourites(index: Int) {
+        var currentIndex = index
+        var currentPlanet = planetsArray[currentIndex]
+        currentPlanet.isFaved.toggle()
+        
+        planetsArray.remove(at: currentIndex)
+
+        if currentPlanet.isFaved  {
+            planetsArray.insert(currentPlanet, at: 0)
+            currentIndex = 0
+        } else {
+            planetsArray.append(currentPlanet)
+            currentIndex = planetsArray.count
+        }
+        
+        collectionView.reloadData()
+        print(planetsArray[index].name, currentIndex)
+    }
+}
+
 extension SolarVC {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         
@@ -114,14 +136,17 @@ extension SolarVC {
         
         let planet = Planet(image: currentPlanet.image ?? UIImage(), name: currentPlanet.name, area: currentPlanet.name, temp: currentPlanet.temperature, mass: currentPlanet.mass, isFaved: currentPlanet.isFaved)
         
-        navigationController?.pushViewController(DetailsVC(planet), animated: true)
+        let detailsVC = DetailsVC(planet, index: indexPath.item)
+        detailsVC.delegate = self
+        self.navigationController?.pushViewController(detailsVC, animated: true)
+
     }
 }
 
 
 
 
-//#Preview {
-//    let vc = SolarVC()
-//    return vc
-//}
+#Preview {
+    let vc = SolarVC()
+    return vc
+}

@@ -1,24 +1,34 @@
 import UIKit
 
+protocol favPlanetDelegate: AnyObject {
+    func addPlanetInFavourites(index: Int)
+}
+
 class DetailsVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
+    weak var delegate: favPlanetDelegate?
     private let navStack = UIStackView()
     private let detailImg = UIImageView()
     private let table = UITableView()
     private var screenTitle = UILabel()
     private let backButton = UIButton()
     private let favButton = UIButton()
-    
+    private var index: Int?
+    private var isIconActive = false
     private let planet: Planet
     
-    init(_ planet: Planet) {
+    init(_ planet: Planet, index: Int) {
+        self.index = index
         self.planet = planet
         super.init(nibName: nil, bundle: nil)
     }
     
-    
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func viewDidLayoutSubviews() {
+            super.viewDidLayoutSubviews()
+        view.layoutIfNeeded()
     }
     
     override func viewDidLoad() {
@@ -72,7 +82,8 @@ class DetailsVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         favButton.configureButtonIcon(with: planet.isFaved ? "starActive" : "starInactive", size: 25)
         
         favButton.addAction(UIAction(handler: { action in
-            print("test detail")
+            self.updateFavButtonIcon()
+            self.updatePlanetStatus()
         }), for: .touchUpInside)
     }
     
@@ -116,6 +127,16 @@ class DetailsVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
             table.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             table.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
         ])
+    }
+    
+    private func updatePlanetStatus() {
+        guard let index = index else { return }
+        self.delegate?.addPlanetInFavourites(index: index)
+    }
+    
+    private func updateFavButtonIcon() {
+        isIconActive.toggle()
+        favButton.setImage(UIImage(named: isIconActive ? "starActive" : "starInactive"), for: .normal)
     }
 }
 
