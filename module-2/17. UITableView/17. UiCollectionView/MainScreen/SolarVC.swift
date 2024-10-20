@@ -27,13 +27,13 @@ class SolarVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
     
     var planetsArray = [
         (image: UIImage(named: "mercury"), name: "Mercury", area: "1,258,250 km²", temperature: "-60°C", mass: "460.234.317", isFaved: false),
-        (image: UIImage(named: "venus"), name: "Venus", area: "4,602,000 km²", temperature: "462°C", mass: "4.867×10^24 kg", isFaved: true),
+        (image: UIImage(named: "venus"), name: "Venus", area: "4,602,000 km²", temperature: "462°C", mass: "4.867×10^24 kg", isFaved: false),
         (image: UIImage(named: "earth"), name: "Earth", area: "510,100,000 km²", temperature: "15°C", mass: "5.972×10^24 kg", isFaved: false),
         (image: UIImage(named: "mars"), name: "Mars", area: "144,800,000 km²", temperature: "-63°C", mass: "641.71×10^21 kg", isFaved: false),
-        (image: UIImage(named: "jupiter"), name: "Jupiter", area: "61,418,738,571 km²", temperature: "-145°C", mass: "1.898×10^27 kg", isFaved: true),
+        (image: UIImage(named: "jupiter"), name: "Jupiter", area: "61,418,738,571 km²", temperature: "-145°C", mass: "1.898×10^27 kg", isFaved: false),
         (image: UIImage(named: "saturn"), name: "Saturn", area: "42,700,000,000 km²", temperature: "-178°C", mass: "5.683×10^26 kg", isFaved: false),
         (image: UIImage(named: "uranus"), name: "Uranus", area: "8,115,600,000 km²", temperature: "-224°C", mass: "8.681×10^25 kg", isFaved: false),
-        (image: UIImage(named: "neptune"), name: "Neptune", area: "7,618,300,000 km²", temperature: "-214°C", mass: "1.024×10^26 kg", isFaved: true),
+        (image: UIImage(named: "neptune"), name: "Neptune", area: "7,618,300,000 km²", temperature: "-214°C", mass: "1.024×10^26 kg", isFaved: false),
         (image: UIImage(named: "pluto"), name: "Pluto", area: "16,647,940 km²", temperature: "-229°C", mass: "1.303×10^22 kg", isFaved: false),
         (image: UIImage(named: "eris"), name: "Eris", area: "6,440,000 km²", temperature: "-243°C", mass: "1.66×10^22 kg", isFaved: false)
     ]
@@ -46,10 +46,8 @@ class SolarVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
     private func setupUI() {
         self.navigationController?.isNavigationBarHidden = true
         view.addSubview(collectionView)
-        
         view.backgroundColor = UIColor(hue: 18/360, saturation: 0.88, brightness: 0.13, alpha: 1)
-        
-       
+    
         setupScreenTitle()
         setupCollectionView()
     }
@@ -66,10 +64,10 @@ class SolarVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
     
     private func setupCollectionView() {
         collectionView.backgroundColor = .clear
-        
         collectionView.register(PlanetCell.self, forCellWithReuseIdentifier: "PlanetCell")
         collectionView.delegate = self
         collectionView.dataSource = self
+        
         NSLayoutConstraint.activate([
             collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
@@ -79,20 +77,35 @@ class SolarVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
     }
 }
 
-extension SolarVC {
+extension SolarVC{
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         planetsArray.count
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PlanetCell", for: indexPath) as? PlanetCell
-        cell?.isUserInteractionEnabled = true
         
         let currentPlanet = planetsArray[indexPath.row]
         
-        cell?.configurePlanetCell(planetImg: currentPlanet.image ?? UIImage(), titleLbl: currentPlanet.name, areaLbl: currentPlanet.area, isFaved: currentPlanet.isFaved)
+        cell?.delegate = self
+        cell?.configurePlanetCell(planetImg: currentPlanet.image ?? UIImage(), titleLbl: currentPlanet.name, areaLbl: currentPlanet.area, isFaved: currentPlanet.isFaved, index: indexPath.row)
         
         return cell ?? PlanetCell()
+    }
+}
+
+extension SolarVC: makePlanetFavDelegate {
+    func savePlanet(index: Int) {
+        planetsArray[index].isFaved.toggle()
+        let currentPlanet = planetsArray.remove(at: index)
+        
+        if currentPlanet.isFaved {
+            planetsArray.insert(currentPlanet, at: 0)
+        } else {
+            planetsArray.append(currentPlanet)
+        }
+        
+        collectionView.reloadData()
     }
 }
 
@@ -110,7 +123,7 @@ extension SolarVC {
 
 
 
-#Preview {
-    let vc = SolarVC()
-    return vc
-}
+//#Preview {
+//    let vc = SolarVC()
+//    return vc
+//}
