@@ -7,18 +7,22 @@
 
 import UIKit
 
+protocol makePlanetFavDelegate: AnyObject {
+    func savePlanet(index: Int)
+}
+
 final class PlanetCell: UICollectionViewCell {
+    weak var delegate: makePlanetFavDelegate?
+    
     private let planetImg = UIImageView()
     private let stackView = UIStackView()
     private let favouriteButton = UIButton()
-    
     private let titleLbl = UILabel()
     private let areaLbl = UILabel()
-    
     private let planetinfoStack = UIStackView()
     
     private var isFaved = false
-    
+    private var index: Int?
     
     override init(frame: CGRect) {
         super.init(frame: .zero)
@@ -30,7 +34,7 @@ final class PlanetCell: UICollectionViewCell {
     }
     
     private func setupUI() {
-      setupImage()
+        setupImage()
         setupTitleAndfavouriteButton()
     }
     
@@ -53,7 +57,7 @@ final class PlanetCell: UICollectionViewCell {
             planetinfoStack.topAnchor.constraint(equalTo: planetImg.bottomAnchor, constant: 10),
             planetinfoStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
             planetinfoStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0),
-
+            
         ])
         
         setupStack()
@@ -66,7 +70,7 @@ final class PlanetCell: UICollectionViewCell {
         stackView.axis = .horizontal
         stackView.distribution = .equalCentering
         stackView.alignment = .center
-
+        
         NSLayoutConstraint.activate([
             stackView.topAnchor.constraint(equalTo: planetinfoStack.topAnchor, constant: 0),
             stackView.centerXAnchor.constraint(equalTo: planetinfoStack.centerXAnchor)
@@ -90,11 +94,13 @@ final class PlanetCell: UICollectionViewCell {
         stackView.bringSubviewToFront(favouriteButton)
         
         favouriteButton.isUserInteractionEnabled = true
+        favouriteButton.configureButtonIcon(with: isFaved ? "starActive" : "starInactive", size: 15)
+
         favouriteButton.addAction(UIAction(handler: { action in
-            print("tapped")
+            self.updatePlanetView()
         }), for: .touchUpInside)
         
-        favouriteButton.configureButtonIcon(with: isFaved ? "starActive" : "starInactive", size: 15)
+        
         NSLayoutConstraint.activate([
             favouriteButton.leftAnchor.constraint(equalTo: titleLbl.rightAnchor, constant: 10)
         ])
@@ -113,11 +119,17 @@ final class PlanetCell: UICollectionViewCell {
         ])
     }
     
-    func configurePlanetCell(planetImg: UIImage, titleLbl: String, areaLbl: String, isFaved: Bool) {
+    private func updatePlanetView() {
+        guard let index = index else { return }
+        delegate?.savePlanet(index: index)
+    }
+    
+    func configurePlanetCell(planetImg: UIImage, titleLbl: String, areaLbl: String, isFaved: Bool, index: Int) {
         self.planetImg.image = planetImg
         self.titleLbl.text = titleLbl
         self.areaLbl.text = areaLbl
         self.isFaved = isFaved
+        self.index = index
         
         favouriteButton.setImage(UIImage(named: isFaved ? "starActive" : "starInactive"), for: .normal)
     }
