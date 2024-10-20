@@ -56,8 +56,7 @@ class SolarVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
     
     private func setupScreenTitle() {
         view.addSubview(screenTitleLbl)
-        screenTitleLbl.text = "Planets"
-        screenTitleLbl.screenTitle()
+        screenTitleLbl.configureCustomLabel(with: "Planets", size:  36)
         
         NSLayoutConstraint.activate([
             screenTitleLbl.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 23),
@@ -75,7 +74,7 @@ class SolarVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
             collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
             collectionView.topAnchor.constraint(equalTo: screenTitleLbl.bottomAnchor, constant: 56),
-            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0)
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -44)
         ])
     }
 }

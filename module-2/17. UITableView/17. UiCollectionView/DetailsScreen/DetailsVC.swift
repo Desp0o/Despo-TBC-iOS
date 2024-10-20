@@ -1,13 +1,6 @@
-//
-//  DetailsVC.swift
-//  17. UiCollectionView
-//
-//  Created by Despo on 19.10.24.
-//
-
 import UIKit
 
-class DetailsVC: UITableViewController {
+class DetailsVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     private let navStack = UIStackView()
     private let detailImg = UIImageView()
     private let table = UITableView()
@@ -21,6 +14,8 @@ class DetailsVC: UITableViewController {
         self.planet = planet
         super.init(nibName: nil, bundle: nil)
     }
+    
+    
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -74,15 +69,7 @@ class DetailsVC: UITableViewController {
     private func setupFavIcon() {
         navStack.addArrangedSubview(favButton)
         
-        favButton.setImage(UIImage(named: planet.isFaved ? "starActive" : "starInactive"), for: .normal)
-        
-        favButton.translatesAutoresizingMaskIntoConstraints = false
-        favButton.imageView?.translatesAutoresizingMaskIntoConstraints = false
-
-        NSLayoutConstraint.activate([
-            favButton.imageView?.widthAnchor.constraint(equalToConstant: 25) ?? NSLayoutConstraint(),
-            favButton.imageView?.heightAnchor.constraint(equalToConstant: 25) ?? NSLayoutConstraint()
-        ])
+        favButton.configureButtonIcon(with: planet.isFaved ? "starActive" : "starInactive", size: 25)
         
         favButton.addAction(UIAction(handler: { action in
             print("test detail")
@@ -91,8 +78,7 @@ class DetailsVC: UITableViewController {
     
     private func setupDetailScreenTitle() {
         navStack.addArrangedSubview(screenTitle)
-        screenTitle.text = planet.name
-        screenTitle.screenTitle()
+        screenTitle.configureCustomLabel(with: planet.name, size: 36)
 
         NSLayoutConstraint.activate([
             screenTitle.centerXAnchor.constraint(equalTo: navStack.centerXAnchor),
@@ -118,38 +104,39 @@ class DetailsVC: UITableViewController {
         view.addSubview(table)
         
         table.translatesAutoresizingMaskIntoConstraints = false
+        table.backgroundColor = .clear
         table.register(DetailCell.self, forCellReuseIdentifier: "DetailCell")
+        table.separatorStyle = .none
         table.dataSource = self
-        table.backgroundColor = UIColor.gray
+        table.delegate = self
         
         NSLayoutConstraint.activate([
             table.topAnchor.constraint(equalTo: detailImg.bottomAnchor, constant: 112),
-            table.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-            table.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
-            table.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0)
+            table.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            table.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            table.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
         ])
     }
-
 }
 
-
 extension DetailsVC {
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         return 3
     }
     
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let planetInfoArray = [
+            ("Area", planet.area),
+            ("Temperature", planet.temp),
+            ("Mass", planet.mass)
+        ]
+        let currentProperty = planetInfoArray[indexPath.row]
+
         
         let cell = table.dequeueReusableCell(withIdentifier: "DetailCell") as? DetailCell
-        
+        cell?.configureDetailCell(propName: currentProperty.0, propValue: currentProperty.1)
         
         return cell ?? UITableViewCell()
     }
 }
-
-//
-//#Preview{
-//    let vc = DetailsVC()
-//    
-//    return vc
-//}
