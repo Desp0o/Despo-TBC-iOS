@@ -15,9 +15,7 @@ class SolarVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
         collectionLayout.itemSize = CGSize(width: 168, height: 180)
         collectionLayout.minimumLineSpacing = 38
         
-        
         collection = UICollectionView(frame: CGRect(x: 20, y: 20, width: 100, height: 100), collectionViewLayout: collectionLayout)
-        
         collection.translatesAutoresizingMaskIntoConstraints = false
         
         return collection
