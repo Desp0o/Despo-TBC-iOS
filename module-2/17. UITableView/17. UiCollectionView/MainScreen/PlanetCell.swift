@@ -7,12 +7,12 @@
 
 import UIKit
 
-protocol makePlanetFavDelegate: AnyObject {
+protocol makeFavFromCellDelegate: AnyObject {
     func savePlanet(index: Int)
 }
 
 final class PlanetCell: UICollectionViewCell {
-    weak var delegate: makePlanetFavDelegate?
+    weak var delegate: makeFavFromCellDelegate?
     
     private let planetImg = UIImageView()
     private let stackView = UIStackView()

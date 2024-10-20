@@ -92,7 +92,7 @@ extension SolarVC{
     }
 }
 
-extension SolarVC: makePlanetFavDelegate {
+extension SolarVC: makeFavFromCellDelegate {
     func savePlanet(index: Int) {
         planetsArray[index].isFaved.toggle()
         let currentPlanet = planetsArray.remove(at: index)
@@ -107,22 +107,29 @@ extension SolarVC: makePlanetFavDelegate {
     }
 }
 
-extension SolarVC: favPlanetDelegate {
-    func addPlanetInFavourites(index: Int) {
-        var currentIndex = index
-        var currentPlanet = planetsArray[currentIndex]
+extension SolarVC: makeFavFromDetailDelegate {
+    
+    func addPlanetInFavourites(name: String) {
+        var currentPlanet = planetsArray.first { planet in planet.name == name
+        }
+         
+        guard var currentPlanet = currentPlanet else { return }
+        
         currentPlanet.isFaved.toggle()
         
-        planetsArray.remove(at: currentIndex)
+        let index = planetsArray.firstIndex { name in
+            name.name == currentPlanet.name
+        }
+        
+        planetsArray.remove(at: index ?? 0)
 
         if currentPlanet.isFaved  {
             planetsArray.insert(currentPlanet, at: 0)
         } else {
             planetsArray.append(currentPlanet)
         }
-        
-        collectionView.reloadData()
-        print(planetsArray[currentIndex].name, currentIndex)
+     
+        collectionView.reloadData()        
     }
 }
 
@@ -142,8 +149,8 @@ extension SolarVC {
 
 
 
-
-#Preview {
-    let vc = SolarVC()
-    return vc
-}
+//
+//#Preview {
+//    let vc = SolarVC()
+//    return vc
+//}
