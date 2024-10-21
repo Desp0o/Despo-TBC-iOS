@@ -95,7 +95,7 @@ class DetailsVC: UIViewController {
     private func setupDetailsImage() {
         view.addSubview(detailImg)
         
-        detailImg.image = planet.image
+        detailImg.image = UIImage(named: planet.image)
         detailImg.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([

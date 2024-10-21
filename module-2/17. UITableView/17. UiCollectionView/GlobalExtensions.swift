@@ -18,7 +18,7 @@ extension UILabel {
 
 extension UIButton {
     func configureButtonIcon(with icon: String, size: CGFloat) {
-        self.setImage(UIImage(named: icon ), for: .normal)
+        self.setImage(UIImage(named: icon), for: .normal)
         
         self.translatesAutoresizingMaskIntoConstraints = false
         self.imageView?.translatesAutoresizingMaskIntoConstraints = false

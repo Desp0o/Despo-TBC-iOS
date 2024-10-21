@@ -116,11 +116,11 @@ final class PlanetCell: UICollectionViewCell {
         delegate?.savePlanet(index: index)
     }
     
-    func configurePlanetCell(planetImg: UIImage, titleLbl: String, areaLbl: String, isFaved: Bool, index: Int) {
-        self.planetImg.image = planetImg
-        self.titleLbl.text = titleLbl
-        self.areaLbl.text = areaLbl
-        self.isFaved = isFaved
+    func configurePlanetCell(planet: Planet, index: Int) {
+        self.planetImg.image = UIImage(named: planet.image)
+        self.titleLbl.text = planet.name
+        self.areaLbl.text = planet.area
+        self.isFaved = planet.isFaved
         self.index = index
         
         favouriteButton.configureButtonIcon(with: isFaved ? "starActive" : "starInactive", size: 15)

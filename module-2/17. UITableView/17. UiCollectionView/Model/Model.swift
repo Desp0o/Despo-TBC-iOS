@@ -7,7 +7,7 @@
 import UIKit
 
 struct Planet {
-    let image: UIImage
+    let image: String
     let name: String
     let area: String
     let temp: String
