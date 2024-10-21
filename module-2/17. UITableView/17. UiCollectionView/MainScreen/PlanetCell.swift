@@ -13,14 +13,12 @@ protocol makeFavFromCellDelegate: AnyObject {
 
 final class PlanetCell: UICollectionViewCell {
     weak var delegate: makeFavFromCellDelegate?
-    
     private let planetImg = UIImageView()
     private let stackView = UIStackView()
+    private let planetinfoStack = UIStackView()
     private let favouriteButton = UIButton()
     private let titleLbl = UILabel()
     private let areaLbl = UILabel()
-    private let planetinfoStack = UIStackView()
-    
     private var isFaved = false
     private var index: Int?
     
@@ -55,9 +53,6 @@ final class PlanetCell: UICollectionViewCell {
         planetinfoStack.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
             planetinfoStack.topAnchor.constraint(equalTo: planetImg.bottomAnchor, constant: 10),
-            planetinfoStack.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
-            planetinfoStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0),
-            
         ])
         
         setupStack()
@@ -68,12 +63,11 @@ final class PlanetCell: UICollectionViewCell {
         
         stackView.translatesAutoresizingMaskIntoConstraints = false
         stackView.axis = .horizontal
-        stackView.distribution = .equalCentering
         stackView.alignment = .center
+        stackView.spacing = 10
         
         NSLayoutConstraint.activate([
-            stackView.topAnchor.constraint(equalTo: planetinfoStack.topAnchor, constant: 0),
-            stackView.centerXAnchor.constraint(equalTo: planetinfoStack.centerXAnchor)
+            stackView.centerXAnchor.constraint(equalTo: self.centerXAnchor)
         ])
         
         setupTitleLabel()
@@ -83,10 +77,13 @@ final class PlanetCell: UICollectionViewCell {
     
     private func setupTitleLabel() {
         stackView.addArrangedSubview(titleLbl)
-        
         titleLbl.translatesAutoresizingMaskIntoConstraints = false
         titleLbl.font = UIFont.boldSystemFont(ofSize: 32)
         titleLbl.textColor = .white
+        
+        NSLayoutConstraint.activate([
+            titleLbl.leadingAnchor.constraint(equalTo: stackView.leadingAnchor, constant: 0)
+        ])
     }
     
     private func setupFavouriteIcon() {
@@ -95,15 +92,10 @@ final class PlanetCell: UICollectionViewCell {
         
         favouriteButton.isUserInteractionEnabled = true
         favouriteButton.configureButtonIcon(with: isFaved ? "starActive" : "starInactive", size: 15)
-
+        
         favouriteButton.addAction(UIAction(handler: { action in
             self.updatePlanetView()
         }), for: .touchUpInside)
-        
-        
-        NSLayoutConstraint.activate([
-            favouriteButton.leftAnchor.constraint(equalTo: titleLbl.rightAnchor, constant: 10)
-        ])
     }
     
     private func setupAreaLabel() {
@@ -114,7 +106,7 @@ final class PlanetCell: UICollectionViewCell {
         
         areaLbl.translatesAutoresizingMaskIntoConstraints = false
         NSLayoutConstraint.activate([
-            areaLbl.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            areaLbl.centerXAnchor.constraint(equalTo: self.centerXAnchor),
             areaLbl.topAnchor.constraint(equalTo: stackView.bottomAnchor, constant: 8)
         ])
     }
@@ -131,7 +123,7 @@ final class PlanetCell: UICollectionViewCell {
         self.isFaved = isFaved
         self.index = index
         
-        favouriteButton.setImage(UIImage(named: isFaved ? "starActive" : "starInactive"), for: .normal)
+        favouriteButton.configureButtonIcon(with: isFaved ? "starActive" : "starInactive", size: 15)
     }
 }
 
