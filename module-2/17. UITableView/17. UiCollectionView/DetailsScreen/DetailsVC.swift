@@ -4,17 +4,21 @@ protocol makeFavFromDetailDelegate: AnyObject {
     func addPlanetInFavourites(name: String)
 }
 
-class DetailsVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class DetailsVC: UIViewController {
     weak var delegate: makeFavFromDetailDelegate?
+    
     private let navStack = UIStackView()
     private let detailImg = UIImageView()
-    private let table = UITableView()
+    private let infoStack = UIStackView()
+    
     private var screenTitle = UILabel()
     private let backButton = UIButton()
     private let favButton = UIButton()
-    private var isIconActive = false
-    private let planet: Planet
     
+    private var isIconActive = false
+    private let isSmallScreen = UIScreen.main.bounds.height < 800 ? true : false
+    private let planet: Planet
+        
     init(_ planet: Planet, index: Int, isIconActive: Bool = false) {
         self.planet = planet
         self.isIconActive = planet.isFaved
@@ -26,7 +30,7 @@ class DetailsVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     }
     
     override func viewDidLayoutSubviews() {
-            super.viewDidLayoutSubviews()
+        super.viewDidLayoutSubviews()
         view.layoutIfNeeded()
     }
     
@@ -34,15 +38,15 @@ class DetailsVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         super.viewDidLoad()
         setupUI()
     }
-
+    
     private func setupUI() {
         view.backgroundColor = UIColor(hue: 18/360, saturation: 0.88, brightness: 0.13, alpha: 1)
         view.isUserInteractionEnabled = true
         setupNavigationBar()
         setupDetailsImage()
-        setupDetailsTable()
+        setupInfoView()
     }
-
+    
     private func setupNavigationBar() {
         view.addSubview(navStack)
         
@@ -89,7 +93,7 @@ class DetailsVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
     private func setupDetailScreenTitle() {
         navStack.addArrangedSubview(screenTitle)
         screenTitle.configureCustomLabel(with: planet.name, size: 36)
-
+        
         NSLayoutConstraint.activate([
             screenTitle.centerXAnchor.constraint(equalTo: navStack.centerXAnchor),
             screenTitle.centerYAnchor.constraint(equalTo: navStack.centerYAnchor)
@@ -103,28 +107,10 @@ class DetailsVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
         detailImg.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
-            detailImg.topAnchor.constraint(equalTo: navStack.bottomAnchor, constant: 86),
+            detailImg.topAnchor.constraint(equalTo: navStack.bottomAnchor, constant: isSmallScreen ? 76 : 86),
             detailImg.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            detailImg.widthAnchor.constraint(equalToConstant: 280),
-            detailImg.heightAnchor.constraint(equalToConstant: 280)
-        ])
-    }
-    
-    private func setupDetailsTable() {
-        view.addSubview(table)
-        
-        table.translatesAutoresizingMaskIntoConstraints = false
-        table.backgroundColor = .clear
-        table.register(DetailCell.self, forCellReuseIdentifier: "DetailCell")
-        table.separatorStyle = .none
-        table.dataSource = self
-        table.delegate = self
-        
-        NSLayoutConstraint.activate([
-            table.topAnchor.constraint(equalTo: detailImg.bottomAnchor, constant: 112),
-            table.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            table.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            table.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -10)
+            detailImg.widthAnchor.constraint(equalToConstant: isSmallScreen ? 200 : 280),
+            detailImg.heightAnchor.constraint(equalToConstant: isSmallScreen ? 200 : 280)
         ])
     }
     
@@ -140,22 +126,54 @@ class DetailsVC: UIViewController, UITableViewDataSource, UITableViewDelegate {
 
 extension DetailsVC {
     
-    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
-    }
-    
-    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    private func setupInfoView() {
+        view.addSubview(infoStack)
+        
+        infoStack.axis = .vertical
+        infoStack.spacing = 15
+        infoStack.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            infoStack.topAnchor.constraint(equalTo: detailImg.bottomAnchor, constant: isSmallScreen ? 76 : 112),
+            infoStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
+            infoStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+        ])
+        
         let planetInfoArray = [
             ("Area", planet.area),
             ("Temperature", planet.temp),
             ("Mass", planet.mass)
         ]
-        let currentProperty = planetInfoArray[indexPath.row]
-
         
-        let cell = table.dequeueReusableCell(withIdentifier: "DetailCell") as? DetailCell
-        cell?.configureDetailCell(propName: currentProperty.0, propValue: currentProperty.1)
+        for prop in planetInfoArray {
+            configurePlanetParams(name: prop.0, labelText: prop.1)
+        }
+    }
+    
+    private func configurePlanetParams(name: String, labelText: String) {
+        let viewStack = UIStackView()
+        infoStack.addArrangedSubview(viewStack)
         
-        return cell ?? UITableViewCell()
+        viewStack.axis = .horizontal
+        viewStack.spacing = 10
+        viewStack.clipsToBounds = true
+        viewStack.layer.borderWidth = 1
+        viewStack.layer.borderColor = UIColor.white.cgColor
+        viewStack.layer.cornerRadius = 15
+        viewStack.layoutMargins = UIEdgeInsets(top: 14, left: 12, bottom: 14, right: 12)
+        viewStack.isLayoutMarginsRelativeArrangement = true
+        
+        let propName = UILabel()
+        propName.configureCustomLabel(with: name, size: 18)
+        viewStack.addArrangedSubview(propName)
+        
+        let propValue = UILabel()
+        propValue.configureCustomLabel(with: labelText, size: 18)
+        viewStack.addArrangedSubview(propValue)
+        
+        NSLayoutConstraint.activate([
+            viewStack.leadingAnchor.constraint(equalTo: infoStack.leadingAnchor, constant: 0),
+            viewStack.trailingAnchor.constraint(equalTo: infoStack.trailingAnchor, constant: 0),
+        ])
     }
 }

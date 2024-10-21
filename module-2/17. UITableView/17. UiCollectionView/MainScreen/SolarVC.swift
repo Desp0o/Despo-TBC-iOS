@@ -65,7 +65,7 @@ class SolarVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
         collectionView.register(PlanetCell.self, forCellWithReuseIdentifier: "PlanetCell")
         collectionView.delegate = self
         collectionView.dataSource = self
-        
+        collectionView.isUserInteractionEnabled = true
         NSLayoutConstraint.activate([
             collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
@@ -84,7 +84,7 @@ extension SolarVC{
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PlanetCell", for: indexPath) as? PlanetCell
         
         let currentPlanet = planetsArray[indexPath.row]
-        
+        cell?.isUserInteractionEnabled = true
         cell?.delegate = self
         cell?.configurePlanetCell(planetImg: currentPlanet.image ?? UIImage(), titleLbl: currentPlanet.name, areaLbl: currentPlanet.area, isFaved: currentPlanet.isFaved, index: indexPath.row)
         
@@ -110,7 +110,7 @@ extension SolarVC: makeFavFromCellDelegate {
 extension SolarVC: makeFavFromDetailDelegate {
     
     func addPlanetInFavourites(name: String) {
-        var currentPlanet = planetsArray.first { planet in planet.name == name
+        let currentPlanet = planetsArray.first { planet in planet.name == name
         }
          
         guard var currentPlanet = currentPlanet else { return }
