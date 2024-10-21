@@ -24,15 +24,15 @@ class SolarVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
     private let vectors = UIImageView()
     
     var planetsArray = [
-        (image: UIImage(named: "mercury"), name: "Mercury", area: "1,258,250 km²", temperature: "-60°C", mass: "460.234.317", isFaved: false),
-        (image: UIImage(named: "venus"), name: "Venus", area: "4,602,000 km²", temperature: "462°C", mass: "4.867×10^24 kg", isFaved: false),
-        (image: UIImage(named: "earth"), name: "Earth", area: "510,100,000 km²", temperature: "15°C", mass: "5.972×10^24 kg", isFaved: false),
-        (image: UIImage(named: "mars"), name: "Mars", area: "144,800,000 km²", temperature: "-63°C", mass: "641.71×10^21 kg", isFaved: false),
-        (image: UIImage(named: "jupiter"), name: "Jupiter", area: "61,418,738,571 km²", temperature: "-145°C", mass: "1.898×10^27 kg", isFaved: false),
-        (image: UIImage(named: "uranus"), name: "Uranus", area: "8,115,600,000 km²", temperature: "-224°C", mass: "8.681×10^25 kg", isFaved: false),
-        (image: UIImage(named: "neptune"), name: "Neptune", area: "7,618,300,000 km²", temperature: "-214°C", mass: "1.024×10^26 kg", isFaved: false),
-        (image: UIImage(named: "pluto"), name: "Pluto", area: "16,647,940 km²", temperature: "-229°C", mass: "1.303×10^22 kg", isFaved: false),
-        (image: UIImage(named: "eris"), name: "Eris", area: "6,440,000 km²", temperature: "-243°C", mass: "1.66×10^22 kg", isFaved: false)
+        Planet(image: "mercury", name: "Mercury", area: "1,258,250 km²", temp: "-60°C", mass: "460.234.317", isFaved: false),
+        Planet(image: "venus", name: "Venus", area: "4,602,000 km²", temp: "462°C", mass: "4.867×10^24 kg", isFaved: false),
+        Planet(image: "earth", name: "Earth", area: "510,100,000 km²", temp: "15°C", mass: "5.972×10^24 kg", isFaved: false),
+        Planet(image: "mars", name: "Mars", area: "144,800,000 km²", temp: "-63°C", mass: "641.71×10^21 kg", isFaved: false),
+        Planet(image: "jupiter", name: "Jupiter", area: "61,418,738,571 km²", temp: "-145°C", mass: "1.898×10^27 kg", isFaved: false),
+        Planet(image: "uranus", name: "Uranus", area: "8,115,600,000 km²", temp: "-224°C", mass: "8.681×10^25 kg", isFaved: false),
+        Planet(image: "neptune", name: "Neptune", area: "7,618,300,000 km²", temp: "-214°C", mass: "1.024×10^26 kg", isFaved: false),
+        Planet(image: "pluto", name: "Pluto", area: "16,647,940 km²", temp: "-229°C", mass: "1.303×10^22 kg", isFaved: false),
+        Planet(image: "eris", name: "Eris", area: "6,440,000 km²", temp: "-243°C", mass: "1.66×10^22 kg", isFaved: false)
     ]
     
     override func viewDidLoad() {
@@ -75,7 +75,7 @@ class SolarVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
     }
 }
 
-extension SolarVC{
+extension SolarVC {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         planetsArray.count
     }
@@ -84,9 +84,10 @@ extension SolarVC{
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PlanetCell", for: indexPath) as? PlanetCell
         
         let currentPlanet = planetsArray[indexPath.row]
+        
         cell?.isUserInteractionEnabled = true
         cell?.delegate = self
-        cell?.configurePlanetCell(planetImg: currentPlanet.image ?? UIImage(), titleLbl: currentPlanet.name, areaLbl: currentPlanet.area, isFaved: currentPlanet.isFaved, index: indexPath.row)
+        cell?.configurePlanetCell(planet: currentPlanet, index: indexPath.row)
         
         return cell ?? PlanetCell()
     }
@@ -109,7 +110,8 @@ extension SolarVC: makeFavFromCellDelegate {
 
 extension SolarVC: makeFavFromDetailDelegate {
     func addPlanetInFavourites(name: String) {
-        let currentPlanet = planetsArray.first { planet in planet.name == name
+        let currentPlanet = planetsArray.first { planet in
+            planet.name == name
         }
          
         guard var currentPlanet = currentPlanet else { return }
@@ -136,9 +138,7 @@ extension SolarVC {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let currentPlanet = planetsArray[indexPath.row]
         
-        let planet = Planet(image: currentPlanet.image ?? UIImage(), name: currentPlanet.name, area: currentPlanet.name, temp: currentPlanet.temperature, mass: currentPlanet.mass, isFaved: currentPlanet.isFaved)
-        
-        let detailsVC = DetailsVC(planet, index: indexPath.item)
+        let detailsVC = DetailsVC(currentPlanet, index: indexPath.item)
         detailsVC.delegate = self
         self.navigationController?.pushViewController(detailsVC, animated: true)
     }
