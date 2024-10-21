@@ -6,18 +6,15 @@ protocol makeFavFromDetailDelegate: AnyObject {
 
 class DetailsVC: UIViewController {
     weak var delegate: makeFavFromDetailDelegate?
-    
     private let navStack = UIStackView()
     private let detailImg = UIImageView()
     private let infoStack = UIStackView()
-    
     private var screenTitle = UILabel()
     private let backButton = UIButton()
     private let favButton = UIButton()
-    
     private var isIconActive = false
-    private let isSmallScreen = UIScreen.main.bounds.height < 800 ? true : false
     private let planet: Planet
+    private let isSmallScreen = UIScreen.main.bounds.height < 800 ? true : false
         
     init(_ planet: Planet, index: Int, isIconActive: Bool = false) {
         self.planet = planet
@@ -27,11 +24,6 @@ class DetailsVC: UIViewController {
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        view.layoutIfNeeded()
     }
     
     override func viewDidLoad() {
@@ -125,7 +117,6 @@ class DetailsVC: UIViewController {
 }
 
 extension DetailsVC {
-    
     private func setupInfoView() {
         view.addSubview(infoStack)
         

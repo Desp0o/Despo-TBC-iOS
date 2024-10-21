@@ -19,7 +19,7 @@ class SolarVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
         
         return collection
     }()
-    
+
     private var screenTitleLbl = UILabel()
     private let vectors = UIImageView()
     
@@ -108,7 +108,6 @@ extension SolarVC: makeFavFromCellDelegate {
 }
 
 extension SolarVC: makeFavFromDetailDelegate {
-    
     func addPlanetInFavourites(name: String) {
         let currentPlanet = planetsArray.first { planet in planet.name == name
         }
@@ -135,7 +134,6 @@ extension SolarVC: makeFavFromDetailDelegate {
 
 extension SolarVC {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
-        
         let currentPlanet = planetsArray[indexPath.row]
         
         let planet = Planet(image: currentPlanet.image ?? UIImage(), name: currentPlanet.name, area: currentPlanet.name, temp: currentPlanet.temperature, mass: currentPlanet.mass, isFaved: currentPlanet.isFaved)
@@ -143,7 +141,6 @@ extension SolarVC {
         let detailsVC = DetailsVC(planet, index: indexPath.item)
         detailsVC.delegate = self
         self.navigationController?.pushViewController(detailsVC, animated: true)
-
     }
 }
 
