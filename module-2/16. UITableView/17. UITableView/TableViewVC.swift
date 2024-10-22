@@ -16,16 +16,15 @@ final class TableViewVC: UIViewController, UITableViewDataSource {
     private let tableView = UITableView()
     
     var planetsArray = [
-        ("Mars", "1,258,250 km²", UIImage(named: "mars"), "-60°C", "144.798.500"),
-        ("Jupiter", "64E10 km²", UIImage(named: "jupiter"), "-108°C", "61.418.738.571"),
-        ("Earth", "500,100,100 km²", UIImage(named: "earth"), "15°C", "510.072.000"),
-        ("Saturn", "2,608,250 km²", UIImage(named: "saturn"), "-139°C", "42.700.000.000"),
-        ("Venus", "460,234,300 km²", UIImage(named: "venus"), "462°C", "460.234.317"),
-        ("Mars", "1,258,250 km²", UIImage(named: "mars"), "-60°C", "144.798.500"),
-        ("Jupiter", "64E10 km²", UIImage(named: "jupiter"), "-108°C", "61.418.738.571"),
-        ("Earth", "500,100,100 km²", UIImage(named: "earth"), "15°C", "510.072.000"),
-        ("Saturn", "2,608,250 km²", UIImage(named: "saturn"), "-139°C", "42.700.000.000"),
-        ("Venus", "460,234,300 km²", UIImage(named: "venus"), "462°C", "460.234.317"),
+        Planet(name: "Jupiter", temperature: "-108°C", area: "64E10 km²", mass: "61.418.738.571", image: "jupiter", isFaved: false),
+        Planet(name: "Earth", temperature: "15°C", area: "500,100,100 km²", mass: "510.072.000", image: "earth", isFaved: false),
+        Planet(name: "Saturn", temperature: "-139°C", area: "2,608,250 km²", mass: "42.700.000.000", image: "saturn", isFaved: false),
+        Planet(name: "Venus", temperature: "462°C", area: "460,234,300 km²", mass: "460.234.317", image: "venus", isFaved: false),
+        Planet(name: "Mars", temperature: "-60°C", area: "1,258,250 km²", mass: "144.798.500", image: "mars", isFaved: false),
+        Planet(name: "Jupiter", temperature: "-108°C", area: "64E10 km²", mass: "61.418.738.571", image: "jupiter", isFaved: false),
+        Planet(name: "Earth", temperature: "15°C", area: "500,100,100 km²", mass: "510.072.000", image: "earth", isFaved: false),
+        Planet(name: "Saturn", temperature: "-139°C", area: "2,608,250 km²", mass: "42.700.000.000", image: "saturn", isFaved: false),
+        Planet(name: "Venus", temperature: "462°C", area: "460,234,300 km²", mass: "460.234.317", image: "venus", isFaved: false)
     ]
     
     override func viewDidLoad() {
@@ -71,3 +70,31 @@ final class TableViewVC: UIViewController, UITableViewDataSource {
     }
 }
 
+
+extension TableViewVC: UpdatePLanetStatus {
+    func addPlanetFavourites(index: Int) {
+        planetsArray[index].isFaved.toggle()
+        
+        let currentPlanet = planetsArray.remove(at: index)
+        
+        if currentPlanet.isFaved {
+            planetsArray.insert(currentPlanet, at: 0)
+        } else {
+            planetsArray.append(currentPlanet)
+        }
+
+        tableView.reloadData()
+    }
+    
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        planetsArray.count
+    }
+    
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        let cell = tableView.dequeueReusableCell(withIdentifier: "PlanetCell", for: indexPath) as! PlanetCell
+        let currentPlanet = planetsArray[indexPath.row]
+        cell.delegate = self
+        cell.setupPlanetCell(planet: currentPlanet, currentIndex: indexPath.row)
+        return cell
+    }
+}

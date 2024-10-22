@@ -92,7 +92,7 @@ final class PlanetDetailsVC: UIViewController {
         scrollView.addSubview(planetImageView)
         planetImageView.translatesAutoresizingMaskIntoConstraints = false
         
-        planetImageView.image = planet.image
+        planetImageView.image = UIImage(named: planet.image)
         
         NSLayoutConstraint.activate([
             planetImageView.topAnchor.constraint(equalTo: titleLbl.bottomAnchor, constant: 86),
@@ -159,7 +159,7 @@ final class PlanetDetailsVC: UIViewController {
         
         viewStack.addArrangedSubview(labelName)
         labelName.text = labelText
-        labelName.textColor = primaryColor
+        labelName.textColor = .white
         labelName.font = UIFont.systemFont(ofSize: 18)
         labelName.textAlignment = .center
         

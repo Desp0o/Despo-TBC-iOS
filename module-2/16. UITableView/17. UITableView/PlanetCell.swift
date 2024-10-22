@@ -6,7 +6,12 @@
 //
 import UIKit
 
+protocol UpdatePLanetStatus: AnyObject {
+    func addPlanetFavourites(index: Int)
+}
+
 final class PlanetCell: UITableViewCell {
+    weak var delegate: UpdatePLanetStatus?
     private let cellStack = UIStackView()
     private let infoStack = UIStackView()
     private var planetImg = UIImageView()
@@ -15,6 +20,7 @@ final class PlanetCell: UITableViewCell {
     private var arrowIocn = UIImageView()
     private let favIcon = UIImageView()
     private var isFaved = false
+    private var currentIndex: Int?
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -28,6 +34,8 @@ final class PlanetCell: UITableViewCell {
     }
     
     private func setupUI() {
+        self.selectionStyle = .none
+        
         setupMainStack()
         setupImage()
         setupInfoStack()
@@ -64,13 +72,8 @@ final class PlanetCell: UITableViewCell {
     }
     
     @objc private func favIconTapped() {
-        isFaved = !isFaved        
-        updateFavIconOnTap()
-    }
-    
-    private func updateFavIconOnTap() {
-        favIcon.image = UIImage(systemName: isFaved ? "star.fill" : "star")
-        favIcon.tintColor = isFaved ? .systemYellow : .gray
+        guard let index = currentIndex else  { return }
+        self.delegate?.addPlanetFavourites(index: index)
     }
     
     private func setupMainStack() {
@@ -81,6 +84,8 @@ final class PlanetCell: UITableViewCell {
         cellStack.alignment = .center
         cellStack.spacing = 36
         
+        cellStack.isLayoutMarginsRelativeArrangement = true
+        cellStack.layoutMargins = UIEdgeInsets(top: 0, left: 0, bottom: 30, right: 0)
         cellStack.translatesAutoresizingMaskIntoConstraints = false
         
         NSLayoutConstraint.activate([
@@ -103,10 +108,9 @@ final class PlanetCell: UITableViewCell {
         
         NSLayoutConstraint.activate([
             infoStack.leftAnchor.constraint(equalTo: planetImg.rightAnchor, constant: 36),
-            infoStack.topAnchor.constraint(equalTo: cellStack.topAnchor),
-            infoStack.bottomAnchor.constraint(equalTo: cellStack.bottomAnchor)
         ])
         
+        planetTitle.intrinsicContentSize = .init()
     }
     
     private func setupPlanetInfo() {
@@ -121,10 +125,15 @@ final class PlanetCell: UITableViewCell {
         arrowIocn.image = UIImage(named: "arrowIcon")
     }
     
-    func setupPlanetCell(planetImage: UIImage, planetTitle: String, planetArea: String) {
-        self.planetImg.image = planetImage
-        self.planetTitle.text = planetTitle
-        self.planetArea.text = planetArea
+    func setupPlanetCell(planet: Planet, currentIndex: Int) {
+        self.planetImg.image = UIImage(named: planet.image)
+        self.planetTitle.text = planet.name
+        self.planetArea.text = planet.area
+        self.isFaved = planet.isFaved
+        self.currentIndex = currentIndex
+        
+        favIcon.image = UIImage(systemName: isFaved ? "star.fill" : "star")
+        favIcon.tintColor = isFaved ? .systemYellow : .gray
     }
 }
 

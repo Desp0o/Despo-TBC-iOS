@@ -11,5 +11,6 @@ struct Planet {
     let temperature: String
     let area: String
     let mass: String
-    let image: UIImage?
+    let image: String
+    var isFaved: Bool
 }
