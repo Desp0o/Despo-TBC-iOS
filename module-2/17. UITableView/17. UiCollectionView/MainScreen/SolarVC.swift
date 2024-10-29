@@ -65,7 +65,7 @@ class SolarVC: UIViewController, UICollectionViewDataSource, UICollectionViewDel
         collectionView.register(PlanetCell.self, forCellWithReuseIdentifier: "PlanetCell")
         collectionView.delegate = self
         collectionView.dataSource = self
-        collectionView.isUserInteractionEnabled = true
+
         NSLayoutConstraint.activate([
             collectionView.leadingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.leadingAnchor, constant: 16),
             collectionView.trailingAnchor.constraint(equalTo: view.safeAreaLayoutGuide.trailingAnchor, constant: -16),
@@ -95,7 +95,10 @@ extension SolarVC {
 
 extension SolarVC: makeFavFromCellDelegate {
     func savePlanet(index: Int) {
+        
+        
         planetsArray[index].isFaved.toggle()
+        
         let currentPlanet = planetsArray.remove(at: index)
         
         if currentPlanet.isFaved {
