@@ -13,7 +13,6 @@ protocol UpdateNewsDelegate: AnyObject {
 final class ViewModel {
     weak var delegate: UpdateNewsDelegate?
     private var currentPage = 0
-    private var isFetching = false
     
     init() {
         loadNextPage()
@@ -55,6 +54,7 @@ final class ViewModel {
             do {
                 let newsResponseData = try decoder.decode(NewsResponseData.self, from: data)
                 self?.newsArray.append(contentsOf: newsResponseData.articles)
+                
                 DispatchQueue.main.async {
                     self?.delegate?.updateNewsFeed()
                 }
