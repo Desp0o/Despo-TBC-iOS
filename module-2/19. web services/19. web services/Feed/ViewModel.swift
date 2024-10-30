@@ -26,7 +26,12 @@ final class ViewModel {
     }
     
     func singlePost(index: Int) -> SinglePost {
-        newsArray[index]
+        
+        if newsArray[index].title == "[Removed]" {
+            newsArray.remove(at: index)
+            print("removed")
+        }
+        return newsArray[index]
     }
     
     func fetchNews(page: Int) {
