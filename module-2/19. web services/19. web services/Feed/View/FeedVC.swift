@@ -1,6 +1,12 @@
 import UIKit
 
-final class FeedVC: UIViewController {
+final class FeedVC: UIViewController, UpdateNewsDelegate {
+    func updateNewsFeed() {
+        tableView.reloadData()
+    }
+    
+
+    
     let viewModelPost = ViewModel()
     let screenTitleLabel = UILabel()
     let tableView: UITableView = {
@@ -14,7 +20,7 @@ final class FeedVC: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        viewModelPost.delegate = self
         setupUI()
     }
     
@@ -63,7 +69,6 @@ extension FeedVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as? Cell
         let currentNews = viewModelPost.singlePost(index: indexPath.row)
-        
         cell?.configureCell(news: currentNews)
         return cell ?? UITableViewCell()
     }
