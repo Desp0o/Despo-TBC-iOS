@@ -1,12 +1,14 @@
 import UIKit
 
-class FeedVC: UIViewController {
+final class FeedVC: UIViewController {
+    let viewModelPost = ViewModel()
     let screenTitleLabel = UILabel()
     let tableView: UITableView = {
         let tableView = UITableView()
         tableView.separatorStyle = .none
         tableView.translatesAutoresizingMaskIntoConstraints = false
-        
+        tableView.showsVerticalScrollIndicator = false
+    
         return tableView
     }()
     
@@ -39,6 +41,7 @@ class FeedVC: UIViewController {
         view.addSubview(tableView)
         
         tableView.dataSource = self
+        tableView.delegate = self
         tableView.register(Cell.self, forCellReuseIdentifier: "Cell")
         tableView.rowHeight = 124
         
@@ -52,14 +55,20 @@ class FeedVC: UIViewController {
 }
 
 
-extension FeedVC: UITableViewDataSource {
+extension FeedVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        2
+        viewModelPost.newsCount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell")
+        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as? Cell
+        let currentNews = viewModelPost.singlePost(index: indexPath.row)
         
+        cell?.configureCell(news: currentNews)
         return cell ?? UITableViewCell()
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let currentNews = viewModelPost.singlePost(index: indexPath.row)
     }
 }
