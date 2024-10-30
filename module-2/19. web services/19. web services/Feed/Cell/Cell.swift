@@ -20,6 +20,8 @@ final class Cell: UITableViewCell {
     }
     
     private func setupUI() {
+        self.selectionStyle = .none
+        
         setupCellBackground()
         setupCellView()
         setupCellTitle()
@@ -60,7 +62,7 @@ final class Cell: UITableViewCell {
     
     private func setupCellTitle() {
         cellStack.addArrangedSubview(cellTitle)
-
+        
         cellTitle.configureNunitoLabels(text: "FBI Arrests Man Who Searched ‘How Can I Know for Sure If I Am Being Investigated by the FBI", fontName: "Nunito-Bold", color: .white, size: 12)
         cellTitle.numberOfLines = 0
     }
@@ -78,10 +80,10 @@ final class Cell: UITableViewCell {
         cellBottomStack.addArrangedSubview(dateLabel)
     }
     
-    func configureCell(background: String, title: String, author: String, date: String) {
-        self.cellBg.image = UIImage(named: background)
-        self.cellTitle.configureScreenTitle(text: title, size: 12)
-        self.authorLabel.configureNunitoLabels(text: author, fontName: "Nunito-SemiBold", color: .white, size: 12)
-        self.dateLabel.configureNunitoLabels(text: date, fontName: "Nunito-SemiBold", color: .white, size: 12)
+    func configureCell(news: SinglePost) {
+        self.cellBg.image = UIImage(named: news.background)
+        self.cellTitle.configureNunitoLabels(text: news.title, fontName: "Nunito-Bold", color: .white, size: 12)
+        self.authorLabel.configureNunitoLabels(text: news.author, fontName: "Nunito-SemiBold", color: .white, size: 12)
+        self.dateLabel.configureNunitoLabels(text: news.date, fontName: "Nunito-SemiBold", color: .white, size: 12)
     }
 }
