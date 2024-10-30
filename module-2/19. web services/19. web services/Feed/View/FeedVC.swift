@@ -70,5 +70,8 @@ extension FeedVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let currentNews = viewModelPost.singlePost(index: indexPath.row)
+        let vc = DetailsVC(news: currentNews)
+        
+        navigationController?.pushViewController(vc, animated: true)
     }
 }
