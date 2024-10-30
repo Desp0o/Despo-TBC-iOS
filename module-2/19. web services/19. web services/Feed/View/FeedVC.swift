@@ -58,7 +58,6 @@ final class FeedVC: UIViewController, UpdateNewsDelegate {
     }
 }
 
-
 extension FeedVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         viewModelPost.newsCount
@@ -69,10 +68,10 @@ extension FeedVC: UITableViewDataSource, UITableViewDelegate {
         let currentNews = viewModelPost.singlePost(index: indexPath.row)
         cell?.configureCell(news: currentNews)
         
-        if indexPath.row == viewModelPost.newsCount - 1 {
+        if indexPath.row == viewModelPost.newsCount - 3 {
             viewModelPost.loadNextPage()
         }
-        print(currentNews)
+
         return cell ?? UITableViewCell()
     }
     
