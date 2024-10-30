@@ -3,12 +3,13 @@ import UIKit
 final class FeedVC: UIViewController, UpdateNewsDelegate {
     let viewModelPost = ViewModel()
     let screenTitleLabel = UILabel()
+    let loadingLabel = UILabel()
     let tableView: UITableView = {
         let tableView = UITableView()
         tableView.separatorStyle = .none
         tableView.translatesAutoresizingMaskIntoConstraints = false
         tableView.showsVerticalScrollIndicator = false
-    
+        
         return tableView
     }()
     
@@ -24,6 +25,19 @@ final class FeedVC: UIViewController, UpdateNewsDelegate {
         
         setupScreenTitle()
         setupTableView()
+        setupLoadingLabel()
+    }
+    
+    func setupLoadingLabel() {
+        view.addSubview(loadingLabel)
+        
+        loadingLabel.configureNunitoLabels(text: "Loading...", fontName: "Nunito-Bold", color: .black, size: 20)
+        loadingLabel.textAlignment = .center
+        
+        NSLayoutConstraint.activate([
+            loadingLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            loadingLabel.centerYAnchor.constraint(equalTo: view.centerYAnchor)
+        ])
     }
     
     func setupScreenTitle() {
@@ -55,8 +69,10 @@ final class FeedVC: UIViewController, UpdateNewsDelegate {
     
     func updateNewsFeed() {
         tableView.reloadData()
+        loadingLabel.isHidden = true
     }
 }
+
 
 extension FeedVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -71,7 +87,7 @@ extension FeedVC: UITableViewDataSource, UITableViewDelegate {
         if indexPath.row == viewModelPost.newsCount - 3 {
             viewModelPost.loadNextPage()
         }
-
+        
         return cell ?? UITableViewCell()
     }
     
