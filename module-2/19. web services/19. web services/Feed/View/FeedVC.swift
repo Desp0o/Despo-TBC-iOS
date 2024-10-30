@@ -1,12 +1,6 @@
 import UIKit
 
 final class FeedVC: UIViewController, UpdateNewsDelegate {
-    func updateNewsFeed() {
-        tableView.reloadData()
-    }
-    
-
-    
     let viewModelPost = ViewModel()
     let screenTitleLabel = UILabel()
     let tableView: UITableView = {
@@ -58,6 +52,10 @@ final class FeedVC: UIViewController, UpdateNewsDelegate {
             tableView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: 0)
         ])
     }
+    
+    func updateNewsFeed() {
+        tableView.reloadData()
+    }
 }
 
 
@@ -70,6 +68,11 @@ extension FeedVC: UITableViewDataSource, UITableViewDelegate {
         let cell = tableView.dequeueReusableCell(withIdentifier: "Cell") as? Cell
         let currentNews = viewModelPost.singlePost(index: indexPath.row)
         cell?.configureCell(news: currentNews)
+        
+        if indexPath.row == viewModelPost.newsCount - 1 {
+            viewModelPost.loadNextPage()
+        }
+        print(currentNews)
         return cell ?? UITableViewCell()
     }
     

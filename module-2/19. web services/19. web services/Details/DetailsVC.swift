@@ -123,7 +123,7 @@ final class DetailsVC: UIViewController {
     
     private func setupDateLabel() {
         contentView.addSubview(dateLabel)
-        dateLabel.configureNunitoLabels(text: news.publishedAt, fontName: "Nunito-Regular", color: .customBrown, size: 12)
+        dateLabel.configureNunitoLabels(text: news.publishedAt.formatDate(), fontName: "Nunito-Regular", color: .customBrown, size: 12)
         
         NSLayoutConstraint.activate([
             dateLabel.topAnchor.constraint(equalTo: newsTitle.bottomAnchor, constant: 5),
@@ -134,13 +134,22 @@ final class DetailsVC: UIViewController {
     private func setupNewsPoster() {
         contentView.addSubview(newsPoster)
         newsPoster.translatesAutoresizingMaskIntoConstraints = false
-        newsPoster.image = UIImage(named: news.urlToImage ?? "")
+        
+        newsPoster.configureImgBasicSettings()
         newsPoster.contentMode = .scaleAspectFill
+
+        if let urlString = news.urlToImage, let url = URL(string: urlString) {
+            self.newsPoster.imageFrom(url: url)
+        } else {
+            newsPoster.image = UIImage(named: "bgImg")
+        }
+        
         
         NSLayoutConstraint.activate([
             newsPoster.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 0),
             newsPoster.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: 0),
-            newsPoster.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 11)
+            newsPoster.topAnchor.constraint(equalTo: dateLabel.bottomAnchor, constant: 11),
+            newsPoster.heightAnchor.constraint(equalToConstant: 144)
         ])
     }
     
