@@ -8,16 +8,16 @@
 import UIKit
 
 extension UILabel {
-    func configureScreenTitle(with text: String, size: CGFloat) {
-        self.translatesAutoresizingMaskIntoConstraints = true
+    func configureScreenTitle(text: String, size: CGFloat) {
+        self.translatesAutoresizingMaskIntoConstraints = false
         
         self.text = text
         self.textColor = UIColor.black
         self.font = UIFont(name: "Anek-bold", size: size)
     }
     
-    func configureNunitoLabels(with text: String, fontName: String, color: UIColor, size: CGFloat) {
-        self.translatesAutoresizingMaskIntoConstraints = true
+    func configureNunitoLabels(text: String, fontName: String, color: UIColor, size: CGFloat) {
+        self.translatesAutoresizingMaskIntoConstraints = false
         
         self.text = text
         self.textColor = color
