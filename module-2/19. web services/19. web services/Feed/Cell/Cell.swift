@@ -21,7 +21,7 @@ final class Cell: UITableViewCell {
     
     private func setupUI() {
         self.selectionStyle = .none
-        
+        self.backgroundColor = .green
         setupCellBackground()
         setupCellView()
         setupCellTitle()
@@ -81,9 +81,9 @@ final class Cell: UITableViewCell {
     }
     
     func configureCell(news: SinglePost) {
-        self.cellBg.image = UIImage(named: news.background)
+        self.cellBg.image = UIImage(named: news.urlToImage ?? "")
         self.cellTitle.configureNunitoLabels(text: news.title, fontName: "Nunito-Bold", color: .white, size: 12)
-        self.authorLabel.configureNunitoLabels(text: news.author, fontName: "Nunito-SemiBold", color: .white, size: 12)
-        self.dateLabel.configureNunitoLabels(text: news.date, fontName: "Nunito-SemiBold", color: .white, size: 12)
+        self.authorLabel.configureNunitoLabels(text: news.author ?? "", fontName: "Nunito-SemiBold", color: .white, size: 12)
+        self.dateLabel.configureNunitoLabels(text: news.publishedAt, fontName: "Nunito-SemiBold", color: .white, size: 12)
     }
 }

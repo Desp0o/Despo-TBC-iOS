@@ -4,87 +4,65 @@
 //
 //  Created by Despo on 30.10.24.
 //
+import Foundation
+
+protocol UpdateNewsDelegate: AnyObject {
+    func updateNewsFeed()
+}
 
 final class ViewModel {
-    var newsArray = [
-        SinglePost(
-            background: "bgImg",
-            title: "First News",
-            author: "Tornike",
-            description: "An overview of the latest news events and updates from around the world.",
-            date: "October 30, 2024"
-        ),
-        SinglePost(
-            background: "bgImg",
-            title: "Global Market Insights",
-            author: "Ana",
-            description: "An analysis of the recent trends in the global market, highlighting emerging industries.",
-            date: "September 15, 2024"
-        ),
-        SinglePost(
-            background: "bgImg",
-            title: "Tech Innovations 2024",
-            author: "Lasha",
-            description: "Exploring the latest innovations in technology and what to expect in the coming year.",
-            date: "August 5, 2024"
-        ),
-        SinglePost(
-            background: "bgImg",
-            title: "AI Breakthrough in Medicine",
-            author: "Mariam",
-            description: "Discover the recent AI advancements that are revolutionizing the healthcare sector.",
-            date: "July 12, 2024"
-        ),
-        SinglePost(
-            background: "bgImg",
-            title: "Climate Change Effects",
-            author: "George",
-            description: "An in-depth look at the ongoing impacts of climate change across the globe.",
-            date: "June 23, 2024"
-        ),
-        SinglePost(
-            background: "bgImg",
-            title: "Economic Shifts in Asia",
-            author: "Sophie",
-            description: "A report on the changing economic landscape in Asia and its global implications.",
-            date: "May 19, 2024"
-        ),
-        SinglePost(
-            background: "bgImg",
-            title: "Renewable Energy Trends",
-            author: "Levan",
-            description: "Examining the growth and future of renewable energy in the global energy market.",
-            date: "April 7, 2024"
-        ),
-        SinglePost(
-            background: "bgImg",
-            title: "Advancements in Space Tech",
-            author: "Nino",
-            description: "Highlights of the recent breakthroughs in space technology and exploration.",
-            date: "March 25, 2024"
-        ),
-        SinglePost(
-            background: "bgImg",
-            title: "Smart Cities Development",
-            author: "David",
-            description: "An exploration of the advancements in smart city technology and urban planning.",
-            date: "February 10, 2024"
-        ),
-        SinglePost(
-            background: "bgImg",
-            title: "Future of Education",
-            author: "Tina",
-            description: "Insights into the evolving educational landscape and the role of technology.",
-            date: "January 3, 2024"
-        )
-    ]
-
+    weak var delegate: UpdateNewsDelegate?
     
+    init() {
+        fetchNews()
+    }
+    
+    var newsArray: [SinglePost] = [SinglePost(
+        source: Source(id: "wired", name: "Wired"),
+        author: "Joel Khalili",
+        title: "Unmasking Bitcoin Creator Satoshi Nakamoto—Again",
+        description: "A new HBO documentary takes a swing at uncovering the real identity of Satoshi Nakamoto, inventor of Bitcoin. But without incontrovertible proof, the myth lives on.",
+        url: "https://www.wired.com/story/unmasking-bitcoin-creator-satoshi-nakamoto-again/",
+        urlToImage: "https://media.wired.com/photos/6703eb3979f13fda7f04485b/191:100/w_1280,c_limit/Satoshi-Nakamoto-biz-1341874258.jpg",
+        publishedAt: "2024-10-09T01:00:00Z", content: ""
+    )]
+
     var newsCount: Int {
         newsArray.count
     }
     
     func singlePost(index: Int) -> SinglePost {
         newsArray[index]
+    }
+    
+    func fetchNews() {
+        let urlString = "https://newsapi.org/v2/everything?q=bitcoin&apiKey=9670879ea1df4f23b16aa2e834f82a66"
+        let url = URL(string: urlString)
+        
+        guard let url = url else { return }
+        let urlRequest = URLRequest(url: url)
+        
+        URLSession.shared.dataTask(with: urlRequest) {[weak self] data, response, error in
+            let decoder = JSONDecoder()
+            
+            if let error {
+                print(error)
+            }
+            
+            guard let response = response as? HTTPURLResponse else { return }
+            guard (200...299).contains(response.statusCode) else { return }
+            guard let data else { return }
+            
+            do {
+                let newsResponseData = try decoder.decode(NewsResponseData.self, from: data)
+                self?.newsArray.append(contentsOf: newsResponseData.articles)
+                DispatchQueue.main.async {
+                    self?.delegate?.updateNewsFeed()
+                        }
+            } catch {
+                print(error.localizedDescription)
+            }
+        }.resume()
+        
     }
 }
