@@ -25,7 +25,6 @@ final class Cell: UITableViewCell {
         setupCellTitle()
         setupCellBottomStack()
         setupBottomLabels()
-        setupDateLabel()
     }
     
     private func setupCellBackground() {
@@ -76,20 +75,13 @@ final class Cell: UITableViewCell {
     
     private func setupBottomLabels() {
         cellBottomStack.addArrangedSubview(authorLabel)
-        
-        authorLabel.configureNunitoLabels(text: "Zain Korsgaard", fontName: "Nunito-SemiBold", color: .white, size: 12)
-    }
-    
-    private func setupDateLabel() {
         cellBottomStack.addArrangedSubview(dateLabel)
-        
-        dateLabel.configureNunitoLabels(text: "Sunday, 9 May 2021", fontName: "Nunito-SemiBold", color: .white, size: 12)
     }
     
     func configureCell(background: String, title: String, author: String, date: String) {
         self.cellBg.image = UIImage(named: background)
-        self.cellTitle.text = title
-        self.authorLabel.text = author
-        self.dateLabel.text = date
+        self.cellTitle.configureScreenTitle(text: title, size: 12)
+        self.authorLabel.configureNunitoLabels(text: author, fontName: "Nunito-SemiBold", color: .white, size: 12)
+        self.dateLabel.configureNunitoLabels(text: date, fontName: "Nunito-SemiBold", color: .white, size: 12)
     }
 }
