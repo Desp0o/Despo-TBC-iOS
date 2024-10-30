@@ -29,8 +29,8 @@ final class ViewModel {
         
         if newsArray[index].title == "[Removed]" {
             newsArray.remove(at: index)
-            print("removed")
         }
+        
         return newsArray[index]
     }
     
