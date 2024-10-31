@@ -14,8 +14,16 @@ final class ViewModel {
     weak var delegate: UpdateNewsDelegate?
     private var currentPage = 0
     
+    private var linkApi =  "https://newsapi.org/v2/everything?q=bitcoin&pageSize=30&page=\(1)&apiKey=815bdd179bed438aa183f4d2a6ff264f"
+    
+    
     init() {
-        loadNextPage()
+//        loadNextPage()
+        
+        fetchData(url: linkApi) {[weak self] data, error in
+            self?.newsArray.append(contentsOf: data?.articles ?? [])
+            print(self?.newsArray)
+        }
     }
     
     var newsArray: [SinglePost] = []
@@ -25,7 +33,6 @@ final class ViewModel {
     }
     
     func singlePost(index: Int) -> SinglePost {
-        
         if newsArray[index].title == "[Removed]" {
             newsArray.remove(at: index)
         }
@@ -67,6 +74,35 @@ final class ViewModel {
     
     func loadNextPage() {
         currentPage += 1
-        fetchNews(page: currentPage)
+    }
+    
+    func fetchData(url: String, complition: @escaping (NewsResponseData?, Error?) -> Void) {
+        let url = URL(string: url)
+        
+        guard let url = url else { return }
+        
+        let urlRequest = URLRequest(url: url)
+        
+        URLSession.shared.dataTask(with: urlRequest) { data, response, error in
+            
+            if let error {
+                print(error)
+            }
+            
+            guard let response = response as? HTTPURLResponse else { return }
+            guard (200...299).contains(response.statusCode) else { return }
+            guard let data else { return }
+            
+            do {
+                let fetchedData = try JSONDecoder().decode(NewsResponseData.self, from: data)
+                DispatchQueue.main.async {
+                    complition(fetchedData, nil)
+                    self.delegate?.updateNewsFeed()
+                }
+            } catch {
+                complition(nil, error.localizedDescription as! Error)
+            }
+            
+        }.resume()
     }
 }
