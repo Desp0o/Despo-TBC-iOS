@@ -38,7 +38,7 @@ final class FeaturedCell: UITableViewCell {
         var genreCounter = 0
         var currentGenres = [String]()
         movie.genreIDs.forEach { index in
-            let genreName = genreList.filter({$0.id == index}).first?.name
+            let genreName = genreList.filter({$0.id.hashValue == index}).first?.name
             if genreCounter < 4 {
                 currentGenres.append(genreName ?? "N/A")
             }
