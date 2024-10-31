@@ -23,9 +23,10 @@ final class NowInTheaters: UIViewController {
             }
         }
         
+        tableView.backgroundColor = .red
         tableView.delegate = self
         tableView.dataSource = self
-        tableView.register(UINib(nibName: "MovieCollectionVie", bundle: nil), forCellReuseIdentifier: "MovieCollectionView")
+        tableView.register(UINib(nibName: "MovieCollectionView", bundle: nil), forCellReuseIdentifier: "MovieCollectionView")
         tableView.register(UINib(nibName: "FeaturedCell", bundle: nil), forCellReuseIdentifier: "FeaturedCell")
         tableView.register(UINib(nibName: "MovieCell", bundle: nil), forCellReuseIdentifier: "MovieCell")
     }
@@ -33,14 +34,14 @@ final class NowInTheaters: UIViewController {
 
 extension NowInTheaters: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        movies.count/10
+        movies.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 && movies.count > 0 {
-            let cell = tableView.dequeueReusableCell(withIdentifier: "FeaturedCell", for: indexPath) as! FeaturedCell
-            cell.makeNew(movies[indexPath.row])
-            return cell
+            let cell = tableView.dequeueReusableCell(withIdentifier: "FeaturedCell", for: indexPath) as? FeaturedCell
+            cell?.makeNew(movies[indexPath.row])
+            return cell ?? FeaturedCell()
         }
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCollectionView", for: indexPath) as! MovieCollectionView
