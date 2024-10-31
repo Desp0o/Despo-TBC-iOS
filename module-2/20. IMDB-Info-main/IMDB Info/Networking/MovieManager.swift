@@ -15,7 +15,7 @@ final class MovieManager {
                 if let data = Data {
                     do {
                         let movieList = try JSONDecoder().decode(MovieList.self, from: data)
-                        completion(movieList)
+                            completion(movieList)
                     } catch {
                         if let error = Error {
                             print (error.localizedDescription)
@@ -26,7 +26,7 @@ final class MovieManager {
                         print (error.localizedDescription)
                     }
                 }
-            }
+            }.resume()
         }
     }
     
