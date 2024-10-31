@@ -48,6 +48,7 @@ extension NowInTheaters: UITableViewDelegate, UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCollectionView", for: indexPath) as! MovieCollectionView
         cell.movies = self.movies
         cell.delegate = self
+
         return cell
     }
     
