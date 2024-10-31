@@ -34,7 +34,7 @@ final class ViewModel {
     }
     
     func fetchNews(page: Int) {
-        let urlString = "https://newsapi.org/v2/everything?q=bitcoin&pageSize=10&page=\(page)&apiKey=9670879ea1df4f23b16aa2e834f82a66"
+        let urlString = "https://newsapi.org/v2/everything?q=bitcoin&pageSize=10&page=\(page)&apiKey=815bdd179bed438aa183f4d2a6ff264f"
         let url = URL(string: urlString)
         
         guard let url = url else { return }
