@@ -17,7 +17,7 @@ final class MovieCollectionView: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
-        movieCollectionView.register(UINib(nibName: "MovieCollectionViewCelll", bundle: nil), forCellWithReuseIdentifier: "MovieCollectionViewCell")
+        movieCollectionView.register(UINib(nibName: "MovieCollectionViewCell", bundle: nil), forCellWithReuseIdentifier: "MovieCollectionViewCell")
         movieCollectionView.dataSource = self
         movieCollectionView.delegate = self
         movieCollectionView.showAnimatedGradientSkeleton()
