@@ -15,7 +15,9 @@ final class MovieManager {
                 if let data = Data {
                     do {
                         let movieList = try JSONDecoder().decode(MovieList.self, from: data)
+                        DispatchQueue.main.async {
                             completion(movieList)
+                        }
                     } catch {
                         if let error = Error {
                             print (error.localizedDescription)

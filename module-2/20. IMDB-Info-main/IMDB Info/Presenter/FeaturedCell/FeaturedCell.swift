@@ -9,7 +9,7 @@ import UIKit
 import CoreMIDI
 
 final class FeaturedCell: UITableViewCell {
-
+    weak var delegate: UpdateFeatureDelegate?
     private let imagePrefix = "https://image.tmdb.org/t/p/w500/"
     private let genreListUrl = "https://api.themoviedb.org/3/genre/movie/list?api_key=b688d2e3d40e21d185f1dd90d122a568&language=en-US"
     private var genreList = [Genre]()
@@ -21,7 +21,9 @@ final class FeaturedCell: UITableViewCell {
     override func awakeFromNib() {
         super.awakeFromNib()
         GenreManager.fetchGenreList(with: genreListUrl) { genreList in
-            self.genreList = genreList.genres
+            DispatchQueue.main.async {
+                self.genreList = genreList.genres
+            }
         }
         
         self.showAnimatedGradientSkeleton()
@@ -29,6 +31,7 @@ final class FeaturedCell: UITableViewCell {
         DispatchQueue.main.asyncAfter(deadline: .now() + 2, execute: {
             self.stopSkeletonAnimation()
             self.hideSkeleton()
+            self.delegate?.didUpdateLabels()
         })
     }
     
@@ -54,6 +57,7 @@ final class FeaturedCell: UITableViewCell {
                 scoreStars[i].image = UIImage.init(systemName: "star.fill")
             }
             scoreStars[Int(movie.score/2)].image = UIImage.init(systemName: "star.leadinghalf.filled")
+            print(movie.score)
         }
         movieScore.text = "\(String(movie.score))"
     }

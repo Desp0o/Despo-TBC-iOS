@@ -7,10 +7,19 @@
 
 import UIKit
 
-final class NowInTheaters: UIViewController {
+protocol UpdateFeatureDelegate: AnyObject {
+    func didUpdateLabels()
+}
+
+final class NowInTheaters: UIViewController, UpdateFeatureDelegate {
+    func didUpdateLabels() {
+        tableView.reloadData()
+        print("reloaded data")
+    }
     
     @IBOutlet private var tableView: UITableView!
     private let movieManager = MovieManager()
+    
     private var movies = [Movie]()
     private let nowInTheaters = "https://api.themoviedb.org/3/movie/now_playing?api_key=b688d2e3d40e21d185f1dd90d122a568&language=en-US&page=1"
     
@@ -19,10 +28,9 @@ final class NowInTheaters: UIViewController {
         
         movieManager.fetchMovieList(with: nowInTheaters) {[weak self] movielist in
             self?.movies = movielist.results
-
-            DispatchQueue.main.async {
+            
                 self?.tableView.reloadData()
-            }
+            
         }
         
         tableView.delegate = self
@@ -41,6 +49,7 @@ extension NowInTheaters: UITableViewDelegate, UITableViewDataSource{
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         if indexPath.row == 0 && movies.count > 0 {
             let cell = tableView.dequeueReusableCell(withIdentifier: "FeaturedCell", for: indexPath) as? FeaturedCell
+            cell?.delegate = self 
             cell?.makeNew(movies[indexPath.row])
             return cell ?? FeaturedCell()
         }
@@ -48,7 +57,7 @@ extension NowInTheaters: UITableViewDelegate, UITableViewDataSource{
         let cell = tableView.dequeueReusableCell(withIdentifier: "MovieCollectionView", for: indexPath) as! MovieCollectionView
         cell.movies = self.movies
         cell.delegate = self
-
+        
         return cell
     }
     
