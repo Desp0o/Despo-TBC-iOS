@@ -33,7 +33,6 @@ final class FeaturedCell: UITableViewCell {
         })
     }
     
-    
     func makeNew(_ movie: Movie) {
         mainImageView.kf.setImage(with: URL(string: "\(imagePrefix)\(movie.largeImage ?? "")"))
         var genreCounter = 0
