@@ -21,7 +21,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="339" height="523"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstAttribute="width" secondItem="HsS-ST-kGM" secondAttribute="height" multiplier="339:523" id="NKX-Rk-JNO"/>
+                            <constraint firstAttribute="height" constant="523" id="yE3-oR-yMj"/>
                         </constraints>
                         <collectionViewFlowLayout key="collectionViewLayout" scrollDirection="horizontal" minimumLineSpacing="0.0" minimumInteritemSpacing="5" id="hnF-xi-DHy">
                             <size key="itemSize" width="120" height="170"/>
