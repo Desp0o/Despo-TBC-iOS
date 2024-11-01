@@ -25,7 +25,7 @@ final class DetailsView: UIViewController {
         mainImage.kf.setImage(with: URL(string: "\(imagePrefix)\(movie.largeImage ?? "")"))
         backgroundImage.kf.setImage(with: URL(string: "\(imagePrefix)\(movie.largeImage ?? "")"))
         movieTitle.text = movie.movieTitle
-        movieScore.text = "IMDB Score: \(String(movie.score))"
+        movieScore.text = "IMDB Score: \(String(round(movie.score * 10) / 10))"
         movieDescription.text = "Description: \(movie.overview)"
     }
 }

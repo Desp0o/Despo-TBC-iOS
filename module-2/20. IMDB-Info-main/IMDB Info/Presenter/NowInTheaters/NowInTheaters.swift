@@ -14,7 +14,6 @@ protocol UpdateFeatureDelegate: AnyObject {
 final class NowInTheaters: UIViewController, UpdateFeatureDelegate {
     func didUpdateLabels() {
         tableView.reloadData()
-        print("reloaded data")
     }
     
     @IBOutlet private var tableView: UITableView!
@@ -28,9 +27,7 @@ final class NowInTheaters: UIViewController, UpdateFeatureDelegate {
         
         movieManager.fetchMovieList(with: nowInTheaters) {[weak self] movielist in
             self?.movies = movielist.results
-            
-                self?.tableView.reloadData()
-            
+            self?.tableView.reloadData()
         }
         
         tableView.delegate = self

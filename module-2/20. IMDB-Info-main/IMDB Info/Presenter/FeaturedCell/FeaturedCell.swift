@@ -20,10 +20,8 @@ final class FeaturedCell: UITableViewCell {
     
     override func awakeFromNib() {
         super.awakeFromNib()
-        GenreManager.fetchGenreList(with: genreListUrl) { genreList in
-            DispatchQueue.main.async {
-                self.genreList = genreList.genres
-            }
+        GenreManager.fetchGenreList(with: genreListUrl) {[weak self] genreList in
+            self?.genreList = genreList.genres
         }
         
         self.showAnimatedGradientSkeleton()
@@ -41,7 +39,7 @@ final class FeaturedCell: UITableViewCell {
         var genreCounter = 0
         var currentGenres = [String]()
         movie.genreIDs.forEach { index in
-            let genreName = genreList.filter({$0.id.hashValue == index}).first?.name
+            let genreName = genreList.filter({$0.id == index}).first?.name
             if genreCounter < 4 {
                 currentGenres.append(genreName ?? "N/A")
             }
@@ -57,8 +55,7 @@ final class FeaturedCell: UITableViewCell {
                 scoreStars[i].image = UIImage.init(systemName: "star.fill")
             }
             scoreStars[Int(movie.score/2)].image = UIImage.init(systemName: "star.leadinghalf.filled")
-            print(movie.score)
         }
-        movieScore.text = "\(String(movie.score))"
+        movieScore.text = "\(String(round(movie.score * 10)/10))"
     }
 }
