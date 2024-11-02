@@ -12,11 +12,11 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     var window: UIWindow?
     
     func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
-        
+                
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
         
-        if KeyChainVC.shared.get(service: "quizapp", account: "saeto") != nil {
+        if KeyChainVC.shared.get(service: "quizapp", account: "kokaito") != nil {
             let quizVC = QuizVC()
             window?.rootViewController = UINavigationController(rootViewController: quizVC)
         } else {

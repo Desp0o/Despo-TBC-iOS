@@ -7,7 +7,8 @@
 
 import UIKit
 
-class LoginVC: UIViewController {
+final class LoginVC: UIViewController {
+    let viewModel = LoginViewModel()
     private let inputStacks = UIStackView()
     private let avatar = UIImageView()
     private let loginButton = UIButton(type: .custom)
@@ -22,6 +23,7 @@ class LoginVC: UIViewController {
     }
     
     func setupUI() {
+        navigationController?.isNavigationBarHidden = true
         setupAvatarUpload()
         setupInputs()
         configureInput(textField: userNameTxtField, labelText: "Username", placeholder: "Enter username")
@@ -84,22 +86,25 @@ class LoginVC: UIViewController {
         ])
         
         loginButton.addAction(UIAction(handler: { [weak self] action in
-            if self?.passwordTxtField.text == self?.confirmPasswdTxtField.text {
-                do {
-                    try KeyChainVC.shared.save(service: "quizapp", account: self?.userNameTxtField.text ?? "", password: self?.passwordTxtField.text?.data(using: .utf8) ?? Data())
-                } catch {
-                    print(error.localizedDescription)
+            
+            guard let self = self else { return }
+            
+            self.viewModel.auth(
+                userField: self.userNameTxtField,
+                passField: self.passwordTxtField,
+                confield: self.confirmPasswdTxtField, errors: { errormsg in
+                    self.errorModal(text: errormsg ?? "" )
                 }
-            } else {
-                self?.errorModal(text: "The passwords do not match")
-            }
+            )
+            
+            navigationController?.pushViewController(QuizVC(), animated: true)
         }), for: .touchUpInside)
     }
-    
     
     func errorModal(text: String) {
         let alert = UIAlertController(title: "OoOps...", message: text, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
+    
 }
