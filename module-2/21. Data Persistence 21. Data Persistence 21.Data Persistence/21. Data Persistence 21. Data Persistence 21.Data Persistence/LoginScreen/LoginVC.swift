@@ -10,7 +10,7 @@ import UIKit
 class LoginVC: UIViewController {
     private let inputStacks = UIStackView()
     private let avatar = UIImageView()
-    private let loginButton = UIButton()
+    private let loginButton = UIButton(type: .custom)
     private let userNameTxtField = PaddedTextField()
     private let passwordTxtField = PaddedTextField()
     private let confirmPasswdTxtField = PaddedTextField()
@@ -83,15 +83,33 @@ class LoginVC: UIViewController {
             loginButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100),
         ])
         
-        loginButton.addAction(UIAction(handler: { [weak self] _ in
+        loginButton.addAction(UIAction(handler: { [weak self] action in
             
+            
+            print("124")
             if self?.passwordTxtField.text == self?.confirmPasswdTxtField.text {
                 print("true")
+                print("tapped true")
+
+                do {
+                    try KeyChainVC.shared.save(service: "quizapp", account: self?.userNameTxtField.text ?? "", password: self?.passwordTxtField.text?.data(using: .utf8) ?? Data())
+                } catch {
+                    print(error.localizedDescription)
+                }
+//                
+                
+                
+                
             } else {
-                let alert = UIAlertController(title: "Password Mismatch", message: "The passwords do not match", preferredStyle: .alert)
-                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-                self?.present(alert, animated: true, completion: nil)
+                self?.errorModal(text: "The passwords do not match")
             }
         }), for: .touchUpInside)
+    }
+    
+    
+    func errorModal(text: String) {
+        let alert = UIAlertController(title: "OoOps...", message: text, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
 }
