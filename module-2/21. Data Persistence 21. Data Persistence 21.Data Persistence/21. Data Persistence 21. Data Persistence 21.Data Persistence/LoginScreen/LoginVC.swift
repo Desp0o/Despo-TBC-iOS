@@ -84,22 +84,12 @@ class LoginVC: UIViewController {
         ])
         
         loginButton.addAction(UIAction(handler: { [weak self] action in
-            
-            
-            print("124")
             if self?.passwordTxtField.text == self?.confirmPasswdTxtField.text {
-                print("true")
-                print("tapped true")
-
                 do {
                     try KeyChainVC.shared.save(service: "quizapp", account: self?.userNameTxtField.text ?? "", password: self?.passwordTxtField.text?.data(using: .utf8) ?? Data())
                 } catch {
                     print(error.localizedDescription)
                 }
-//                
-                
-                
-                
             } else {
                 self?.errorModal(text: "The passwords do not match")
             }
