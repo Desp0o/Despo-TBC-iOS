@@ -7,23 +7,91 @@
 
 import UIKit
 
-class LoginView: UIViewController {
-
+class LoginVC: UIViewController {
+    private let inputStacks = UIStackView()
+    private let avatar = UIImageView()
+    private let loginButton = UIButton()
+    private let userNameTxtField = PaddedTextField()
+    private let passwordTxtField = PaddedTextField()
+    private let confirmPasswdTxtField = PaddedTextField()
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
-        // Do any additional setup after loading the view.
+        
+        setupUI()
     }
     
-
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    func setupUI() {
+        setupAvatarUpload()
+        setupInputs()
+        configureInput(textField: userNameTxtField, labelText: "Username", placeholder: "Enter username")
+        configureInput(textField: passwordTxtField, labelText: "Password", placeholder: "Enter password")
+        configureInput(textField: confirmPasswdTxtField, labelText: "Confirm password", placeholder: "Enter password")
+        setupLoginButton()
     }
-    */
-
+    
+    func setupAvatarUpload() {
+        view.addSubview(avatar)
+        
+        avatar.translatesAutoresizingMaskIntoConstraints = false
+        avatar.image = UIImage(named: "avatar")
+        
+        NSLayoutConstraint.activate([
+            avatar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 35),
+            avatar.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+        ])
+    }
+    
+    func setupInputs() {
+        view.addSubview(inputStacks)
+        inputStacks.translatesAutoresizingMaskIntoConstraints = false
+        inputStacks.axis = .vertical
+        inputStacks.spacing = 13
+        
+        NSLayoutConstraint.activate([
+            inputStacks.topAnchor.constraint(equalTo: avatar.bottomAnchor, constant: 22),
+            inputStacks.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 18),
+            inputStacks.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -18),
+        ])
+    }
+    
+    func configureInput(textField: PaddedTextField, labelText: String, placeholder: String) {
+        let stack = UIStackView()
+        let label = UILabel()
+        
+        inputStacks.addArrangedSubview(stack)
+        
+        stack.addArrangedSubview(label)
+        stack.addArrangedSubview(textField)
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .vertical
+        stack.spacing = 10
+        
+        label.configureCustomLabel(text: labelText, textColor: .white, fontName: "Sen-Regular", fontSize: 16)
+        
+        textField.configureCustomTextField(placeholder: placeholder)
+    }
+    
+    func setupLoginButton() {
+        view.addSubview(loginButton)
+        
+        loginButton.configureCustomButton(bgColor: .secondaryViolet, btnTitle: "Login", color: .white, fontName: "Sen-Medium", fonSize: 14)
+        
+        NSLayoutConstraint.activate([
+            loginButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 18),
+            loginButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -18),
+            loginButton.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -100),
+        ])
+        
+        loginButton.addAction(UIAction(handler: { [weak self] _ in
+            
+            if self?.passwordTxtField.text == self?.confirmPasswdTxtField.text {
+                print("true")
+            } else {
+                let alert = UIAlertController(title: "Password Mismatch", message: "The passwords do not match", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+                self?.present(alert, animated: true, completion: nil)
+            }
+        }), for: .touchUpInside)
+    }
 }

@@ -8,12 +8,15 @@
 import UIKit
 
 class PaddedTextField: UITextField {
-    private let textPadding = UIEdgeInsets(top: 14, left: 8, bottom: 14, right: 0)
+    private let textPadding = UIEdgeInsets(top: 0, left: 8, bottom: 0, right: 0)
     
     func configureCustomTextField(placeholder: String) {
         self.translatesAutoresizingMaskIntoConstraints = false
+        self.heightAnchor.constraint(equalToConstant: 42).isActive = true
+        
         self.isSecureTextEntry = true
         self.placeholder = placeholder
+        self.font = UIFont(name: "Sen-Medium", size: 11)
         self.backgroundColor = .textFieldBG
         self.layer.cornerRadius = 12
     }
