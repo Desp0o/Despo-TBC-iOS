@@ -16,7 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
         
-        if KeyChainVC.shared.get(service: "quizapp", account: "kokaito") != nil {
+        if KeyChainVC.shared.get(service: "quizapp", account: "kokito") != nil {
             let quizVC = QuizVC()
             window?.rootViewController = UINavigationController(rootViewController: quizVC)
         } else {
