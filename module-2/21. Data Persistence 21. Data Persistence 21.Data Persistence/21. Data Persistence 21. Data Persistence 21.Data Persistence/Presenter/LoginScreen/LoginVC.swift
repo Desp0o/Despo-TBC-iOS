@@ -23,6 +23,7 @@ final class LoginVC: UIViewController {
     }
     
     func setupUI() {
+        view.backgroundColor = .mainViolet
         setupAvatarUpload()
         setupInputs()
         configureInput(textField: userNameTxtField, labelText: "Username", placeholder: "Enter username")
