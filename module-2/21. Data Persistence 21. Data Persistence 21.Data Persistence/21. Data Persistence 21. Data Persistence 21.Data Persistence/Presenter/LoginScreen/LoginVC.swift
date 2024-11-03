@@ -78,7 +78,14 @@ final class LoginVC: UIViewController {
     func setupLoginButton() {
         view.addSubview(loginButton)
         
-        loginButton.configureCustomButton(bgColor: .secondaryViolet, btnTitle: "Login", color: .white, fontName: "Sen-Medium", fonSize: 14)
+        loginButton.configureCustomButton(
+            btnHeight: 42,
+            bgColor: .secondaryViolet,
+            btnTitle: "Login",
+            color: .white,
+            fontName: "Sen-Medium",
+            fonSize: 14
+        )
         
         NSLayoutConstraint.activate([
             loginButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 18),

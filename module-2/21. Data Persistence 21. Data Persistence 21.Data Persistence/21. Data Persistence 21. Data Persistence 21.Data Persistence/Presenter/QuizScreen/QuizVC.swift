@@ -10,16 +10,56 @@ import UIKit
 class QuizVC: UIViewController {
     let viewModel = QuizViewModel()
     private let table = UITableView()
+    private let topStack = UIStackView()
+    private let screenTitleLabel = UILabel()
+    private let resetButton = UIButton()
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .mainViolet
+        
         setupUI()
     }
     
     private func setupUI() {
         navigationController?.isNavigationBarHidden = true
+        view.backgroundColor = .mainViolet
+        setupTopStack()
         setupTableView()
+    }
+    
+    private func setupTopStack() {
+        view.addSubview(topStack)
+        topStack.translatesAutoresizingMaskIntoConstraints = false
+        topStack.axis = .horizontal
+        topStack.distribution = .equalCentering
+        
+        NSLayoutConstraint.activate([
+            topStack.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 21),
+            topStack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 0),
+            topStack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -21),
+        ])
+        
+        setupScreenTitle()
+        setupResetButton()
+    }
+    
+    private func setupScreenTitle() {
+        topStack.addArrangedSubview(screenTitleLabel)
+        screenTitleLabel.configureCustomLabel(text: "Quiz", textColor: .white, fontName: "Sen-Regular", fontSize: 24)
+    }
+    
+    private func setupResetButton() {
+        topStack.addArrangedSubview(resetButton)
+        resetButton.configureCustomButton(
+            btnHeight: 32,
+            btnWidth: 64,
+            bgColor: .secondaryViolet,
+            btnTitle: "Reset",
+            color: .white,
+            fontName: "Sen-Medium",
+            fonSize: 14,
+            borderWidth: 1
+        )
     }
     
     private func setupTableView() {
@@ -33,7 +73,7 @@ class QuizVC: UIViewController {
         
         NSLayoutConstraint.activate([
             table.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
-            table.topAnchor.constraint(equalTo: view.topAnchor, constant: 0),
+            table.topAnchor.constraint(equalTo: topStack.bottomAnchor, constant: 14),
             table.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
             table.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
         ])
