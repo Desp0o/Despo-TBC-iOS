@@ -41,7 +41,8 @@ final class QuestionDetailVC: UIViewController {
         setupNavigationBar()
         setupScrollView()
         setupMainQuestionLabel()
-        setupAnswerButton()
+        setupAnswerStack()
+        setupAnswerButtons()
         setupBottomResultLabel()
     }
     
@@ -62,7 +63,7 @@ final class QuestionDetailVC: UIViewController {
         setupBackButton()
         setupQuestionNumberLabel()
     }
-        
+    
     private func setupBackButton() {
         navStack.addArrangedSubview(backButton)
         backButton.translatesAutoresizingMaskIntoConstraints = false
@@ -107,7 +108,7 @@ final class QuestionDetailVC: UIViewController {
             contentView.heightAnchor.constraint(greaterThanOrEqualTo: scrollView.heightAnchor)
         ])
     }
-   
+    
     private func setupMainQuestionLabel() {
         contentView.addSubview(maincQuestionLabel)
         
@@ -125,11 +126,7 @@ final class QuestionDetailVC: UIViewController {
         ])
     }
     
-    private func setupAnswerButton() {
-//        answerButton.addAction(UIAction(handler: { UIAction in
-//            print("tested")
-//        }), for: .touchUpInside)
-        
+    private func setupAnswerStack() {
         contentView.addSubview(answersStack)
         answersStack.translatesAutoresizingMaskIntoConstraints = false
         answersStack.axis = .vertical
@@ -140,19 +137,19 @@ final class QuestionDetailVC: UIViewController {
             answersStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
             answersStack.topAnchor.constraint(equalTo: maincQuestionLabel.bottomAnchor, constant: 30)
         ])
-        
+    }
+    
+    private func setupAnswerButtons() {
         let answerButtonsArray = [answer1, answer2, answer3, answer4]
         
-        var incorrectAnswers = currentQuestion.incorrect_answers
-        incorrectAnswers.append(currentQuestion.correct_answer)
+        var incorrectAnswers = currentQuestion.incorrectAnswers
+        incorrectAnswers.append(currentQuestion.correctAnswer)
         
         let shuffledAnswers = incorrectAnswers.shuffled()
-       
-        
         
         for (answer, answerBtn) in zip(shuffledAnswers, answerButtonsArray) {
             answersStack.addArrangedSubview(answerBtn)
-            
+
             answerBtn.configureCustomButton(
                 btnHeight: 49,
                 bgColor: .white,
@@ -162,19 +159,32 @@ final class QuestionDetailVC: UIViewController {
                 fonSize: 16
             )
             
+            var config = UIButton.Configuration.plain()
+            config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 0)
+            config.imagePadding = 16.0
+            answerBtn.configuration = config
+
+            answerBtn.setImage(UIImage(named: "emptyCircle"), for: .normal)
+            answerBtn.contentHorizontalAlignment = .leading
+            answerBtn.configuration?.titlePadding = 30
+
             NSLayoutConstraint.activate([
                 answerBtn.leadingAnchor.constraint(equalTo: answersStack.leadingAnchor),
                 answerBtn.trailingAnchor.constraint(equalTo: answersStack.trailingAnchor),
             ])
             
-            answerBtn.addAction(UIAction(handler: { _ in
+            answerBtn.addAction(UIAction(handler: {[weak self] _ in
                 answerBtn.backgroundColor = .secondaryViolet
+                
+                if answerBtn.titleLabel?.text == self?.currentQuestion.correctAnswer {
+                    answerBtn.setImage(UIImage(named: "correctCircle"), for: .normal)
+                } else {
+                    answerBtn.setImage(UIImage(named: "wrongCircle"), for: .normal)
+                }
                 
                 answerButtonsArray.forEach { $0.isUserInteractionEnabled = false }
             }), for: .touchUpInside)
         }
-
-
     }
     
     private func setupBottomResultLabel() {

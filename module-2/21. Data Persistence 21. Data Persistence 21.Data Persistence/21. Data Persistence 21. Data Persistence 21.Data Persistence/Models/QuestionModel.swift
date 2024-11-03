@@ -11,16 +11,16 @@ struct QuestionModel: Codable {
     let difficulty: String
     let category: String
     let question: String
-    let correct_answer: String
-    let incorrect_answers: [String]
+    let correctAnswer: String
+    let incorrectAnswers: [String]
     
     enum CodingKeys: String, CodingKey {
         case questionNumber
         case difficulty
         case category
         case question 
-        case correct_answer = "correct_answer"
-        case incorrect_answers = "incorrect_answers"
+        case correctAnswer = "correct_answer"
+        case incorrectAnswers = "incorrect_answers"
     }
 }
 
