@@ -9,7 +9,6 @@ import UIKit
 
 final class QuestionDetailVC: UIViewController, QuestionViewModelDelegate {
     var viewModel = QuestionViewModel()
-    private var correctAnswers: Int
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     private let navStack = UIStackView()
@@ -26,7 +25,6 @@ final class QuestionDetailVC: UIViewController, QuestionViewModelDelegate {
     
     init(currentQuestion: QuestionModel) {
         self.currentQuestion = currentQuestion
-        correctAnswers = viewModel.correctAnswerCount
         super.init(nibName: nil, bundle: nil)
     }
     

@@ -81,4 +81,9 @@ final class QuizViewModel {
     func getSingleQuestion(index: Int) -> QuestionModel {
         quizArray[index]
     }
+    
+    func resetResults() {
+        UserDefaults.standard.set(0, forKey: AnswerStatus.answersCorrect.rawValue)
+        UserDefaults.standard.set(0, forKey: AnswerStatus.answersIncorrect.rawValue)
+    }
 }

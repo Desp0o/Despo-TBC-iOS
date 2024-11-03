@@ -12,7 +12,7 @@ class QuizVC: UIViewController {
     private let table = UITableView()
     private let topStack = UIStackView()
     private let screenTitleLabel = UILabel()
-    private let resetButton = PaddedLabel()
+    private let resetButton = UIButton()
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -51,17 +51,21 @@ class QuizVC: UIViewController {
     private func setupResetButton() {
         topStack.addArrangedSubview(resetButton)
 
-        resetButton.configureCustomLabel(
-            text: "Reset",
-            textColor: .white,
-            fontName: "Sen-Medium",
-            fontSize: 14
+        resetButton.configureCustomButton(
+            btnHeight: 34,
+            bgColor: .secondaryViolet,
+            btnTitle: "Reset",
+            color: .white,
+            fontName: "Ren-Regular",
+            fonSize: 14,
+            borderWidth: 1
         )
         
-        resetButton.backgroundColor = .secondaryViolet
-        resetButton.layer.borderColor = UIColor.outlineViolet.cgColor
-        resetButton.layer.borderWidth = 1
-        resetButton.padding = UIEdgeInsets(top: 9, left: 12, bottom: 9, right: 12)
+        resetButton.widthAnchor.constraint(equalToConstant: 66).isActive = true
+        
+        resetButton.addAction(UIAction(handler: {[weak self] _ in
+            self?.viewModel.resetResults()
+        }), for: .touchUpInside)
     }
     
     private func setupTableView() {
