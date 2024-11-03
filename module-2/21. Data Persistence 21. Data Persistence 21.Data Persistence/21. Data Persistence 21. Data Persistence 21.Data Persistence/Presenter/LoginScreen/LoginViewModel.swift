@@ -20,6 +20,8 @@ final class LoginViewModel: UIViewController {
             return
         }
         
+        UserDefaults.standard.setValue(userField.text, forKey: "userName")
+        
         if (passField.text == confield.text) {
             do {
                 try KeyChainVC.shared.save(service: "quizapp", account: userField.text ?? "", password: passField.text?.data(using: .utf8) ?? Data())
