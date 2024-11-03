@@ -27,6 +27,7 @@ final class LoginVC: UIViewController {
         setupAvatarUpload()
         setupInputs()
         configureInput(textField: userNameTxtField, labelText: "Username", placeholder: "Enter username")
+        userNameTxtField.isSecureTextEntry = false
         configureInput(textField: passwordTxtField, labelText: "Password", placeholder: "Enter password")
         configureInput(textField: confirmPasswdTxtField, labelText: "Confirm password", placeholder: "Enter password")
         setupLoginButton()
@@ -71,7 +72,7 @@ final class LoginVC: UIViewController {
         
         label.configureCustomLabel(text: labelText, textColor: .white, fontName: "Sen-Regular", fontSize: 16)
         
-        textField.configureCustomTextField(placeholder: placeholder)
+        textField.configureCustomTextField(isSecure: true, placeholder: placeholder)
     }
     
     func setupLoginButton() {
