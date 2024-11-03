@@ -8,22 +8,8 @@
 import UIKit
 
 class QuizVC: UIViewController {
+    let viewModel = QuizViewModel()
     private let table = UITableView()
-    
-    let randomStrings = [
-        QuestionModel(numeration: "Stardust"),
-            QuestionModel(numeration: "Nebula"),
-            QuestionModel(numeration: "Aurora"),
-            QuestionModel(numeration: "Comet"),
-            QuestionModel(numeration: "Galaxy"),
-            QuestionModel(numeration: "Meteor"),
-            QuestionModel(numeration: "Eclipse"),
-            QuestionModel(numeration: "Celestial"),
-            QuestionModel(numeration: "Nova"),
-            QuestionModel(numeration: "Quasar"),
-            QuestionModel(numeration: "Asteroid"),
-            QuestionModel(numeration: "Pulsar"),
-    ]
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -57,19 +43,19 @@ class QuizVC: UIViewController {
 
 extension QuizVC: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        randomStrings.count
+        viewModel.questionsCount
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = table.dequeueReusableCell(withIdentifier: "TableCell") as? TableCell
         
-        let currentQuestion = randomStrings[indexPath.row]
+        let currentQuestion = viewModel.getSingleQuestion(index: indexPath.row)
         cell?.configureCell(question: currentQuestion)
         return cell ?? TableCell()
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        let currentQuestion = randomStrings[indexPath.row]
+        let currentQuestion = viewModel.getSingleQuestion(index: indexPath.row)
         print(currentQuestion)
     }
 }

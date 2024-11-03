@@ -56,7 +56,7 @@ class TableCell: UITableViewCell {
     }
     
     func configureCell(question: QuestionModel) {
-        questLabel.configureCustomLabel(text: "Question \(question.numeration)", textColor: .mainViolet, fontName: "Sen-Regular", fontSize: 15)
+        questLabel.configureCustomLabel(text: "Question \(question.questionNumber)", textColor: .mainViolet, fontName: "Sen-Regular", fontSize: 15)
     }
     
 }
