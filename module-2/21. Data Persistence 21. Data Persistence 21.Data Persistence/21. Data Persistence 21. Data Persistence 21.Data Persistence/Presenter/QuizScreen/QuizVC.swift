@@ -16,7 +16,6 @@ class QuizVC: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
         setupUI()
     }
     
@@ -64,7 +63,16 @@ class QuizVC: UIViewController {
         resetButton.widthAnchor.constraint(equalToConstant: 66).isActive = true
         
         resetButton.addAction(UIAction(handler: {[weak self] _ in
-            self?.viewModel.resetResults()
+            
+            guard let self = self else { return }
+            
+            for num in 0...self.viewModel.questionsCount {
+                UserDefaults.standard.removeObject(forKey: "quiz\(num)")
+            }
+            
+            self.viewModel.resetResults(alert: { alert in
+                self.alertModal(text: alert)
+            })
         }), for: .touchUpInside)
     }
     
@@ -83,6 +91,13 @@ class QuizVC: UIViewController {
             table.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: 0),
             table.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: 0),
         ])
+    }
+
+    func alertModal(text: String) {
+        let user = UserDefaults.standard.string(forKey: "userName")
+        let alert = UIAlertController(title: "Dear \(user ?? "player")", message: text, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        self.present(alert, animated: true, completion: nil)
     }
 }
 

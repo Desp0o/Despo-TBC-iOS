@@ -22,7 +22,9 @@ final class QuestionDetailVC: UIViewController, QuestionViewModelDelegate {
     private let answer2 = UIButton()
     private let answer3 = UIButton()
     private let answer4 = UIButton()
-    
+    private var answerButtonsArray: [UIButton] = []
+    private var myAnswer = String()
+
     init(currentQuestion: QuestionModel) {
         self.currentQuestion = currentQuestion
         super.init(nibName: nil, bundle: nil)
@@ -39,12 +41,14 @@ final class QuestionDetailVC: UIViewController, QuestionViewModelDelegate {
     
     private func setupUI() {
         view.backgroundColor = .mainViolet
+        answerButtonsArray = [answer1, answer2, answer3, answer4]
         setupNavigationBar()
         setupScrollView()
         setupMainQuestionLabel()
         setupAnswerStack()
         setupAnswerButtons()
         setupBottomResultLabel()
+        updateQuestionStatus()
         
         viewModel.delegate = self
         updateResultLabel(correct: viewModel.correctAnswerCount, incorrect: viewModel.incorrectAnswerCount)
@@ -144,7 +148,6 @@ final class QuestionDetailVC: UIViewController, QuestionViewModelDelegate {
     }
     
     private func setupAnswerButtons() {
-        let answerButtonsArray = [answer1, answer2, answer3, answer4]
         
         var incorrectAnswers = currentQuestion.incorrectAnswers
         incorrectAnswers.append(currentQuestion.correctAnswer)
@@ -188,7 +191,10 @@ final class QuestionDetailVC: UIViewController, QuestionViewModelDelegate {
                     self?.viewModel.incrementIncorrectAnswers()
                 }
                 
-                answerButtonsArray.forEach { $0.isUserInteractionEnabled = false }
+                guard let current = self?.currentQuestion else { return }
+                self?.myAnswer = answerBtn.titleLabel?.text ?? ""
+                self?.viewModel.saveDataInStorage(currentQuiz: current, myAnswer: self?.myAnswer ?? "")
+                self?.answerButtonsArray.forEach { $0.isUserInteractionEnabled = false }
             }), for: .touchUpInside)
         }
     }
@@ -219,4 +225,19 @@ final class QuestionDetailVC: UIViewController, QuestionViewModelDelegate {
                 fontSize: 16
             )
         }
+    
+    func updateQuestionStatus() {
+        let status = viewModel.getDataFromStorage(currentQuiz: currentQuestion)
+        
+        guard let response = status else { return }
+        
+        if response.isAnswered == true {
+            answerButtonsArray.forEach { $0.isUserInteractionEnabled = false }
+            answerButtonsArray.forEach { print($0.titleLabel?.text)
+            }
+            
+        }
+        
+        print(response)
+    }
 }

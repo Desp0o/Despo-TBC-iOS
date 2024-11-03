@@ -104,8 +104,7 @@ final class LoginVC: UIViewController {
                     self.errorModal(text: errormsg ?? "" )
                 }
             )
-            
-            navigationController?.pushViewController(QuizVC(), animated: true)
+            self.navigationController?.pushViewController(QuizVC(), animated: true)
         }), for: .touchUpInside)
     }
     

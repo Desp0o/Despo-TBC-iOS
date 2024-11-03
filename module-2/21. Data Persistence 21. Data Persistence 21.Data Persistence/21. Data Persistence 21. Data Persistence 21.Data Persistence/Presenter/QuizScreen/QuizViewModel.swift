@@ -82,8 +82,9 @@ final class QuizViewModel {
         quizArray[index]
     }
     
-    func resetResults() {
+    func resetResults(alert: (String) -> Void) {
         UserDefaults.standard.set(0, forKey: AnswerStatus.answersCorrect.rawValue)
         UserDefaults.standard.set(0, forKey: AnswerStatus.answersIncorrect.rawValue)
+    alert("Your result has been cleared.")
     }
 }

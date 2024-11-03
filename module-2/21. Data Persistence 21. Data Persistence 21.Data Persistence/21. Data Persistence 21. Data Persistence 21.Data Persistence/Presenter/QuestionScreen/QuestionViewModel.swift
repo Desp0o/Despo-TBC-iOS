@@ -49,4 +49,20 @@ final class QuestionViewModel {
 
     }
     
+    func saveDataInStorage(currentQuiz: QuestionModel, myAnswer: String) {
+        let saveStatus = SingleQuizStatus(isAnswered: true, prevAnswer: myAnswer)
+        
+        if let encodedData = try? JSONEncoder().encode(saveStatus) {
+            UserDefaults.standard.set(encodedData, forKey: "quiz\(currentQuiz.questionNumber)")
+        }
+        
+        print("saved")
+    }
+    
+    func getDataFromStorage(currentQuiz: QuestionModel) -> SingleQuizStatus? {
+        let retirevedData = UserDefaults.standard.data(forKey: "quiz\(currentQuiz.questionNumber)")
+        let decodedData = try? JSONDecoder().decode(SingleQuizStatus.self, from: retirevedData ?? Data())
+        return decodedData
+    }
+    
 }
