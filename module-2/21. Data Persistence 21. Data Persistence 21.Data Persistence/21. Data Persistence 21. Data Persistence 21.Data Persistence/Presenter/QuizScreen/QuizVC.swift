@@ -11,27 +11,18 @@ class QuizVC: UIViewController {
     private let table = UITableView()
     
     let randomStrings = [
-        "Sunbeam",
-        "Oceanic",
-        "Stardust",
-        "Nebula",
-        "Aurora",
-        "Comet",
-        "Galaxy",
-        "Meteor",
-        "Eclipse",
-        "Celestial",
-        "Nova",
-        "Quasar",
-        "Asteroid",
-        "Pulsar",
-        "Equinox",
-        "Cosmos",
-        "Lunar",
-        "Orion",
-        "Zenith",
-        "Orbit",
-        "Helios"
+        QuestionModel(numeration: "Stardust"),
+            QuestionModel(numeration: "Nebula"),
+            QuestionModel(numeration: "Aurora"),
+            QuestionModel(numeration: "Comet"),
+            QuestionModel(numeration: "Galaxy"),
+            QuestionModel(numeration: "Meteor"),
+            QuestionModel(numeration: "Eclipse"),
+            QuestionModel(numeration: "Celestial"),
+            QuestionModel(numeration: "Nova"),
+            QuestionModel(numeration: "Quasar"),
+            QuestionModel(numeration: "Asteroid"),
+            QuestionModel(numeration: "Pulsar"),
     ]
 
     override func viewDidLoad() {
@@ -41,16 +32,18 @@ class QuizVC: UIViewController {
     }
     
     private func setupUI() {
+        navigationController?.isNavigationBarHidden = true
         setupTableView()
     }
     
     private func setupTableView() {
         view.addSubview(table)
         table.translatesAutoresizingMaskIntoConstraints = false
-        table.backgroundColor = .purple
+        table.backgroundColor = .clear
         table.dataSource = self
         table.delegate = self
         table.register(TableCell.self, forCellReuseIdentifier: "TableCell")
+        table.separatorStyle = .none
         
         NSLayoutConstraint.activate([
             table.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 0),
@@ -71,6 +64,7 @@ extension QuizVC: UITableViewDataSource, UITableViewDelegate {
         let cell = table.dequeueReusableCell(withIdentifier: "TableCell") as? TableCell
         
         let currentQuestion = randomStrings[indexPath.row]
+        cell?.configureCell(question: currentQuestion)
         return cell ?? TableCell()
     }
     

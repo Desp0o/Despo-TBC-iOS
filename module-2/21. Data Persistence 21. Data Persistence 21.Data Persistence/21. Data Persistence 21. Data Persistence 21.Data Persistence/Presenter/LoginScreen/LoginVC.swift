@@ -23,7 +23,6 @@ final class LoginVC: UIViewController {
     }
     
     func setupUI() {
-        navigationController?.isNavigationBarHidden = true
         setupAvatarUpload()
         setupInputs()
         configureInput(textField: userNameTxtField, labelText: "Username", placeholder: "Enter username")
