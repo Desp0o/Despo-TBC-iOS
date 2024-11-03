@@ -23,11 +23,13 @@ final class QuizViewModel {
     }
     
     func addNewFolder() {
-        documentsDirectoryPath?.appendPathComponent("Documents")
+        guard let documentsDirectoryPath = documentsDirectoryPath else { return }
+
+        let path = documentsDirectoryPath.appendingPathComponent("Documents")
         
         do {
             try fileManager.createDirectory(
-                at: documentsDirectoryPath!,
+                at: path,
                 withIntermediateDirectories: true
             )
         } catch {
