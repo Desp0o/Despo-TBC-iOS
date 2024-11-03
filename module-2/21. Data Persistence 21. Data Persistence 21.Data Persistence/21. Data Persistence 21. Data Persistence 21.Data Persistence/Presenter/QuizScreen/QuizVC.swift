@@ -96,6 +96,7 @@ extension QuizVC: UITableViewDataSource, UITableViewDelegate {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let currentQuestion = viewModel.getSingleQuestion(index: indexPath.row)
-        print(currentQuestion)
+        let vc = QuestionDetailVC(currentQuestion: currentQuestion)
+        navigationController?.pushViewController(vc, animated: true)
     }
 }

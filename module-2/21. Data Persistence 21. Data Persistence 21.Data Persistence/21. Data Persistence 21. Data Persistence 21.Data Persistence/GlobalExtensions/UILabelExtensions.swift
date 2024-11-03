@@ -10,6 +10,7 @@ import UIKit
 extension UILabel {
     func configureCustomLabel(text: String, textColor: UIColor, fontName: String, fontSize: CGFloat) {
         self.translatesAutoresizingMaskIntoConstraints = false
+        self.preservesSuperviewLayoutMargins = true
         self.text = text
         self.textColor = textColor
         self.font = UIFont(name: fontName, size: fontSize)
