@@ -7,7 +7,9 @@
 
 import UIKit
 
-final class QuestionDetailVC: UIViewController {
+final class QuestionDetailVC: UIViewController, QuestionViewModelDelegate {
+    var viewModel = QuestionViewModel()
+    private var correctAnswers: Int
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     private let navStack = UIStackView()
@@ -24,6 +26,7 @@ final class QuestionDetailVC: UIViewController {
     
     init(currentQuestion: QuestionModel) {
         self.currentQuestion = currentQuestion
+        correctAnswers = viewModel.correctAnswerCount
         super.init(nibName: nil, bundle: nil)
     }
     
@@ -44,6 +47,9 @@ final class QuestionDetailVC: UIViewController {
         setupAnswerStack()
         setupAnswerButtons()
         setupBottomResultLabel()
+        
+        viewModel.delegate = self
+        updateResultLabel(correct: viewModel.correctAnswerCount, incorrect: viewModel.incorrectAnswerCount)
     }
     
     private func setupNavigationBar() {
@@ -178,8 +184,10 @@ final class QuestionDetailVC: UIViewController {
                 
                 if answerBtn.titleLabel?.text == self?.currentQuestion.correctAnswer {
                     answerBtn.setImage(UIImage(named: "correctCircle"), for: .normal)
+                    self?.viewModel.incremetnCorrects()
                 } else {
                     answerBtn.setImage(UIImage(named: "wrongCircle"), for: .normal)
+                    self?.viewModel.incrementIncorrectAnswers()
                 }
                 
                 answerButtonsArray.forEach { $0.isUserInteractionEnabled = false }
@@ -187,15 +195,13 @@ final class QuestionDetailVC: UIViewController {
         }
     }
     
+    func didUpdateAnswerCounts(correct: Int, incorrect: Int) {
+           updateResultLabel(correct: correct, incorrect: incorrect)
+       }
+    
     private func setupBottomResultLabel() {
         contentView.addSubview(bottomResultLabel)
         
-        bottomResultLabel.configureCustomLabel(
-            text: "Correct Answer \(1) / Incorrect \(9)",
-            textColor: .white,
-            fontName: "Sen-Regular",
-            fontSize: 16
-        )
         bottomResultLabel.padding = UIEdgeInsets(top: 11, left: 15, bottom: 11, right: 15)
         bottomResultLabel.backgroundColor = .secondaryViolet
         
@@ -206,4 +212,13 @@ final class QuestionDetailVC: UIViewController {
             bottomResultLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -49),
         ])
     }
+    
+    func updateResultLabel(correct: Int, incorrect: Int) {
+            bottomResultLabel.configureCustomLabel(
+                text: "Correct Answer \(correct) / Incorrect \(incorrect)",
+                textColor: .white,
+                fontName: "Sen-Regular",
+                fontSize: 16
+            )
+        }
 }
