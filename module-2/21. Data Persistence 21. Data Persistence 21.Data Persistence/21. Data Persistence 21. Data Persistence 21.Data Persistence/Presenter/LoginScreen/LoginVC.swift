@@ -16,6 +16,11 @@ final class LoginVC: UIViewController {
     private let passwordTxtField = PaddedTextField()
     private let confirmPasswdTxtField = PaddedTextField()
     
+    override func loadView() {
+        super.loadView()
+        view = LinearGradient()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         

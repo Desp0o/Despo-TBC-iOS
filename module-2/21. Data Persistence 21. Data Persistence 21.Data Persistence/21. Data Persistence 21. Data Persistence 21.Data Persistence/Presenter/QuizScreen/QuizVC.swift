@@ -13,6 +13,11 @@ final class QuizVC: UIViewController {
     private let topStack = UIStackView()
     private let screenTitleLabel = UILabel()
     private let resetButton = UIButton()
+    
+    override func loadView() {
+        super.loadView()
+        view = LinearGradient()
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -21,7 +26,6 @@ final class QuizVC: UIViewController {
     
     private func setupUI() {
         navigationController?.isNavigationBarHidden = true
-        view.backgroundColor = .mainViolet
         setupTopStack()
         setupTableView()
     }
