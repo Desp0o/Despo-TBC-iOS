@@ -22,7 +22,6 @@ final class QuestionDetailVC: UIViewController, QuestionViewModelDelegate {
     private let answer2 = UIButton()
     private let answer3 = UIButton()
     private let answer4 = UIButton()
-    private var answerButtonsArray: [UIButton] = []
     private var myAnswer = String()
 
     init(currentQuestion: QuestionModel) {
@@ -41,14 +40,13 @@ final class QuestionDetailVC: UIViewController, QuestionViewModelDelegate {
     
     private func setupUI() {
         view.backgroundColor = .mainViolet
-        answerButtonsArray = [answer1, answer2, answer3, answer4]
         setupNavigationBar()
         setupScrollView()
         setupMainQuestionLabel()
         setupAnswerStack()
         setupAnswerButtons()
         setupBottomResultLabel()
-        updateQuestionStatus()
+//        updateQuestionStatus()
         
         viewModel.delegate = self
         updateResultLabel(correct: viewModel.correctAnswerCount, incorrect: viewModel.incorrectAnswerCount)
@@ -148,11 +146,15 @@ final class QuestionDetailVC: UIViewController, QuestionViewModelDelegate {
     }
     
     private func setupAnswerButtons() {
+        let answerButtonsArray = [answer1, answer2, answer3, answer4]
+
+        let status = viewModel.getDataFromStorage(currentQuiz: currentQuestion)
+
         
-        var incorrectAnswers = currentQuestion.incorrectAnswers
-        incorrectAnswers.append(currentQuestion.correctAnswer)
+        var allAnswers = currentQuestion.incorrectAnswers
+        allAnswers.append(currentQuestion.correctAnswer)
         
-        let shuffledAnswers = incorrectAnswers.shuffled()
+        let shuffledAnswers = allAnswers.shuffled()
         
         for (answer, answerBtn) in zip(shuffledAnswers, answerButtonsArray) {
             answersStack.addArrangedSubview(answerBtn)
@@ -165,6 +167,10 @@ final class QuestionDetailVC: UIViewController, QuestionViewModelDelegate {
                 fontName: "Ren-Regular",
                 fonSize: 16
             )
+            
+            if status?.isAnswered == true {
+                answerBtn.isUserInteractionEnabled = false
+            }
             
             var config = UIButton.Configuration.plain()
             config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 0)
@@ -180,6 +186,15 @@ final class QuestionDetailVC: UIViewController, QuestionViewModelDelegate {
                 answerBtn.trailingAnchor.constraint(equalTo: answersStack.trailingAnchor),
             ])
             
+            if answer == status?.prevAnswer {
+                answerBtn.backgroundColor = .secondaryViolet
+                if status?.prevAnswer == currentQuestion.correctAnswer {
+                    answerBtn.setImage(UIImage(named: "correctCircle"), for: .normal)
+                } else {
+                    answerBtn.setImage(UIImage(named: "wrongCircle"), for: .normal)
+                }
+            }
+            
             answerBtn.addAction(UIAction(handler: {[weak self] _ in
                 answerBtn.backgroundColor = .secondaryViolet
                 
@@ -194,7 +209,7 @@ final class QuestionDetailVC: UIViewController, QuestionViewModelDelegate {
                 guard let current = self?.currentQuestion else { return }
                 self?.myAnswer = answerBtn.titleLabel?.text ?? ""
                 self?.viewModel.saveDataInStorage(currentQuiz: current, myAnswer: self?.myAnswer ?? "")
-                self?.answerButtonsArray.forEach { $0.isUserInteractionEnabled = false }
+                answerButtonsArray.forEach { $0.isUserInteractionEnabled = false }
             }), for: .touchUpInside)
         }
     }
@@ -226,18 +241,4 @@ final class QuestionDetailVC: UIViewController, QuestionViewModelDelegate {
             )
         }
     
-    func updateQuestionStatus() {
-        let status = viewModel.getDataFromStorage(currentQuiz: currentQuestion)
-        
-        guard let response = status else { return }
-        
-        if response.isAnswered == true {
-            answerButtonsArray.forEach { $0.isUserInteractionEnabled = false }
-            answerButtonsArray.forEach { print($0.titleLabel?.text)
-            }
-            
-        }
-        
-        print(response)
-    }
 }
