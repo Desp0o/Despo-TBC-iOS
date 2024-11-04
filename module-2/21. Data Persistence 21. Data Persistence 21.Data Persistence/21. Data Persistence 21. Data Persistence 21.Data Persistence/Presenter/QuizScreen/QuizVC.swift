@@ -7,7 +7,7 @@
 
 import UIKit
 
-class QuizVC: UIViewController {
+final class QuizVC: UIViewController {
     let viewModel = QuizViewModel()
     private let table = UITableView()
     private let topStack = UIStackView()
@@ -63,15 +63,8 @@ class QuizVC: UIViewController {
         resetButton.widthAnchor.constraint(equalToConstant: 66).isActive = true
         
         resetButton.addAction(UIAction(handler: {[weak self] _ in
-            
-            guard let self = self else { return }
-            
-            for num in 0...self.viewModel.questionsCount {
-                UserDefaults.standard.removeObject(forKey: "quiz\(num)")
-            }
-            
-            self.viewModel.resetResults(alert: { alert in
-                self.alertModal(text: alert)
+            self?.viewModel.resetResults(alert: { alert in
+                self?.alertModal(text: alert)
             })
         }), for: .touchUpInside)
     }

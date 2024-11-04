@@ -22,8 +22,9 @@ final class LoginVC: UIViewController {
         setupUI()
     }
     
-    func setupUI() {
+    private func setupUI() {
         view.backgroundColor = .mainViolet
+        
         setupAvatarUpload()
         setupInputs()
         configureInput(textField: userNameTxtField, labelText: "Username", placeholder: "Enter username")
@@ -33,7 +34,7 @@ final class LoginVC: UIViewController {
         setupLoginButton()
     }
     
-    func setupAvatarUpload() {
+    private func setupAvatarUpload() {
         view.addSubview(avatar)
         
         avatar.translatesAutoresizingMaskIntoConstraints = false
@@ -45,7 +46,7 @@ final class LoginVC: UIViewController {
         ])
     }
     
-    func setupInputs() {
+    private func setupInputs() {
         view.addSubview(inputStacks)
         inputStacks.translatesAutoresizingMaskIntoConstraints = false
         inputStacks.axis = .vertical
@@ -58,7 +59,7 @@ final class LoginVC: UIViewController {
         ])
     }
     
-    func configureInput(textField: PaddedTextField, labelText: String, placeholder: String) {
+    private func configureInput(textField: PaddedTextField, labelText: String, placeholder: String) {
         let stack = UIStackView()
         let label = UILabel()
         
@@ -75,7 +76,7 @@ final class LoginVC: UIViewController {
         textField.configureCustomTextField(isSecure: true, placeholder: placeholder)
     }
     
-    func setupLoginButton() {
+    private func setupLoginButton() {
         view.addSubview(loginButton)
         
         loginButton.configureCustomButton(
@@ -108,10 +109,9 @@ final class LoginVC: UIViewController {
         }), for: .touchUpInside)
     }
     
-    func errorModal(text: String) {
+    private func errorModal(text: String) {
         let alert = UIAlertController(title: "OoOps...", message: text, preferredStyle: .alert)
         alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
         self.present(alert, animated: true, completion: nil)
     }
-    
 }

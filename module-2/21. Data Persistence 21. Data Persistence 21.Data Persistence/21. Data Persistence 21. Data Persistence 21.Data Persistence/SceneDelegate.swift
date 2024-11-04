@@ -16,7 +16,7 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
         guard let scene = (scene as? UIWindowScene) else { return }
         window = UIWindow(windowScene: scene)
         
-        let savedUserName = UserDefaults.standard.string(forKey: "userName")
+        let savedUserName = UserDefaults.standard.string(forKey: "")
         
         if KeyChainVC.shared.get(service: "quizapp", account: savedUserName ?? "") != nil {
             let quizVC = QuizVC()

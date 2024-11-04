@@ -9,21 +9,21 @@ import UIKit
 
 final class QuestionDetailVC: UIViewController, QuestionViewModelDelegate {
     var viewModel = QuestionViewModel()
+    private let currentQuestion: QuestionModel
+    private let quesNumberLabel = PaddedLabel()
+    private let bottomResultLabel = PaddedLabel()
     private let scrollView = UIScrollView()
     private let contentView = UIView()
     private let navStack = UIStackView()
-    private let currentQuestion: QuestionModel
     private let backButton = UIButton()
-    private let quesNumberLabel = PaddedLabel()
     private let maincQuestionLabel = UILabel()
-    private let bottomResultLabel = PaddedLabel()
     private let answersStack = UIStackView()
     private let answer1 = UIButton()
     private let answer2 = UIButton()
     private let answer3 = UIButton()
     private let answer4 = UIButton()
     private var myAnswer = String()
-
+    
     init(currentQuestion: QuestionModel) {
         self.currentQuestion = currentQuestion
         super.init(nibName: nil, bundle: nil)
@@ -40,13 +40,13 @@ final class QuestionDetailVC: UIViewController, QuestionViewModelDelegate {
     
     private func setupUI() {
         view.backgroundColor = .mainViolet
+        
         setupNavigationBar()
         setupScrollView()
         setupMainQuestionLabel()
         setupAnswerStack()
         setupAnswerButtons()
         setupBottomResultLabel()
-//        updateQuestionStatus()
         
         viewModel.delegate = self
         updateResultLabel(correct: viewModel.correctAnswerCount, incorrect: viewModel.incorrectAnswerCount)
@@ -147,18 +147,15 @@ final class QuestionDetailVC: UIViewController, QuestionViewModelDelegate {
     
     private func setupAnswerButtons() {
         let answerButtonsArray = [answer1, answer2, answer3, answer4]
-
-        let status = viewModel.getDataFromStorage(currentQuiz: currentQuestion)
-
-        
         var allAnswers = currentQuestion.incorrectAnswers
         allAnswers.append(currentQuestion.correctAnswer)
-        
         let shuffledAnswers = allAnswers.shuffled()
+        
+        let status = viewModel.getDataFromStorage(currentQuiz: currentQuestion)
         
         for (answer, answerBtn) in zip(shuffledAnswers, answerButtonsArray) {
             answersStack.addArrangedSubview(answerBtn)
-
+            
             answerBtn.configureCustomButton(
                 btnHeight: 49,
                 bgColor: .white,
@@ -168,23 +165,23 @@ final class QuestionDetailVC: UIViewController, QuestionViewModelDelegate {
                 fonSize: 16
             )
             
-            if status?.isAnswered == true {
-                answerBtn.isUserInteractionEnabled = false
-            }
-            
             var config = UIButton.Configuration.plain()
             config.contentInsets = NSDirectionalEdgeInsets(top: 0, leading: 15, bottom: 0, trailing: 0)
             config.imagePadding = 16.0
             answerBtn.configuration = config
-
+            
             answerBtn.setImage(UIImage(named: "emptyCircle"), for: .normal)
             answerBtn.contentHorizontalAlignment = .leading
             answerBtn.configuration?.titlePadding = 30
-
+            
             NSLayoutConstraint.activate([
                 answerBtn.leadingAnchor.constraint(equalTo: answersStack.leadingAnchor),
                 answerBtn.trailingAnchor.constraint(equalTo: answersStack.trailingAnchor),
             ])
+            
+            if status?.isAnswered == true {
+                answerBtn.isUserInteractionEnabled = false
+            }
             
             if answer == status?.prevAnswer {
                 answerBtn.backgroundColor = .secondaryViolet
@@ -214,10 +211,6 @@ final class QuestionDetailVC: UIViewController, QuestionViewModelDelegate {
         }
     }
     
-    func didUpdateAnswerCounts(correct: Int, incorrect: Int) {
-           updateResultLabel(correct: correct, incorrect: incorrect)
-       }
-    
     private func setupBottomResultLabel() {
         contentView.addSubview(bottomResultLabel)
         
@@ -232,13 +225,16 @@ final class QuestionDetailVC: UIViewController, QuestionViewModelDelegate {
         ])
     }
     
-    func updateResultLabel(correct: Int, incorrect: Int) {
-            bottomResultLabel.configureCustomLabel(
-                text: "Correct Answer \(correct) / Incorrect \(incorrect)",
-                textColor: .white,
-                fontName: "Sen-Regular",
-                fontSize: 16
-            )
-        }
+    private func updateResultLabel(correct: Int, incorrect: Int) {
+        bottomResultLabel.configureCustomLabel(
+            text: "Correct Answer \(correct) / Incorrect \(incorrect)",
+            textColor: .white,
+            fontName: "Sen-Regular",
+            fontSize: 16
+        )
+    }
     
+    func didUpdateAnswerCounts(correct: Int, incorrect: Int) {
+        updateResultLabel(correct: correct, incorrect: incorrect)
+    }
 }

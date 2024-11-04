@@ -8,7 +8,6 @@
 import UIKit
 
 final class LoginViewModel: UIViewController {
-    
     func auth(userField: PaddedTextField, passField: PaddedTextField, confield: PaddedTextField, errors: (String?) -> Void) {
         guard userField.text?.count ?? 0 > 1 else {
             errors("Username must not be empty")
@@ -19,7 +18,6 @@ final class LoginViewModel: UIViewController {
             errors("Password must be at least 6 characters")
             return
         }
-        
         
         if (passField.text == confield.text) {
             do {

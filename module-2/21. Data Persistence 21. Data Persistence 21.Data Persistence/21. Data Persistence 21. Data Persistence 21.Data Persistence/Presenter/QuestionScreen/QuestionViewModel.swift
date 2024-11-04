@@ -7,18 +7,18 @@
 
 import Foundation
 
-protocol QuestionViewModelDelegate: AnyObject {
-    func didUpdateAnswerCounts(correct: Int, incorrect: Int)
-}
-
 enum AnswerStatus: String {
     case answersCorrect = "answersCorrect"
     case answersIncorrect = "answersIncorrect"
 }
 
+protocol QuestionViewModelDelegate: AnyObject {
+    func didUpdateAnswerCounts(correct: Int, incorrect: Int)
+}
+
 final class QuestionViewModel {
     weak var delegate: QuestionViewModelDelegate?
-
+    
     var correctAnswerCount: Int = 0 {
         didSet {
             delegate?.didUpdateAnswerCounts(correct: correctAnswerCount, incorrect: incorrectAnswerCount)
@@ -40,13 +40,10 @@ final class QuestionViewModel {
     
     func incremetnCorrects() {
         correctAnswerCount += 1
-        print(correctAnswerCount)
     }
     
     func incrementIncorrectAnswers() {
         incorrectAnswerCount += 1
-        print(incorrectAnswerCount)
-
     }
     
     func saveDataInStorage(currentQuiz: QuestionModel, myAnswer: String) {
@@ -55,8 +52,6 @@ final class QuestionViewModel {
         if let encodedData = try? JSONEncoder().encode(saveStatus) {
             UserDefaults.standard.set(encodedData, forKey: "quiz\(currentQuiz.questionNumber)")
         }
-        
-        print("saved")
     }
     
     func getDataFromStorage(currentQuiz: QuestionModel) -> SingleQuizStatus? {
@@ -64,5 +59,4 @@ final class QuestionViewModel {
         let decodedData = try? JSONDecoder().decode(SingleQuizStatus.self, from: retirevedData ?? Data())
         return decodedData
     }
-    
 }

@@ -7,7 +7,7 @@
 
 import UIKit
 
-class TableCell: UITableViewCell {
+final class TableCell: UITableViewCell {
     private let stack = UIStackView()
     private let questLabel = UILabel()
     
@@ -58,5 +58,4 @@ class TableCell: UITableViewCell {
     func configureCell(question: QuestionModel) {
         questLabel.configureCustomLabel(text: "Question \(question.questionNumber)", textColor: .mainViolet, fontName: "Sen-Regular", fontSize: 15)
     }
-    
 }
