@@ -25,6 +25,8 @@ final class LoginViewModel: UIViewController {
             do {
                 try KeyChainVC.shared.save(service: "quizapp", account: userField.text ?? "", password: passField.text?.data(using: .utf8) ?? Data())
                 UserDefaults.standard.setValue(userField.text, forKey: "userName")
+            } catch KeyChainVC.keyChainError.duplicate {
+                errors("This user already exists")
             } catch {
                 print(error.localizedDescription)
             }

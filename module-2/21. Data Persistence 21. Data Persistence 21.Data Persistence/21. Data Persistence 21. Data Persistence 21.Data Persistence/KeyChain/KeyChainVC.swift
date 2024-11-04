@@ -43,9 +43,6 @@ class KeyChainVC: UIViewController {
         guard status == errSecSuccess else {
             throw keyChainError.unknown
         }
-        
-        print(status)
-        print("pass saved")
     }
     
     func get(
