@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "interstellarPoster.jpg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

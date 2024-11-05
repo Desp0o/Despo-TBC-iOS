@@ -1,0 +1,12 @@
+{
+  "images" : [
+    {
+      "filename" : "alienPoster.jpg",
+      "idiom" : "universal"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}
