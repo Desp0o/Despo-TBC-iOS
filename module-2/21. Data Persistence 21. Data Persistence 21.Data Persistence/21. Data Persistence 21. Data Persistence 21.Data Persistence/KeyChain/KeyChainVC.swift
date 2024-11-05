@@ -15,7 +15,7 @@ class KeyChainVC: UIViewController {
         case duplicate
         case unknown
         case notFound
-        case KCErrorWithCode(Int)
+        case kcErrorWithCode(Int)
     }
     
     override func viewDidLoad() {

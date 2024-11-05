@@ -18,10 +18,10 @@ final class QuestionDetailVC: UIViewController, QuestionViewModelDelegate {
     private let backButton = UIButton()
     private let maincQuestionLabel = UILabel()
     private let answersStack = UIStackView()
-    private let answer1 = UIButton()
-    private let answer2 = UIButton()
-    private let answer3 = UIButton()
-    private let answer4 = UIButton()
+    private let answerOne = UIButton()
+    private let answerTwo = UIButton()
+    private let answerThree = UIButton()
+    private let answerFour = UIButton()
     private var myAnswer = String()
     
     init(currentQuestion: QuestionModel) {
@@ -151,7 +151,7 @@ final class QuestionDetailVC: UIViewController, QuestionViewModelDelegate {
     }
     
     private func setupAnswerButtons() {
-        let answerButtonsArray = [answer1, answer2, answer3, answer4]
+        let answerButtonsArray = [answerOne, answerTwo, answerThree, answerFour]
         var allAnswers = currentQuestion.incorrectAnswers
         allAnswers.append(currentQuestion.correctAnswer)
         let shuffledAnswers = allAnswers.shuffled()
