@@ -85,6 +85,33 @@ final class ImageViewModel {
         }
     }
     
+    func fetchImagesWithOperationQueueSecond() {
+        var downloadedImages: [UIImage] = []
+        let lock = NSLock()
+        let operationQueue = OperationQueue()
+        operationQueue.underlyingQueue = DispatchQueue.global(qos: .userInitiated)
+        
+        var count = 0
+        
+        for url in imageUrls {
+            let operation = BlockOperation { [weak self] in
+                self?.fetchAndProcessImage(from: url) { image in
+                    guard let image else { return }
+                    lock.lock()
+                    downloadedImages.append(image)
+                    lock.unlock()
+                    
+                    count += 1
+                    if count == self?.imageUrls.count {
+                        DispatchQueue.main.async {
+                            self?.images = downloadedImages
+                        }
+                    }
+                }
+            }
+            operationQueue.addOperation(operation)
+        }
+    }
     
     // დაასრულეთ მეთოდის იმპლემენტაცია async/await-ის გამოყენებით (შეგიძლიათ დაიხმაროთ fetchAndProcessImageAsync())
     func fetchImagesWithAsyncAwait() {
@@ -102,7 +129,6 @@ final class ImageViewModel {
         }
     }
 
-    
     
     func updateNumberOfImages(to count: Int) {
         generateImageUrls(numberOfImages: count)

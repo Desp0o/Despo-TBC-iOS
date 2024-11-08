@@ -78,8 +78,9 @@ final class ImageViewController: UIViewController {
         // გასატესტად uncomment გაუკეთეთ ქვემოთ მოცემულ მეთოდებს საჭიროებისამებრ
         
 //         viewModel.fetchImagesWithGCD()
-         viewModel.fetchImagesWithOperationQueue()
-//         viewModel.fetchImagesWithAsyncAwait()
+//         viewModel.fetchImagesWithOperationQueue()
+         viewModel.fetchImagesWithOperationQueueSecond()
+//           viewModel.fetchImagesWithAsyncAwait()
     }
 }
 
