@@ -73,13 +73,13 @@ final class ImageViewController: UIViewController {
         }
     }
 
-    @objc private func fetchImagesButtonTapped() {
+    @objc private func fetchImagesButtonTapped()  {
         viewModel.updateNumberOfImages(to: 10)
         // გასატესტად uncomment გაუკეთეთ ქვემოთ მოცემულ მეთოდებს საჭიროებისამებრ
         
-         viewModel.fetchImagesWithGCD()
-        // viewModel.fetchImagesWithOperationQueue()
-        // viewModel.fetchImagesWithAsyncAwait()
+//         viewModel.fetchImagesWithGCD()
+         viewModel.fetchImagesWithOperationQueue()
+//         viewModel.fetchImagesWithAsyncAwait()
     }
 }
 
