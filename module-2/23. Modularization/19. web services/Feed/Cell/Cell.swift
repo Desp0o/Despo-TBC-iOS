@@ -1,7 +1,9 @@
 
 import UIKit
+import DateFormatterFramework
 
 final class Cell: UITableViewCell {
+    private let dateformatter = DateFormatterFramework()
     private let cellStack = UIStackView()
     private let cellBg = UIImageView()
     private let cellTitle = UILabel()
@@ -80,7 +82,7 @@ final class Cell: UITableViewCell {
     }
     
     func configureCell(news: SinglePost) {
-        let currentDate = news.publishedAt.formatDate()
+        let currentDate = dateformatter.formatDate(date: news.publishedAt)
         
         self.dateLabel.configureNunitoLabels(text: currentDate, fontName: "Nunito-SemiBold", color: .white, size: 12)
         self.cellTitle.configureNunitoLabels(text: news.title, fontName: "Nunito-Bold", color: .white, size: 12)
