@@ -10,7 +10,7 @@ public protocol DateFormattingProtocol {
     func formatDate(date: String) -> String
 }
 
-public class DateFormatterFramework: DateFormattingProtocol {
+public final class DateFormatterFramework {
     
     public init() { }
     

@@ -26,6 +26,8 @@ final class Cell: UITableViewCell {
 
         setupCellBackground()
         setupCellView()
+        addGradient()
+
         setupCellTitle()
         setupCellBottomStack()
         setupBottomLabels()
@@ -47,6 +49,7 @@ final class Cell: UITableViewCell {
     private func setupCellView() {
         contentView.addSubview(cellStack)
         
+       
         cellStack.translatesAutoresizingMaskIntoConstraints = false
         cellStack.isLayoutMarginsRelativeArrangement = true
         cellStack.layoutMargins = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
@@ -59,6 +62,7 @@ final class Cell: UITableViewCell {
             cellStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             cellStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8)
         ])
+        
     }
     
     private func setupCellTitle() {
@@ -79,6 +83,23 @@ final class Cell: UITableViewCell {
     private func setupBottomLabels() {
         cellBottomStack.addArrangedSubview(authorLabel)
         cellBottomStack.addArrangedSubview(dateLabel)
+    }
+    
+    private func addGradient(){
+        let gradientView = LinearGradient()
+        cellStack.insertSubview(gradientView, at: 0)
+        
+        gradientView.translatesAutoresizingMaskIntoConstraints = false
+        gradientView.clipsToBounds = true
+        gradientView.layer.cornerRadius = cellBg.layer.cornerRadius
+        gradientView.layer.opacity = 0.6
+        
+        NSLayoutConstraint.activate([
+            gradientView.leadingAnchor.constraint(equalTo: cellStack.leadingAnchor),
+            gradientView.topAnchor.constraint(equalTo: cellStack.topAnchor),
+            gradientView.trailingAnchor.constraint(equalTo: cellStack.trailingAnchor),
+            gradientView.bottomAnchor.constraint(equalTo: cellStack.bottomAnchor),
+        ])
     }
     
     func configureCell(news: SinglePost) {
