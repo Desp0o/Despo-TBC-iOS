@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		E33AF68A2CE1305600261EDE /* NetworkManagerFramework in Frameworks */ = {isa = PBXBuildFile; productRef = E33AF6892CE1305600261EDE /* NetworkManagerFramework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		E38388F32CD1853D00599F61 /* 19. web services.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "19. web services.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E33AF68A2CE1305600261EDE /* NetworkManagerFramework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +83,7 @@
 			);
 			name = "19. web services";
 			packageProductDependencies = (
+				E33AF6892CE1305600261EDE /* NetworkManagerFramework */,
 			);
 			productName = "19. web services";
 			productReference = E38388F32CD1853D00599F61 /* 19. web services.app */;
@@ -107,6 +113,9 @@
 			);
 			mainGroup = E38388EA2CD1853D00599F61;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				E33AF6882CE1305600261EDE /* XCRemoteSwiftPackageReference "webService" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = E38388F42CD1853D00599F61 /* Products */;
 			projectDirPath = "";
@@ -341,6 +350,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E33AF6882CE1305600261EDE /* XCRemoteSwiftPackageReference "webService" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Desp0o/webService.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E33AF6892CE1305600261EDE /* NetworkManagerFramework */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E33AF6882CE1305600261EDE /* XCRemoteSwiftPackageReference "webService" */;
+			productName = NetworkManagerFramework;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E38388EB2CD1853D00599F61 /* Project object */;
 }
