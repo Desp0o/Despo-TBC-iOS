@@ -6,7 +6,11 @@
 //
 import Foundation
 
-public class DateFormatterFramework {
+public protocol DateFormattingProtocol {
+    func formatDate(date: String) -> String
+}
+
+public class DateFormatterFramework: DateFormattingProtocol {
     
     public init() { }
     
