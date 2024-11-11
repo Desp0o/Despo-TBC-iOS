@@ -1,6 +1,15 @@
 {
-  "originHash" : "f10d442eb69c8cbe0f76ab2131a5bec6eb9ee0ede2f76bfb1a46d36ad486af37",
+  "originHash" : "c4aaabd29bd445b8ab9ae8c2b87c7bfcce66f74cdfcadf0469c6e15ea90b7c78",
   "pins" : [
+    {
+      "identity" : "izzidateformatter",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/Desp0o/izziDateFormatter.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "e9431fda38dbeb7b7a6fa3eae49bda6d93c5e7bf"
+      }
+    },
     {
       "identity" : "izzigradient",
       "kind" : "remoteSourceControl",

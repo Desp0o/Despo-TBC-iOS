@@ -14,8 +14,8 @@ protocol UpdateNewsDelegate: AnyObject {
 
 final class ViewModel {
     weak var delegate: UpdateNewsDelegate?
-    let dateFormatter: DateFormatProtocol
-    let networkService: NetworkServiceProtocol
+    private let dateFormatter: DateFormatProtocol
+    private let networkService: NetworkServiceProtocol
     private var currentPage = 0
     
     init(dateFormatter: DateFormatProtocol = DateFormat(), networkService: NetworkServiceProtocol = NetworkService()) {
