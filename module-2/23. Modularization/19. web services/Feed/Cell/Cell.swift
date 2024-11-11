@@ -4,11 +4,6 @@ import DateFormatterFramework
 import izziGradient
 
 final class Cell: UITableViewCell, DateFormattingProtocol {
-    
-    
-    
-    
-
     private let cellStack = UIStackView()
     private let cellBg = UIImageView()
     private let cellTitle = UILabel()
@@ -17,28 +12,25 @@ final class Cell: UITableViewCell, DateFormattingProtocol {
     private let dateLabel = UILabel()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-            super.init(style: style, reuseIdentifier: reuseIdentifier)
-            setupUI()
-
-        }
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+        setupUI()
+    }
     
     init(style: UITableViewCell.CellStyle, reuseIdentifier: String?, dateFormatter: DateFormattingProtocol) {
-            super.init(style: style, reuseIdentifier: reuseIdentifier)
-        }
-    
+        super.init(style: style, reuseIdentifier: reuseIdentifier)
+    }
 
-    
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     private func setupUI() {
         self.selectionStyle = .none
-
+        
         setupCellBackground()
         setupCellView()
         addGradient()
-
+        
         setupCellTitle()
         setupCellBottomStack()
         setupBottomLabels()
@@ -60,7 +52,6 @@ final class Cell: UITableViewCell, DateFormattingProtocol {
     private func setupCellView() {
         contentView.addSubview(cellStack)
         
-       
         cellStack.translatesAutoresizingMaskIntoConstraints = false
         cellStack.isLayoutMarginsRelativeArrangement = true
         cellStack.layoutMargins = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
@@ -73,7 +64,6 @@ final class Cell: UITableViewCell, DateFormattingProtocol {
             cellStack.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
             cellStack.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8)
         ])
-        
     }
     
     private func setupCellTitle() {
@@ -104,7 +94,7 @@ final class Cell: UITableViewCell, DateFormattingProtocol {
         gradientView.startPoint = CGPoint(x: 0.0, y: 0.1)
         
         cellStack.insertSubview(gradientView, at: 0)
-
+        
         gradientView.translatesAutoresizingMaskIntoConstraints = false
         gradientView.clipsToBounds = true
         gradientView.layer.cornerRadius = cellBg.layer.cornerRadius
@@ -124,7 +114,6 @@ final class Cell: UITableViewCell, DateFormattingProtocol {
     
     func configureCell(news: SinglePost) {
         let currentDate = Cell.formatDate(date: news.publishedAt)
-        print(currentDate)
         
         self.dateLabel.configureNunitoLabels(text: currentDate, fontName: "Nunito-SemiBold", color: .white, size: 12)
         self.cellTitle.configureNunitoLabels(text: news.title, fontName: "Nunito-Bold", color: .white, size: 12)

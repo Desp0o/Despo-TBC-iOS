@@ -11,13 +11,11 @@ protocol UpdateNewsDelegate: AnyObject {
     func updateNewsFeed()
 }
 
-final class ViewModel {
-    private let networkService: NetworkServiceProtocol
+final class ViewModel: NetworkServiceProtocol {
     weak var delegate: UpdateNewsDelegate?
     private var currentPage = 0
     
-    init(networkService: NetworkServiceProtocol = NetworkService()) {
-        self.networkService = networkService
+    init() {
         loadNextPage()
     }
     
@@ -31,12 +29,16 @@ final class ViewModel {
         return newsArray[index]
     }
     
+    static func fetchData<T>(urlString: String, completion: @escaping @Sendable (Result<T, NetworkManagerFramework.NetworkError>) -> Void) where T : Decodable, T : Encodable {
+        NetworkService.fetchData(urlString: urlString, completion: completion)
+    }
+    
     func loadNextPage() {
         currentPage += 1
         
         let linkApi =  "https://newsapi.org/v2/everything?q=bitcoin&pageSize=30&page=\(currentPage)&apiKey=c20af04d5d98493e80e749a05098a930"
         
-        networkService.fetchData(urlString: linkApi) { (result: Result<NewsResponseData, NetworkError>) in
+        NetworkService.fetchData(urlString: linkApi) { (result: Result<NewsResponseData, NetworkError>) in
             switch result {
             case .success(let posts):
                 var finalData = posts.articles
