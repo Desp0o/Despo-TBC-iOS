@@ -1,5 +1,4 @@
 import UIKit
-import DateFormatterFramework
 
 final class DetailsVC: UIViewController {
     private let news: SinglePost

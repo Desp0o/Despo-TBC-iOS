@@ -1,6 +1,5 @@
 
 import UIKit
-import DateFormatterFramework
 import izziGradient
 
 final class Cell: UITableViewCell {
