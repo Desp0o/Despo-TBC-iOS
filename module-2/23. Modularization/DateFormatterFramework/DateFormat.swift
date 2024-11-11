@@ -1,20 +1,15 @@
-//
-//  DateFormatter.swift
-//  19. web services
-//
-//  Created by Despo on 10.11.24.
-//
+
 import Foundation
 
-public protocol DateFormattingProtocol {
-    static func formatDate(date: String) -> String
+public protocol DateFormatProtocol {
+    func formatDate(date: String) -> String
 }
 
-public final class DateFormatterLib: DateFormattingProtocol {
+public final class DateFormat: DateFormatProtocol  {
     
     public init() { }
     
-    public static func formatDate(date: String) -> String {
+    public func formatDate(date: String) -> String {
         let inputFormatter = DateFormatter()
         inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         

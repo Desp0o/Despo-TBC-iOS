@@ -6,16 +6,21 @@
 //
 import Foundation
 import NetworkManagerFramework
+import DateFormatterFramework
 
 protocol UpdateNewsDelegate: AnyObject {
     func updateNewsFeed()
 }
 
-final class ViewModel: NetworkServiceProtocol {
+final class ViewModel {
     weak var delegate: UpdateNewsDelegate?
+    let dateFormatter: DateFormatProtocol
+    let networkService: NetworkServiceProtocol
     private var currentPage = 0
     
-    init() {
+    init(dateFormatter: DateFormatProtocol = DateFormat(), networkService: NetworkServiceProtocol = NetworkService()) {
+        self.dateFormatter = dateFormatter
+        self.networkService = networkService
         loadNextPage()
     }
     
@@ -29,21 +34,23 @@ final class ViewModel: NetworkServiceProtocol {
         return newsArray[index]
     }
     
-    static func fetchData<T>(urlString: String, completion: @escaping @Sendable (Result<T, NetworkManagerFramework.NetworkError>) -> Void) where T : Decodable, T : Encodable {
-        NetworkService.fetchData(urlString: urlString, completion: completion)
-    }
-    
     func loadNextPage() {
         currentPage += 1
-        
         let linkApi =  "https://newsapi.org/v2/everything?q=bitcoin&pageSize=30&page=\(currentPage)&apiKey=c20af04d5d98493e80e749a05098a930"
         
-        NetworkService.fetchData(urlString: linkApi) { (result: Result<NewsResponseData, NetworkError>) in
+        networkService.fetchData(urlString: linkApi) { (result: Result<NewsResponseData, NetworkError>) in
             switch result {
             case .success(let posts):
                 var finalData = posts.articles
+                
                 finalData.removeAll { post in
                     post.title == "[Removed]"
+                }
+                
+                finalData = finalData.map {[weak self] post in
+                    var updatedPost = post
+                    updatedPost.publishedAt = self?.dateFormatter.formatDate(date: post.publishedAt) ?? post.publishedAt
+                    return updatedPost
                 }
                 
                 self.newsArray.append(contentsOf: finalData)
