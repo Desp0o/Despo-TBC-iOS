@@ -1,6 +1,7 @@
 
 import UIKit
 import DateFormatterFramework
+import izziGradient
 
 final class Cell: UITableViewCell {
     private let dateformatter = DateFormatterFramework()
@@ -86,9 +87,14 @@ final class Cell: UITableViewCell {
     }
     
     private func addGradient(){
-        let gradientView = LinearGradient()
-        cellStack.insertSubview(gradientView, at: 0)
         
+        let gradientView = IzziLinearGradient()
+        gradientView.gradientColors = [.gradientFirst, .black]
+        gradientView.startPoint = CGPoint(x: 0.0, y: 0.0)
+        gradientView.startPoint = CGPoint(x: 0.0, y: 0.1)
+        
+        cellStack.insertSubview(gradientView, at: 0)
+
         gradientView.translatesAutoresizingMaskIntoConstraints = false
         gradientView.clipsToBounds = true
         gradientView.layer.cornerRadius = cellBg.layer.cornerRadius

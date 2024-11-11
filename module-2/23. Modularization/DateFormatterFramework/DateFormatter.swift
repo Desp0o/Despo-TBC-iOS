@@ -10,7 +10,7 @@ public protocol DateFormattingProtocol {
     func formatDate(date: String) -> String
 }
 
-public final class DateFormatterFramework {
+public final class DateFormatterLib {
     
     public init() { }
     
@@ -21,7 +21,7 @@ public final class DateFormatterFramework {
         guard let date = inputFormatter.date(from: date) else { return String()}
         
         let outputFormatter = DateFormatter()
-        outputFormatter.dateFormat = "EEEE, dd MMMM yyyy"
+        outputFormatter.dateFormat = "EEEE, MMMM dd yyyy"
         
         return outputFormatter.string(from: date)
     }

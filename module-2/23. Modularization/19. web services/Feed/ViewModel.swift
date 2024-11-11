@@ -28,24 +28,24 @@ final class ViewModel {
     }
     
     func singlePost(index: Int) -> SinglePost {
-        if index < newsArray.count && newsArray[index].title == "[Removed]" {
-            newsArray.remove(at: index)
-            print("remove")
-        }
-            
         return newsArray[index]
     }
     
     func loadNextPage() {
         currentPage += 1
         
-        let linkApi =  "https://newsapi.org/v2/everything?q=bitcoin&pageSize=30&page=\(currentPage)&apiKey=815bdd179bed438aa183f4d2a6ff264f"
+        let linkApi =  "https://newsapi.org/v2/everything?q=bitcoin&pageSize=30&page=\(currentPage)&apiKey=c20af04d5d98493e80e749a05098a930"
         
-        networkService.fetchData(urlString: linkApi) { [weak self] (result: Result<NewsResponseData, NetworkError>) in
+        networkService.fetchData(urlString: linkApi) { (result: Result<NewsResponseData, NetworkError>) in
             switch result {
             case .success(let posts):
-                self?.newsArray.append(contentsOf: posts.articles)
-                self?.delegate?.updateNewsFeed()
+                var finalData = posts.articles
+                finalData.removeAll { post in
+                    post.title == "[Removed]"
+                }
+                
+                self.newsArray.append(contentsOf: finalData)
+                self.delegate?.updateNewsFeed()
             case .failure(let error):
                 print("Error fetching data: \(error)")
             }
