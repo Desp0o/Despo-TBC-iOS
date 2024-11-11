@@ -1,5 +1,6 @@
 
 import UIKit
+import izziGradient
 
 final class Cell: UITableViewCell {
     private let cellStack = UIStackView()
@@ -11,19 +12,20 @@ final class Cell: UITableViewCell {
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
         setupUI()
     }
-    
+
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
     private func setupUI() {
         self.selectionStyle = .none
-
+        
         setupCellBackground()
         setupCellView()
+        addGradient()
+        
         setupCellTitle()
         setupCellBottomStack()
         setupBottomLabels()
@@ -79,10 +81,30 @@ final class Cell: UITableViewCell {
         cellBottomStack.addArrangedSubview(dateLabel)
     }
     
-    func configureCell(news: SinglePost) {
-        let currentDate = news.publishedAt.formatDate()
+    private func addGradient(){
         
-        self.dateLabel.configureNunitoLabels(text: currentDate, fontName: "Nunito-SemiBold", color: .white, size: 12)
+        let gradientView = IzziLinearGradient()
+        gradientView.gradientColors = [.gradientFirst, .black]
+        gradientView.startPoint = CGPoint(x: 0.0, y: 0.0)
+        gradientView.startPoint = CGPoint(x: 0.0, y: 0.1)
+        
+        cellStack.insertSubview(gradientView, at: 0)
+        
+        gradientView.translatesAutoresizingMaskIntoConstraints = false
+        gradientView.clipsToBounds = true
+        gradientView.layer.cornerRadius = cellBg.layer.cornerRadius
+        gradientView.layer.opacity = 0.6
+        
+        NSLayoutConstraint.activate([
+            gradientView.leadingAnchor.constraint(equalTo: cellStack.leadingAnchor),
+            gradientView.topAnchor.constraint(equalTo: cellStack.topAnchor),
+            gradientView.trailingAnchor.constraint(equalTo: cellStack.trailingAnchor),
+            gradientView.bottomAnchor.constraint(equalTo: cellStack.bottomAnchor),
+        ])
+    }
+    
+    func configureCell(news: SinglePost) {
+        self.dateLabel.configureNunitoLabels(text: news.publishedAt, fontName: "Nunito-SemiBold", color: .white, size: 12)
         self.cellTitle.configureNunitoLabels(text: news.title, fontName: "Nunito-Bold", color: .white, size: 12)
         self.authorLabel.configureNunitoLabels(text: news.author ?? "", fontName: "Nunito-SemiBold", color: .white, size: 12)
         

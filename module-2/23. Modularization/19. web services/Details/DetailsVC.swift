@@ -1,17 +1,17 @@
 import UIKit
 
 final class DetailsVC: UIViewController {
-    let news: SinglePost
-    let navigationStack = UIStackView()
-    let backButton = UIButton()
-    let screenTitle = UILabel()
-    let scrollView = UIScrollView()
-    let contentView = UIView()
-    let newsTitle = UILabel()
-    let dateLabel = UILabel()
-    let newsPoster = UIImageView()
-    let newsDescription = UILabel()
-    let authorLabel = UILabel()
+    private let news: SinglePost
+    private let navigationStack = UIStackView()
+    private let backButton = UIButton()
+    private let screenTitle = UILabel()
+    private let scrollView = UIScrollView()
+    private let contentView = UIView()
+    private let newsTitle = UILabel()
+    private let dateLabel = UILabel()
+    private let newsPoster = UIImageView()
+    private let newsDescription = UILabel()
+    private let authorLabel = UILabel()
     
     init(news: SinglePost) {
         self.news = news
@@ -120,10 +120,11 @@ final class DetailsVC: UIViewController {
             newsTitle.topAnchor.constraint(equalTo: contentView.topAnchor)
         ])
     }
-    
+  
     private func setupDateLabel() {
         contentView.addSubview(dateLabel)
-        dateLabel.configureNunitoLabels(text: news.publishedAt.formatDate(), fontName: "Nunito-Regular", color: .customBrown, size: 12)
+        
+        dateLabel.configureNunitoLabels(text: news.publishedAt, fontName: "Nunito-Regular", color: .customBrown, size: 12)
         
         NSLayoutConstraint.activate([
             dateLabel.topAnchor.constraint(equalTo: newsTitle.bottomAnchor, constant: 5),
