@@ -3,8 +3,12 @@ import UIKit
 import DateFormatterFramework
 import izziGradient
 
-final class Cell: UITableViewCell {
-    private let dateformatter = DateFormatterLib()
+final class Cell: UITableViewCell, DateFormattingProtocol {
+    
+    
+    
+    
+
     private let cellStack = UIStackView()
     private let cellBg = UIImageView()
     private let cellTitle = UILabel()
@@ -13,10 +17,16 @@ final class Cell: UITableViewCell {
     private let dateLabel = UILabel()
     
     override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
-        super.init(style: style, reuseIdentifier: reuseIdentifier)
-        
-        setupUI()
-    }
+            super.init(style: style, reuseIdentifier: reuseIdentifier)
+            setupUI()
+
+        }
+    
+    init(style: UITableViewCell.CellStyle, reuseIdentifier: String?, dateFormatter: DateFormattingProtocol) {
+            super.init(style: style, reuseIdentifier: reuseIdentifier)
+        }
+    
+
     
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
@@ -108,8 +118,13 @@ final class Cell: UITableViewCell {
         ])
     }
     
+    static func formatDate(date: String) -> String {
+        return DateFormatterLib.formatDate(date: date)
+    }
+    
     func configureCell(news: SinglePost) {
-        let currentDate = dateformatter.formatDate(date: news.publishedAt)
+        let currentDate = Cell.formatDate(date: news.publishedAt)
+        print(currentDate)
         
         self.dateLabel.configureNunitoLabels(text: currentDate, fontName: "Nunito-SemiBold", color: .white, size: 12)
         self.cellTitle.configureNunitoLabels(text: news.title, fontName: "Nunito-Bold", color: .white, size: 12)

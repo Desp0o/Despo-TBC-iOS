@@ -1,8 +1,7 @@
 import UIKit
 import DateFormatterFramework
 
-final class DetailsVC: UIViewController {
-    private let dateFormatter = DateFormatterLib()
+final class DetailsVC: UIViewController, DateFormattingProtocol {
     private let news: SinglePost
     private let navigationStack = UIStackView()
     private let backButton = UIButton()
@@ -123,10 +122,14 @@ final class DetailsVC: UIViewController {
         ])
     }
     
+    static func formatDate(date: String) -> String {
+        return DateFormatterLib.formatDate(date: date)
+    }
+    
     private func setupDateLabel() {
         contentView.addSubview(dateLabel)
         
-        let date = dateFormatter.formatDate(date: news.publishedAt)
+        let date = DetailsVC.formatDate(date: news.publishedAt)
         dateLabel.configureNunitoLabels(text: date, fontName: "Nunito-Regular", color: .customBrown, size: 12)
         
         NSLayoutConstraint.activate([

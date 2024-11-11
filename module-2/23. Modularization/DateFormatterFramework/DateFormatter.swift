@@ -7,14 +7,14 @@
 import Foundation
 
 public protocol DateFormattingProtocol {
-    func formatDate(date: String) -> String
+    static func formatDate(date: String) -> String
 }
 
 public final class DateFormatterLib: DateFormattingProtocol {
     
     public init() { }
     
-    public func formatDate(date: String) -> String {
+    public static func formatDate(date: String) -> String {
         let inputFormatter = DateFormatter()
         inputFormatter.dateFormat = "yyyy-MM-dd'T'HH:mm:ssZ"
         
