@@ -2,7 +2,7 @@ import UIKit
 import DateFormatterFramework
 
 final class DetailsVC: UIViewController {
-    private let dateFormatter = DateFormatterFramework()
+    private let dateFormatter = DateFormatterLib()
     private let news: SinglePost
     private let navigationStack = UIStackView()
     private let backButton = UIButton()

@@ -4,7 +4,7 @@ import DateFormatterFramework
 import izziGradient
 
 final class Cell: UITableViewCell {
-    private let dateformatter = DateFormatterFramework()
+    private let dateformatter = DateFormatterLib()
     private let cellStack = UIStackView()
     private let cellBg = UIImageView()
     private let cellTitle = UILabel()
