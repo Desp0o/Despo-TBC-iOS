@@ -18,9 +18,9 @@ class Animal {
 final class Predator: Animal {
     override func save(data: String) {
         if data.contains("meat") {
-            super.save(data: "food ration: \(data)")
+            super.save(data: "predators food ration is: \(data)")
         } else {
-            print("predators doesnt eat such a cute food")
+            print("food ration is \(data)")
         }
     }
 }
