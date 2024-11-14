@@ -1,14 +1,6 @@
-//
-//  ISPCorrect.swift
-//  SOLID
-//
-//  Created by Despo on 13.11.24.
-//
-
 // ამ კოდში დაცულია ISP პრინციპ რადნაგნ პროტოკოლები შეცავენ ისეთ მეთოდებს
 // რომელბიც ჭირდებათ სხვა და სხვა პერსონაჟებს, და მათ არ უწევთ ისეთი მეთოდების მაინც გამოყენება რომელბიც არ ჭირდებათ
 // აქ შეგვეძლო დაგვეყო ასევე პროტოკელები უნარების მიხედვით უფრო მაშტაბურად გამოსაყენებლად ქვემოთ კომენატრად დავტოვებ
-
 
 protocol ElfCcharacter {
     func useBow()
@@ -19,21 +11,22 @@ protocol GnomeCharacter {
     func useAxe()
 }
 
-final class Galadriel: ElfCcharacter {
+final class Legolas: ElfCcharacter {
     func useBow() {
-        print("Galadriel elfs can use bow")
+        print("Legolas is best archer")
     }
     
     func beStealthy() {
-        print("Galadriel can be stealthy")
+        print("legolas can be stealthy")
     }
 }
 
-final class Thorin: GnomeCharacter {
+final class Gimli: GnomeCharacter {
     func useAxe() {
-        print("Thorin's fav weapon is axe")
+        print("Gimli's fav weapon is axe")
     }
 }
+
 
 //protocol Archer {
 //    func useBow()
@@ -48,18 +41,18 @@ final class Thorin: GnomeCharacter {
 //}
 //
 //
-//final class Galadriel: Archer, Stealthy {
+//final class Legolas: Archer, Stealthy {
 //    func useBow() {
-//        print("Galadriel elfs can use bow")
+//        print("Legolas is best archer")
 //    }
-//    
+//
 //    func beStealthy() {
-//        print("Galadriel can be stealthy")
+//        print("legolas can be stealthy")
 //    }
 //}
 //
-//final class Thorin: Berserker {
+//final class Gimli: Berserker {
 //    func useAxe() {
-//        print("Thorin's fav weapon is axe")
+//        print("Gimli's fav weapon is axe")
 //    }
 //}

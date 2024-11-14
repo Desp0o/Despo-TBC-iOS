@@ -1,10 +1,3 @@
-//
-//  ISPWrong.swift
-//  SOLID
-//
-//  Created by Despo on 13.11.24.
-//
-
 // ამ მოყავნილ მაგალითში ირღვევა ISP პრინციპი
 // პროტოკოლი მოიცავს რამდენიმე უნარს რომელიც ყველა პერსონაჟს არ შეესაბამება
 // მაგრამ ყველა პერსონაჟს უწევს მაინც დააიმპლიმეტიროს მოცემული მეთოდები რომლებიც არ ჭირდებათ
@@ -21,14 +14,13 @@ final class Legolas: MiddleEarthCharacter {
     }
     
     func useAxe() {
-        print("legolas can use axe")
+        print("legolas doesn't like Axe")
     }
     
     func beStealthy() {
         print("legolas can be stealthy")
     }
 }
-
 
 final class Gimli: MiddleEarthCharacter {
     func useBow() {

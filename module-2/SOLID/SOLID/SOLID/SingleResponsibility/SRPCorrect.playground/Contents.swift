@@ -1,9 +1,3 @@
-//
-//  SRPCorrect.swift
-//  SOLID
-//
-//  Created by Despo on 13.11.24.
-//
 
 import Foundation
 

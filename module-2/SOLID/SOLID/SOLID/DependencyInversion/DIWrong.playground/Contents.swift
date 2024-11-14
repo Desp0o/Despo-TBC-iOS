@@ -1,9 +1,3 @@
-//
-//  DIWrong.swift.swift
-//  SOLID
-//
-//  Created by Despo on 13.11.24.
-//
 
 // ამ კოდში დარღევული DI ფუნქცია რადგან Frodo კლასი პირდაპირ დამოკიდებულია Sting კლასზე
 // ანუ მაღალი დონის მოდული დამოკიდებულია დაბალი დონის მოდულზე
@@ -16,14 +10,15 @@ final class Sting {
 }
 
 final class Frodo {
-    private let sting: Sting
+    private let weapon: Sting
     
-    init(sting: Sting) {
-        self.sting = sting
+    init(weapon: Sting) {
+        self.weapon = weapon
     }
     
     func detectEnemy() {
-        sting.useWeapon()
+        weapon.useWeapon()
     }
 }
 
+Frodo(weapon: Sting()).detectEnemy()

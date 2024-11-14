@@ -1,9 +1,3 @@
-//
-//  SRPWrong.swift
-//  SOLID
-//
-//  Created by Despo on 13.11.24.
-//
 
 import Foundation
 
@@ -28,7 +22,12 @@ final class SRPWrong {
     
     func handleJungle() {
         let allAnimals = getAnimals()
+        print(allAnimals)
+        
         let allBirds = getBirds()
+        print(allBirds)
+        
         let reptile = getReptiles()
+        print(reptile)
     }
 }
