@@ -36,7 +36,7 @@ final class ViewModel {
     
     func loadNextPage() {
         currentPage += 1
-        let linkApi =  "https://newsapi.org/v2/everything?q=bitcoin&pageSize=30&page=\(currentPage)&apiKey=c20af04d5d98493e80e749a05098a930"
+        let linkApi = "https://newsapi.org/v2/everything?q=bitcoin&pageSize=30&page=\(currentPage)&apiKey=c20af04d5d98493e80e749a05098a930"
         
         networkService.fetchData(urlString: linkApi) { (result: Result<NewsResponseData, NetworkError>) in
             switch result {
