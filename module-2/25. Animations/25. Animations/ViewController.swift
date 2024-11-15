@@ -8,7 +8,8 @@
 import UIKit
 
 class ViewController: UIViewController {
-    let stack = UIStackView()
+    private let startButton = UIButton()
+    private let stack = UIStackView()
     private let banana = UIImageView()
     private let monkey = UIImageView()
     private let bomb = UIImageView()
@@ -30,13 +31,37 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         
-        setupLivesStack()
-        setupBanana()
-        setupMonkey()
-        setupBomb()
-        setupScoreLabel()
-        animateBanana()
-        animateBomb()
+        setupStartButton()
+        
+    }
+    
+    private func setupStartButton() {
+        view.addSubview(startButton)
+        startButton.translatesAutoresizingMaskIntoConstraints = false
+        
+        startButton.setTitle("Start Game", for: .normal)
+        startButton.setTitleColor(.black, for: .normal)
+        startButton.backgroundColor = .systemYellow
+        startButton.clipsToBounds = true
+        startButton.layer.cornerRadius = 10
+        
+        NSLayoutConstraint.activate([
+            startButton.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            startButton.centerYAnchor.constraint(equalTo: view.centerYAnchor),
+            startButton.widthAnchor.constraint(equalToConstant: 120),
+            startButton.heightAnchor.constraint(equalToConstant: 40)
+        ])
+        
+        startButton.addAction(UIAction(handler: {[weak self] _ in
+            self?.setupLivesStack()
+            self?.setupBanana()
+            self?.setupMonkey()
+            self?.setupBomb()
+            self?.setupScoreLabel()
+            self?.animateBanana()
+            self?.animateBomb()
+            self?.startButton.isHidden = true
+        }), for: .touchUpInside)
     }
     
     private func setupLivesStack() {
@@ -63,7 +88,6 @@ class ViewController: UIViewController {
             NSLayoutConstraint.activate([
                 live.widthAnchor.constraint(equalToConstant: 25),
                 live.heightAnchor.constraint(equalTo: live.widthAnchor, multiplier: 1)
-                
             ])
             
             livesArray.append(live)
@@ -121,11 +145,11 @@ class ViewController: UIViewController {
     private func animateBanana() {
         setupBananaPosition()
         
-        UIView.animate(withDuration: bananaInterval, delay: 0, options: [.curveLinear, .allowUserInteraction], animations: {
-            self.banana.frame.origin.y = self.view.bounds.height + 50
-        }) { completed in
+        UIView.animate(withDuration: bananaInterval, delay: 0, options: [.curveLinear, .allowUserInteraction], animations: {[weak self] in
+            self?.banana.frame.origin.y = (self?.view.bounds.height ?? 0) + 50
+        }) {[weak self] completed in
             if completed {
-                self.animateBanana()
+                self?.animateBanana()
             }
         }
         
@@ -136,7 +160,7 @@ class ViewController: UIViewController {
     
     private func setupBananaPosition() {
         let randomX = CGFloat.random(in: 0...(view.bounds.width - 50))
-        banana.frame.origin = CGPoint(x: randomX, y: 50)
+        banana.frame.origin = CGPoint(x: randomX, y: 100)
     }
     
     
@@ -158,11 +182,11 @@ class ViewController: UIViewController {
     private func animateBomb() {
         setupBombPosition()
         
-        UIView.animate(withDuration: 2, delay: 0, options: [.curveLinear, .allowUserInteraction], animations: {
-            self.bomb.frame.origin.y = self.view.bounds.height + 30
-        }) { completed in
+        UIView.animate(withDuration: 2, delay: 0, options: [.curveLinear, .allowUserInteraction], animations: {[weak self] in
+            self?.bomb.frame.origin.y = (self?.view.bounds.height ?? 0) + 30
+        }) {[weak self] completed in
             if completed {
-                self.animateBomb()
+                self?.animateBomb()
             }
         }
         
@@ -173,7 +197,7 @@ class ViewController: UIViewController {
     
     private func setupBombPosition() {
         let randomX = CGFloat.random(in: 0...(view.bounds.width - 30))
-        bomb.frame.origin = CGPoint(x: randomX, y: 30)
+        bomb.frame.origin = CGPoint(x: randomX, y: 60)
     }
     
     private func setupMonkey() {
@@ -217,9 +241,9 @@ class ViewController: UIViewController {
                 
                 score += 1
                 
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    self.collisionDetected = false
-                    self.animateBanana()
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {[weak self] in
+                    self?.collisionDetected = false
+                    self?.animateBanana()
                 }
             }
         } else {
@@ -240,22 +264,30 @@ class ViewController: UIViewController {
                 bombDisplayLink?.invalidate()
                 bombDisplayLink = nil
                 
-                if let lastLife = livesArray.first {
-                    UIView.animate(withDuration: 0.3, animations: {
-                        lastLife.alpha = 0
-                    }) { _ in
-                        lastLife.removeFromSuperview()
-                        self.livesArray.removeFirst()
+                UIView.animate(withDuration: 0.1, animations: {[weak self] in
+                    self?.monkey.alpha = 0
+                }) {[weak self] _ in
+                    UIView.animate(withDuration: 0.1) {
+                        self?.monkey.alpha = 1
                     }
                 }
                 
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
-                    self.bombCollisionDetected = false
-                    if self.livesArray.isEmpty {
-                        self.bomb.layer.removeAllAnimations()
-                        self.banana.layer.removeAllAnimations()
+                if livesArray.count >= 0 {
+                    UIView.animate(withDuration: 0.3, animations: {[weak self] in
+                        self?.livesArray.first?.alpha = 0
+                    }) {[weak self] _ in
+                        self?.livesArray.first?.removeFromSuperview()
+                        self?.livesArray.removeFirst()
+                    }
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {[weak self] in
+                    self?.bombCollisionDetected = false
+                    if self?.livesArray.count ?? 0 <= 0 {
+                        self?.bomb.layer.removeAllAnimations()
+                        self?.banana.layer.removeAllAnimations()
                     }else {
-                        self.animateBomb()
+                        self?.animateBomb()
                     }
                 }
             }
