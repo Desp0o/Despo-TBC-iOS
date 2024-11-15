@@ -8,14 +8,20 @@
 import UIKit
 
 class ViewController: UIViewController {
+    let stack = UIStackView()
     private let banana = UIImageView()
     private let monkey = UIImageView()
+    private let bomb = UIImageView()
     private let scoreLabel = UILabel()
     private var displayLink: CADisplayLink?
+    private var bombDisplayLink: CADisplayLink?
+    private var bombCollisionDetected = false
     private var collisionDetected = false
+    private var livesArray: [UIImageView] = []
     private var bananaInterval = 2.0
     private var score = 0 {
         didSet {
+            self.scoreLabel.text = "Score: \(self.score)"
             scoreDidChange()
         }
     }
@@ -24,10 +30,48 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         
+        setupLivesStack()
         setupBanana()
         setupMonkey()
+        setupBomb()
         setupScoreLabel()
         animateBanana()
+        animateBomb()
+    }
+    
+    private func setupLivesStack() {
+        view.addSubview(stack)
+        stack.translatesAutoresizingMaskIntoConstraints = false
+        stack.axis = .horizontal
+        stack.distribution = .fillEqually
+        stack.spacing = 10
+        
+        NSLayoutConstraint.activate([
+            stack.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 10),
+            stack.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -10)
+        ])
+        
+        updateLive()
+    }
+    
+    private func updateLive() {
+        for _ in 0..<3 {
+            let live = UIImageView()
+            
+            live.image = UIImage(named: "banana")
+            
+            NSLayoutConstraint.activate([
+                live.widthAnchor.constraint(equalToConstant: 25),
+                live.heightAnchor.constraint(equalTo: live.widthAnchor, multiplier: 1)
+                
+            ])
+            
+            livesArray.append(live)
+        }
+        
+        livesArray.forEach { live in
+            stack.addArrangedSubview(live)
+        }
     }
     
     private func setupScoreLabel() {
@@ -44,7 +88,6 @@ class ViewController: UIViewController {
     }
     
     private func scoreDidChange() {
-        self.scoreLabel.text = "Score: \(self.score)"
         
         switch score {
         case 40...:
@@ -78,7 +121,7 @@ class ViewController: UIViewController {
     private func animateBanana() {
         setupBananaPosition()
         
-        UIView.animate(withDuration: bananaInterval, delay: 0, options: [.curveLinear, .allowUserInteraction, .allowAnimatedContent], animations: {
+        UIView.animate(withDuration: bananaInterval, delay: 0, options: [.curveLinear, .allowUserInteraction], animations: {
             self.banana.frame.origin.y = self.view.bounds.height + 50
         }) { completed in
             if completed {
@@ -94,6 +137,43 @@ class ViewController: UIViewController {
     private func setupBananaPosition() {
         let randomX = CGFloat.random(in: 0...(view.bounds.width - 50))
         banana.frame.origin = CGPoint(x: randomX, y: 50)
+    }
+    
+    
+    private func setupBomb() {
+        view.addSubview(bomb)
+        
+        bomb.translatesAutoresizingMaskIntoConstraints = false
+        bomb.image = UIImage(named: "bomb")
+        bomb.contentMode = .scaleAspectFit
+        
+        NSLayoutConstraint.activate([
+            bomb.widthAnchor.constraint(equalToConstant: 30),
+            bomb.heightAnchor.constraint(equalToConstant: 30),
+            bomb.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+            bomb.topAnchor.constraint(equalTo: view.topAnchor, constant: -30)
+        ])
+    }
+    
+    private func animateBomb() {
+        setupBombPosition()
+        
+        UIView.animate(withDuration: 2, delay: 0, options: [.curveLinear, .allowUserInteraction], animations: {
+            self.bomb.frame.origin.y = self.view.bounds.height + 30
+        }) { completed in
+            if completed {
+                self.animateBomb()
+            }
+        }
+        
+        bombCollisionDetected = false
+        bombDisplayLink = CADisplayLink(target: self, selector: #selector(checkBombCollision))
+        bombDisplayLink?.add(to: .main, forMode: .common)
+    }
+    
+    private func setupBombPosition() {
+        let randomX = CGFloat.random(in: 0...(view.bounds.width - 30))
+        bomb.frame.origin = CGPoint(x: randomX, y: 30)
     }
     
     private func setupMonkey() {
@@ -144,6 +224,41 @@ class ViewController: UIViewController {
             }
         } else {
             collisionDetected = false
+        }
+    }
+    
+    @objc private func checkBombCollision() {
+        guard let bombPresentationLayer = bomb.layer.presentation(),
+              let monkeyPresentationLayer = monkey.layer.presentation() else {
+            return
+        }
+        
+        if bombPresentationLayer.frame.intersects(monkeyPresentationLayer.frame) {
+            if !bombCollisionDetected {
+                bombCollisionDetected = true
+                bomb.layer.removeAllAnimations()
+                bombDisplayLink?.invalidate()
+                bombDisplayLink = nil
+                
+                if let lastLife = livesArray.first {
+                    UIView.animate(withDuration: 0.3, animations: {
+                        lastLife.alpha = 0
+                    }) { _ in
+                        lastLife.removeFromSuperview()
+                        self.livesArray.removeFirst()
+                    }
+                }
+                
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+                    self.bombCollisionDetected = false
+                    if self.livesArray.isEmpty {
+                        self.bomb.layer.removeAllAnimations()
+                        self.banana.layer.removeAllAnimations()
+                    }else {
+                        self.animateBomb()
+                    }
+                }
+            }
         }
     }
 }
