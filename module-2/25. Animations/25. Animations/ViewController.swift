@@ -284,6 +284,7 @@ class ViewController: UIViewController {
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {[weak self] in
                     self?.bombCollisionDetected = false
                     if self?.livesArray.count ?? 0 <= 0 {
+                        self?.errorModal()
                         self?.bomb.layer.removeAllAnimations()
                         self?.banana.layer.removeAllAnimations()
                     }else {
@@ -292,6 +293,23 @@ class ViewController: UIViewController {
                 }
             }
         }
+    }
+    
+    private func errorModal() {
+        let alert = UIAlertController(title: "Loser, loser, soggy snoozer!", message: nil, preferredStyle: .alert)
+        alert.addAction(UIAlertAction(title: "Try Again", style: .default, handler: {[weak self] _ in
+            self?.restartGame()
+        }))
+        self.present(alert, animated: true, completion: nil)
+    }
+    
+    private func restartGame() {
+        monkey.frame.origin = CGPoint(x: view.bounds.midX - monkey.frame.width / 2, y: view.bounds.height - monkey.frame.height - 50)
+
+        animateBanana()
+        animateBomb()
+        setupLivesStack()
+        score = 0
     }
 }
 
