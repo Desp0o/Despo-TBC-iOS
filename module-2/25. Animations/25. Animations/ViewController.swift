@@ -11,9 +11,9 @@ class ViewController: UIViewController {
     private let banana = UIImageView()
     private let monkey = UIImageView()
     private let scoreLabel = UILabel()
-    private var initialCenter: CGPoint = .zero
     private var displayLink: CADisplayLink?
     private var collisionDetected = false
+    private var bananaInterval = 2.0
     private var score = 0 {
         didSet {
             scoreDidChange()
@@ -45,6 +45,19 @@ class ViewController: UIViewController {
     
     private func scoreDidChange() {
         self.scoreLabel.text = "Score: \(self.score)"
+        
+        switch score {
+        case 40...:
+            bananaInterval = 0.5
+        case 30..<40:
+            bananaInterval = 0.8
+        case 20..<30:
+            bananaInterval = 1.5
+        case 10..<20:
+            bananaInterval = 1.8
+        default:
+            bananaInterval = 2.0
+        }
     }
     
     private func setupBanana() {
@@ -65,7 +78,7 @@ class ViewController: UIViewController {
     private func animateBanana() {
         setupBananaPosition()
         
-        UIView.animate(withDuration: 2.0, delay: 0, options: [.curveLinear, .allowUserInteraction, .allowAnimatedContent], animations: {
+        UIView.animate(withDuration: bananaInterval, delay: 0, options: [.curveLinear, .allowUserInteraction, .allowAnimatedContent], animations: {
             self.banana.frame.origin.y = self.view.bounds.height + 50
         }) { completed in
             if completed {
@@ -107,7 +120,6 @@ class ViewController: UIViewController {
         
         monkey.center = newCenter
         gesture.setTranslation(.zero, in: self.view)
-        
     }
     
     @objc private func checkForCollision() {
@@ -134,6 +146,5 @@ class ViewController: UIViewController {
             collisionDetected = false
         }
     }
-    
 }
 
