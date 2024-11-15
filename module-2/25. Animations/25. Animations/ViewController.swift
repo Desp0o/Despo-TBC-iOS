@@ -80,6 +80,7 @@ class ViewController: UIViewController {
     }
     
     private func updateLive() {
+        stack.arrangedSubviews.forEach { $0.removeFromSuperview() }
         for _ in 0..<3 {
             let live = UIImageView()
             
@@ -182,7 +183,7 @@ class ViewController: UIViewController {
     private func animateBomb() {
         setupBombPosition()
         
-        UIView.animate(withDuration: 2, delay: 0, options: [.curveLinear, .allowUserInteraction], animations: {[weak self] in
+        UIView.animate(withDuration: 2, delay: 0.2, options: [.curveLinear, .allowUserInteraction], animations: {[weak self] in
             self?.bomb.frame.origin.y = (self?.view.bounds.height ?? 0) + 30
         }) {[weak self] completed in
             if completed {
@@ -276,14 +277,13 @@ class ViewController: UIViewController {
                     UIView.animate(withDuration: 0.3, animations: {[weak self] in
                         self?.livesArray.first?.alpha = 0
                     }) {[weak self] _ in
-                        self?.livesArray.first?.removeFromSuperview()
                         self?.livesArray.removeFirst()
                     }
                 }
                 
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {[weak self] in
                     self?.bombCollisionDetected = false
-                    if self?.livesArray.count ?? 0 <= 0 {
+                    if self?.livesArray.count ?? 0 == 0 {
                         self?.errorModal()
                         self?.bomb.layer.removeAllAnimations()
                         self?.banana.layer.removeAllAnimations()
