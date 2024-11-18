@@ -7,7 +7,11 @@
 
 import UIKit
 
-final class NetworkManager: NSObject {
+protocol NetworkService {
+    func fetchUsers(withLimit limit: Int, completionHandler: @escaping ([User]) -> Void)
+}
+
+final class NetworkManager: NSObject, NetworkService {
     static let sharedInstance = NetworkManager()
     
     var users: [User] = []
@@ -48,4 +52,27 @@ final class NetworkManager: NSObject {
         task.resume()
     }
 }
+
+class MockNetworkManager: NetworkService {
+    
+    var mockUsers: [User] = {
+        guard let jsonData = User.jsonMock.data(using: .utf8) else {
+            return []
+        }
+        
+        do {
+            let userList = try JSONDecoder().decode(UserList.self, from: jsonData)
+            return userList.results
+        } catch {
+            print("Failed to decode JSON: \(error)")
+            return []
+        }
+    }()
+    
+    func fetchUsers(withLimit limit: Int, completionHandler: @escaping ([User]) -> Void) {
+        let limitedUsers = Array(mockUsers.prefix(limit))
+        completionHandler(limitedUsers)
+    }
+}
+
 

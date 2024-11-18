@@ -20,14 +20,12 @@ final class UsersTestingAssignmentTests: XCTestCase {
         
         let userList = try JSONDecoder().decode(UserList.self, from: jsonData)
         
-        guard let userMock = userList.results.first else {
-            XCTFail("No user")
-            return
-        }
-        
         print("🟢")
-        user = try XCTUnwrap(userMock)
-        userViewModel = UserViewModel(user: userMock)
+        
+        userList.results.forEach { singleUser in
+            user = singleUser
+            userViewModel = UserViewModel(user: singleUser)
+        }
     }
     
     override func tearDownWithError() throws {
@@ -58,5 +56,16 @@ final class UsersTestingAssignmentTests: XCTestCase {
         let user = try XCTUnwrap(user)
         
         XCTAssertEqual(userViewModel?.email, user.email)
+    }
+    
+    func testPerformanceExample() throws {
+        measure {
+            guard let jsonData = User.jsonMock.data(using: .utf8) else { return }
+            let userList = try? JSONDecoder().decode(UserList.self, from: jsonData)
+            userList?.results.forEach { singleUser in
+                user = singleUser
+                userViewModel = UserViewModel(user: singleUser)
+            }
+        }
     }
 }
