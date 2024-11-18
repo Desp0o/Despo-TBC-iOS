@@ -7,11 +7,7 @@
 
 import UIKit
 
-protocol NetworkService {
-    func fetchUsers(withLimit limit: Int, completionHandler: @escaping ([User]) -> Void)
-}
-
-final class NetworkManager: NSObject, NetworkService {
+final class NetworkManager: NSObject {
     static let sharedInstance = NetworkManager()
     
     var users: [User] = []
@@ -53,7 +49,7 @@ final class NetworkManager: NSObject, NetworkService {
     }
 }
 
-class MockNetworkManager: NetworkService {
+class MockNetworkManager {
     
     var mockUsers: [User] = {
         guard let jsonData = User.jsonMock.data(using: .utf8) else {
