@@ -8,28 +8,6 @@
 import XCTest
 @testable import UsersTestingAssignment
 
-class MockNetworkManager {
-    var mockUsers: [User] = {
-        guard let jsonData = User.jsonMock.data(using: .utf8) else {
-            return []
-        }
-        
-        do {
-            let userList = try JSONDecoder().decode(UserList.self, from: jsonData)
-            return userList.results
-        } catch {
-            print("Failed to decode JSON: \(error)")
-            return []
-        }
-    }()
-    
-    func fetchUsers(withLimit limit: Int, completionHandler: @escaping ([User]) -> Void) {
-        let limitedUsers = Array(mockUsers.prefix(limit))
-        completionHandler(limitedUsers)
-    }
-}
-
-
 final class NetworkManagerTests: XCTestCase {
     var networkManager: MockNetworkManager?
     
