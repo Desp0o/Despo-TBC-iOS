@@ -38,10 +38,11 @@ final class ViewModel {
         currentPage += 1
         let linkApi = "https://newsapi.org/v2/everything?q=bitcoin&pageSize=30&page=\(currentPage)&apiKey=c20af04d5d98493e80e749a05098a930"
         
-        networkService.fetchData(urlString: linkApi) { (result: Result<NewsResponseData, NetworkError>) in
-            switch result {
-            case .success(let posts):
-                var finalData = posts.articles
+        Task {
+            do {
+                let response: NewsResponseData = try await networkService.fetchData(urlString: linkApi)
+                
+                var finalData = response.articles
                 
                 finalData.removeAll { post in
                     post.title == "[Removed]"
@@ -54,9 +55,10 @@ final class ViewModel {
                 }
                 
                 self.newsArray.append(contentsOf: finalData)
-                self.delegate?.updateNewsFeed()
-            case .failure(let error):
-                print("Error fetching data: \(error)")
+
+                DispatchQueue.main.async {
+                            self.delegate?.updateNewsFeed()
+                }
             }
         }
     }
