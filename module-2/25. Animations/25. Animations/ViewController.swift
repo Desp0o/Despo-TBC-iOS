@@ -6,8 +6,10 @@
 //
 
 import UIKit
+import AVFoundation
 
 class ViewController: UIViewController {
+    var audioPlayer: AVAudioPlayer?
     private let startButton = UIButton()
     private let stack = UIStackView()
     private let banana = UIImageView()
@@ -31,8 +33,42 @@ class ViewController: UIViewController {
         super.viewDidLoad()
         view.backgroundColor = .white
         
+        setuBG()
         setupStartButton()
+    }
+    
+    func playAudio() {
+        guard let audioFilePath = Bundle.main.path(forResource: "backgroundMusic", ofType: "mp3") else {
+            print("Audio file not found")
+            return
+        }
         
+        let audioURL = URL(fileURLWithPath: audioFilePath)
+        
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: audioURL)
+            audioPlayer?.numberOfLoops = -1 // უსასრულო ლუპისთვის
+            audioPlayer?.play()
+        } catch {
+            print("Failed to initialize audio player: \(error.localizedDescription)")
+        }
+    }
+
+    
+    private func setuBG() {
+        let bg = UIImageView()
+        bg.image = UIImage(named: "bg1")
+        bg.contentMode = .scaleAspectFill
+        
+        view.addSubview(bg)
+        bg.translatesAutoresizingMaskIntoConstraints = false
+        
+        NSLayoutConstraint.activate([
+            bg.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            bg.topAnchor.constraint(equalTo: view.topAnchor),
+            bg.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            bg.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
     
     private func setupStartButton() {
@@ -53,6 +89,7 @@ class ViewController: UIViewController {
         ])
         
         startButton.addAction(UIAction(handler: {[weak self] _ in
+            self?.playAudio()
             self?.setupLivesStack()
             self?.setupBanana()
             self?.setupMonkey()
@@ -115,13 +152,13 @@ class ViewController: UIViewController {
     private func scoreDidChange() {
         
         switch score {
-        case 40...:
+        case 20...:
             bananaInterval = 0.5
-        case 30..<40:
+        case 15..<20:
             bananaInterval = 0.8
-        case 20..<30:
+        case 10..<15:
             bananaInterval = 1.5
-        case 10..<20:
+        case 5..<10:
             bananaInterval = 1.8
         default:
             bananaInterval = 2.0
@@ -129,19 +166,17 @@ class ViewController: UIViewController {
     }
     
     private func setupBanana() {
-        view.addSubview(banana)
+        let bananaSize: CGFloat = 50
+        let bananaX = (view.frame.width - bananaSize) / 2
+        let bananaY: CGFloat = -bananaSize
         
-        banana.translatesAutoresizingMaskIntoConstraints = false
+        banana.frame = CGRect(x: bananaX, y: bananaY, width: bananaSize, height: bananaSize)
         banana.image = UIImage(named: "banana")
         banana.contentMode = .scaleAspectFit
         
-        NSLayoutConstraint.activate([
-            banana.widthAnchor.constraint(equalToConstant: 50),
-            banana.heightAnchor.constraint(equalToConstant: 50),
-            banana.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            banana.topAnchor.constraint(equalTo: view.topAnchor, constant: -50)
-        ])
+        view.addSubview(banana)
     }
+
     
     private func animateBanana() {
         setupBananaPosition()
@@ -166,24 +201,22 @@ class ViewController: UIViewController {
     
     
     private func setupBomb() {
-        view.addSubview(bomb)
+        let bombSize: CGFloat = 50
+        let bombX = (view.frame.width - bombSize) / 2
+        let bombY: CGFloat = -bombSize
         
-        bomb.translatesAutoresizingMaskIntoConstraints = false
+        bomb.frame = CGRect(x: bombX, y: bombY, width: bombSize, height: bombSize)
         bomb.image = UIImage(named: "bomb")
         bomb.contentMode = .scaleAspectFit
         
-        NSLayoutConstraint.activate([
-            bomb.widthAnchor.constraint(equalToConstant: 30),
-            bomb.heightAnchor.constraint(equalToConstant: 30),
-            bomb.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            bomb.topAnchor.constraint(equalTo: view.topAnchor, constant: -30)
-        ])
+        view.addSubview(bomb)
     }
+
     
     private func animateBomb() {
         setupBombPosition()
         
-        UIView.animate(withDuration: 2, delay: 0.2, options: [.curveLinear, .allowUserInteraction], animations: {[weak self] in
+        UIView.animate(withDuration: 1.5, delay: 0.2, options: [.curveLinear, .allowUserInteraction], animations: {[weak self] in
             self?.bomb.frame.origin.y = (self?.view.bounds.height ?? 0) + 30
         }) {[weak self] completed in
             if completed {
@@ -207,7 +240,7 @@ class ViewController: UIViewController {
         monkey.contentMode = .scaleAspectFit
         monkey.isUserInteractionEnabled = true
         
-        monkey.frame = CGRect(x: view.center.x - 50, y: view.bounds.height - 150, width: 100, height: 100)
+        monkey.frame = CGRect(x: view.center.x - 50, y: view.bounds.height - 150, width: 150, height: 150)
         
         let panGesture = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
         monkey.addGestureRecognizer(panGesture)
