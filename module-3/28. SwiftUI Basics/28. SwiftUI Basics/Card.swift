@@ -31,7 +31,8 @@ struct Card: View {
                 SliderButton(isActive: $isActive)
             }
         }
-        .frame(width: 300, height: 500)
+        .frame(width: 300)
+        .padding(.vertical, 140)
     }
 }
 

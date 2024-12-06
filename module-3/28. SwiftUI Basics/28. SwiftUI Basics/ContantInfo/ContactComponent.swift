@@ -17,7 +17,7 @@ struct ContactComponent: View {
         }
         .background(Color.black.opacity(0.2))
         .clipShape(Circle())
-        
+        .shadow(color: .black.opacity(0.9), radius: 5, x: 0, y: 4)
     }
 }
 
