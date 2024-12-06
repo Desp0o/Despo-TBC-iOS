@@ -20,8 +20,11 @@ struct Card: View {
                 RoundedRectangle(cornerRadius: 12)
             )
             
-            VStack(spacing: 5) {
+            VStack(spacing: 20) {
                 UserPersonalInfo()
+                
+                ContactInfo()
+
             }
             
         }
