@@ -8,6 +8,8 @@
 import SwiftUI
 
 struct Card: View {
+    @State private var isActive = true
+    
     var body: some View {
         ZStack {
             LinearGradient(
@@ -15,22 +17,21 @@ struct Card: View {
                 startPoint: .topLeading,
                 endPoint: .bottomTrailing
             )
-            .frame(width: 300, height: 400)
-            .clipShape(
-                RoundedRectangle(cornerRadius: 12)
-            )
+            .clipShape(RoundedRectangle(cornerRadius: 12))
             
             VStack(spacing: 20) {
-                UserPersonalInfo()
-                
+                UserPersonalInfo(isActive: $isActive)
                 ContactInfo()
-
+                
+                VStack(alignment: .leading) {
+                    Skills()
+                }
+                .frame(maxWidth: .infinity, alignment: .leading)
+                
+                SliderButton(isActive: $isActive)
             }
-            
         }
-        .padding(.horizontal, 20)
-        .padding(.top, 20)
-        .padding(.bottom, 9)
+        .frame(width: 300, height: 500)
     }
 }
 

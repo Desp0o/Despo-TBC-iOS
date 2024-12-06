@@ -8,16 +8,16 @@
 import SwiftUI
 
 struct ContactInfo: View {
-    let icons = [
-        ContactComponent(icon: "phone"),
-        ContactComponent(icon: "mail"),
-        ContactComponent(icon: "web"),
+    private let icons = [
+        "phone",
+        "mail",
+        "web",
     ]
     
     var body: some View {
         HStack(spacing: 30) {
-            ForEach(icons.indices, id: \.self) { index in
-                icons[index]
+            ForEach(icons, id: \.self) { icon in
+                ContactComponent(icon: icon)
             }
         }
     }

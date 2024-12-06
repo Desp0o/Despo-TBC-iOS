@@ -8,8 +8,8 @@
 import SwiftUI
 
 struct UserPersonalInfo: View {
-    @State var status = "Online"
-    @State var statusColor: Color = .green
+    @State private var statusColor: Color = .green
+    @Binding var isActive: Bool
     
     var body: some View {
         VStack(spacing: 20) {
@@ -18,25 +18,25 @@ struct UserPersonalInfo: View {
                     .resizable()
                     .scaledToFit()
                     .clipShape(Circle())
-                    .overlay {
-                        Circle().stroke(.white, lineWidth: 5)
-                    }
-                    .frame(width: 105, height: 105)
-
+                    .frame(width: 100, height: 100)
+                    .padding(.horizontal, 10)
+                    .padding(.vertical, 10)
+                    .background(Color.white)
+                    .clipShape(Circle())
                 
-                Text(status)
+                Text(isActive ? "online" : "offline")
                     .foregroundStyle(Color.white)
                     .fontWeight(.bold)
                     .font(.system(size: 10))
                     .padding(.vertical, 4)
                     .padding(.horizontal, 8)
-                    .background(statusColor)
+                    .background(isActive ? Color.green : Color.red)
                     .clipShape(RoundedRectangle(cornerRadius: 16))
-
+                
             }
             
             VStack(spacing: 5) {
-                Text("John Doe")
+                Text("Ninja Turtle")
                     .foregroundStyle(Color.white)
                     .font(.system(size: 16))
                     .fontWeight(.bold)
@@ -51,5 +51,6 @@ struct UserPersonalInfo: View {
 }
 
 #Preview {
-    UserPersonalInfo()
+    @Previewable @State var isActive = true
+    UserPersonalInfo(isActive: $isActive)
 }
