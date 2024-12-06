@@ -9,7 +9,7 @@ import SwiftUI
 
 struct Card: View {
     var body: some View {
-        VStack {
+        ZStack {
             LinearGradient(
                 colors: [.gradientTop, .gradientBottom],
                 startPoint: .topLeading,
@@ -19,6 +19,11 @@ struct Card: View {
             .clipShape(
                 RoundedRectangle(cornerRadius: 12)
             )
+            
+            VStack(spacing: 5) {
+                UserPersonalInfo()
+            }
+            
         }
         .padding(.horizontal, 20)
         .padding(.top, 20)
