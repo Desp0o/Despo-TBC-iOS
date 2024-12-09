@@ -66,8 +66,8 @@ struct ContentView: View {
                         Text("Add New Working Experience:")
                             .styledText(17, .black, .semibold)
                         
-                        VStack() {
-                            VStack(spacing: 8) {
+                        LazyVStack() {
+                            LazyVStack(spacing: 8) {
                                 ForEach($fieldsArray) { $field in
                                     
                                     VStack(alignment: .leading, spacing: 4) {
@@ -75,7 +75,7 @@ struct ContentView: View {
                                             .styledText(9, .secondaryCol, .regular)
                                             .textCase(.uppercase)
                                             .kerning(3)
-
+                                        
                                         TextField(field.placeholder, text: $field.value)
                                             .styledField()
                                     }
