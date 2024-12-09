@@ -48,40 +48,39 @@ struct ContentView: View {
                         .styledText(17, .black, .semibold)
                         .padding(.leading, 13)
                     
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text("HDR Solutions Inc.")
-                            .styledText(17, .black, .semibold)
-                        
-                        Text("iOS Developer")
-                            .styledText(15, .secondaryCol, .light)
-                        
-                        Text("2021 - Present")
-                            .styledText(15, .secondaryCol, .light)
+                    LazyVStack {
+                        VStack(alignment: .leading, spacing: 6) {
+                            Text("HDR Solutions Inc.")
+                                .styledText(17, .black, .semibold)
+                            
+                            Text("iOS Developer")
+                                .styledText(15, .secondaryCol, .light)
+                            
+                            Text("2021 - Present")
+                                .styledText(15, .secondaryCol, .light)
+                        }
+                        .styledBox()
                     }
-                    .styledBox()
-                    
-                    
                     
                     VStack(alignment: .leading, spacing: 10) {
                         Text("Add New Working Experience:")
                             .styledText(17, .black, .semibold)
                         
-                        LazyVStack() {
-                            LazyVStack(spacing: 8) {
-                                ForEach($fieldsArray) { $field in
+                        LazyVStack(spacing: 8) {
+                            ForEach($fieldsArray) { $field in
+                                
+                                VStack(alignment: .leading, spacing: 4) {
+                                    Text(field.label)
+                                        .styledText(9, .secondaryCol, .regular)
+                                        .textCase(.uppercase)
+                                        .kerning(3)
                                     
-                                    VStack(alignment: .leading, spacing: 4) {
-                                        Text(field.label)
-                                            .styledText(9, .secondaryCol, .regular)
-                                            .textCase(.uppercase)
-                                            .kerning(3)
-                                        
-                                        TextField(field.placeholder, text: $field.value)
-                                            .styledField()
-                                    }
+                                    TextField(field.placeholder, text: $field.value)
+                                        .styledField()
                                 }
                             }
                         }
+                        
                         
                         Button("Add Experience", action: {})
                             .frame(maxWidth: .infinity)
