@@ -7,8 +7,8 @@
 
 import SwiftUI
 
-struct TimerModel: Identifiable {
-    let id = UUID()
+struct TimerModel: Identifiable, Codable {
+    var id = UUID()
     var name: String
     var duration: TimeInterval
     let defaultDuration: TimeInterval

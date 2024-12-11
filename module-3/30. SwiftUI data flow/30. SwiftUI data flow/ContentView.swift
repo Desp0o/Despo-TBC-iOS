@@ -9,6 +9,10 @@ import SwiftUI
 
 struct ContentView: View {
     @StateObject var viewModel = ViewModel()
+    @State var name = ""
+    @State var hours = ""
+    @State var minutes = ""
+    @State var seconds = ""
     
     var body: some View {
         VStack(spacing: 50) {
@@ -23,12 +27,62 @@ struct ContentView: View {
             }
             .frame(maxWidth: .infinity)
             
-            VStack {
-                ForEach($viewModel.timersArray) { $timer in
-                    CardView(timer: $timer, viewModel: viewModel)
+            ScrollView {
+                VStack {
+                    ForEach($viewModel.timersArray) { $timer in
+                        CardView(timer: $timer, viewModel: viewModel)
+                    }
                 }
-                Spacer()
             }
+            .scrollIndicators(.hidden)
+            
+            VStack(spacing: 15) {
+                TextField("", text: $name, prompt: Text("ტაიმერის სახელი...").foregroundColor(.boulder))
+                    .styledField()
+                    .onChange(of: name) {newValue, oldValue in
+                        name = newValue
+                    }
+                
+                HStack(spacing: 10) {
+                    TextField("", text: $hours, prompt: Text("სთ").foregroundColor(.boulder))
+                        .styledField()
+                        .onChange(of: hours) {newValue, oldValue in
+                            hours = newValue
+                        }
+                    
+                    TextField("", text: $minutes, prompt: Text("წთ").foregroundColor(.boulder))
+                        .styledField()
+                        .onChange(of: minutes) {newValue, oldValue in
+                            minutes = newValue
+                        }
+                    
+                    TextField("", text: $seconds, prompt: Text("წმ").foregroundColor(.boulder))
+                        .styledField()
+                        .onChange(of: seconds) {newValue, oldValue in
+                            seconds = newValue
+                        }
+                }
+                
+                Button("დამატება") {
+                    viewModel.addTimer(
+                        name: name,
+                        hh: hours,
+                        mm: minutes,
+                        ss: seconds
+                    )
+                    
+                    name = ""
+                    hours = ""
+                    minutes = ""
+                    seconds = ""
+                }
+                .foregroundStyle(.white)
+                .frame(width: 155, height: 42)
+                .background(.azure)
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+            }
+            .frame(maxHeight: 130)
+            .padding(.bottom, 20)
         }
         .padding(.horizontal, 15)
         .background(.primaryCol)
@@ -75,22 +129,14 @@ struct CardView: View {
                 } label: {
                     Text(timer.isStarted ? "პაუზა" : "დაწყება")
                 }
-                .foregroundStyle(.white)
-                .padding(.horizontal, 20)
-                .padding(.vertical, 10)
-                .background(timer.isStarted ? .pizzaz : .emerlad)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .timerButtonStyles(bgColor: timer.isStarted ? .pizzaz : .emerlad)
                 
                 Button {
                     viewModel.resetTimer(for: timer)
                 } label: {
                     Text("გადატვირთვა")
                 }
-                .foregroundStyle(.white)
-                .padding(.horizontal, 20)
-                .padding(.vertical, 10)
-                .background(.red)
-                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .timerButtonStyles(bgColor: .red)
             }
         }
         .frame(maxWidth: .infinity)
@@ -102,4 +148,26 @@ struct CardView: View {
 
 #Preview {
     ContentView()
+}
+
+extension Button{
+    func timerButtonStyles(bgColor: Color) -> some View {
+        self
+            .foregroundStyle(.white)
+            .padding(.horizontal, 20)
+            .padding(.vertical, 10)
+            .background(bgColor)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+    }
+}
+
+extension TextField {
+    func styledField() -> some View {
+        self
+            .frame(height: 40)
+            .padding(.horizontal, 12)
+            .background(.shipGray)
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+            .foregroundStyle(.white)
+    }
 }
