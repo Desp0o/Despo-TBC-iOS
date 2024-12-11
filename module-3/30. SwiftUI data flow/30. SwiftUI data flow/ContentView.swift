@@ -130,7 +130,9 @@ struct CardView: View {
                 } label: {
                     Text(timer.isStarted ? "პაუზა" : timer.isPaused ? "გაგრძელება" : "დაწყება")
                 }
-                .timerButtonStyles(bgColor: timer.isStarted ? .pizzaz : .emerlad)
+                .timerButtonStyles(bgColor: timer.isStarted ? .pizzaz : timer.duration == 0 ? .gray : .emerlad)
+                .disabled(timer.duration == 0)
+                
                 
                 Button {
                     viewModel.resetTimer(for: timer)
