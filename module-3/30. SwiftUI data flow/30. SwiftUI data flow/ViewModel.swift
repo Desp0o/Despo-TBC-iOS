@@ -48,6 +48,7 @@ class ViewModel: ObservableObject {
                     self?.feedbackGenerator.impactOccurred()
                     print("🔴 feedbackGenerator.impactOccurred()")
                     self?.stopTimer(for: timer)
+                    self?.timersArray[index].isPaused = false
                 }
             }
     }
@@ -55,6 +56,7 @@ class ViewModel: ObservableObject {
     func stopTimer(for timer: TimerModel) {
         if let index = timersArray.firstIndex(where: { $0.id == timer.id }) {
             timersArray[index].isStarted = false
+            timersArray[index].isPaused = true
             timerCancellables[timer.id]?.cancel()
         }
     }
@@ -63,6 +65,7 @@ class ViewModel: ObservableObject {
         if let index = timersArray.firstIndex(where: { $0.id == timer.id }) {
             timersArray[index].duration = timer.defaultDuration
             timersArray[index].isStarted = false
+            timersArray[index].isPaused = false
             timerCancellables[timer.id]?.cancel()
         }
     }

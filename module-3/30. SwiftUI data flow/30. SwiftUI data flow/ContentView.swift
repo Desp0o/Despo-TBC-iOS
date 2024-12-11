@@ -30,7 +30,7 @@ struct ContentView: View {
             ScrollView {
                 VStack {
                     ForEach($viewModel.timersArray) { $timer in
-                        CardView(timer: $timer, viewModel: viewModel)
+                        CardView(timer: $timer)
                     }
                 }
             }
@@ -86,13 +86,14 @@ struct ContentView: View {
         }
         .padding(.horizontal, 15)
         .background(.primaryCol)
+        .environmentObject(viewModel)
     }
 }
 
 
 struct CardView: View {
     @Binding var timer: TimerModel
-    @ObservedObject var viewModel: ViewModel
+    @EnvironmentObject var viewModel: ViewModel
     
     var body: some View {
         VStack {
@@ -127,7 +128,7 @@ struct CardView: View {
                         viewModel.startTimer(for: timer)
                     }
                 } label: {
-                    Text(timer.isStarted ? "პაუზა" : "დაწყება")
+                    Text(timer.isStarted ? "პაუზა" : timer.isPaused ? "გაგრძელება" : "დაწყება")
                 }
                 .timerButtonStyles(bgColor: timer.isStarted ? .pizzaz : .emerlad)
                 

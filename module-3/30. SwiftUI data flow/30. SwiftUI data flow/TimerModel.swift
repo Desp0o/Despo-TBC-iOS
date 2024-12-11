@@ -13,6 +13,7 @@ struct TimerModel: Identifiable, Codable {
     var duration: TimeInterval
     let defaultDuration: TimeInterval
     var isStarted: Bool = false
+    var isPaused: Bool = false
     
     func formatTime(from seconds: TimeInterval) -> String {
         let totalSeconds = Int(seconds)
