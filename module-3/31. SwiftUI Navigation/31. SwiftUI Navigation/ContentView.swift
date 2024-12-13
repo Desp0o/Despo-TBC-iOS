@@ -23,7 +23,7 @@ struct ContentView: View {
                         .styledText(.white, 24, .bold)
                         .multilineTextAlignment(.leading)
                 }
-                .frame(maxWidth: .infinity, maxHeight: 100, alignment: .leading)
+                .frame(maxWidth: .infinity, maxHeight: 70, alignment: .leading)
                 .padding(.horizontal, 15)
                 .background(.cardCol)
                 

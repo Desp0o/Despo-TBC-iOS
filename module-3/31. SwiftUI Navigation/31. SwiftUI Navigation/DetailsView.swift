@@ -12,98 +12,95 @@ struct DetailsView: View {
     let timer: TimerModel
     
     var body: some View {
-        ScrollView {
-            VStack(spacing: 15) {
-                VStack {
-                    Spacer(minLength: 40)
+        VStack(spacing: 15) {
+            VStack {
+                HStack(alignment: .center) {
+                    Button {
+                        dismiss()
+                    } label: {
+                        Image("backButton")
+                    }
                     
-                    HStack(alignment: .center) {
-                        Button {
-                            dismiss()
-                        } label: {
-                            Image("backButton")
+                    Spacer()
+                    
+                    Text(timer.name)
+                        .styledText(.white, 24, .bold)
+                    
+                    Spacer()
+                }
+                .padding(.horizontal, 15)
+                .frame(height: 50)
+            }
+            .background(.cardCol)
+            
+            VStack(spacing: 22) {
+                Image("timerIcon")
+                
+                Text("ხანგრძლივობა")
+                    .foregroundStyle(.white)
+                    .font(.system(size: 18))
+                    .fontWeight(.regular)
+                
+                Text("\(timer.formatTime(from: timer.defaultDuration))")
+                    .styledText(.azure, 36, .bold)
+            }
+            .padding(.vertical, 63)
+            .background(.cardCol)
+            .frame(maxWidth: .infinity)
+            .background(.cardCol)
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+            .padding(.horizontal, 15)
+            
+            VStack(spacing: 16) {
+                ScrollView {
+                    VStack(spacing: 15) {
+                        HStack {
+                            Text("აქტივობებების ისტორია")
+                                .styledText(.white, 18)
+                            
+                            Spacer()
                         }
                         
-                        Spacer()
+                        Divider()
+                            .background(.white)
                         
-                        Text(timer.name)
-                            .styledText(.white, 24, .bold)
+                        HStack {
+                            Text("თარიღი")
+                                .styledText(.white, 14)
+                            
+                            Spacer()
+                            
+                            Text("დრო")
+                                .styledText(.white, 14)
+                                .padding(.trailing, 30)
+                        }
                         
-                        Spacer()
-                    }
-                    .padding(.horizontal, 15)
-                    .frame(height: 100)
-                }
-                .background(.cardCol)
-                
-                VStack(spacing: 22) {
-                    Image("timerIcon")
-                    
-                    Text("ხანგრძლივობა")
-                        .foregroundStyle(.white)
-                        .font(.system(size: 18))
-                        .fontWeight(.regular)
-                    
-                    Text("\(timer.formatTime(from: timer.defaultDuration))")
-                        .styledText(.azure, 36, .bold)
-                }
-                .padding(.vertical, 63)
-                .background(.cardCol)
-                .frame(maxWidth: .infinity)
-                .background(.cardCol)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-                .padding(.horizontal, 15)
-                
-                VStack(spacing: 16) {
-                    HStack {
-                        Text("აქტივობებების ისტორია")
-                            .styledText(.white, 18)
-                        
-                        Spacer()
-                    }
-                    
-                    Divider()
-                        .background(.white)
-                    
-                    HStack {
-                        Text("თარიღი")
-                            .styledText(.white, 14)
-                        
-                        Spacer()
-                        
-                        Text("დრო")
-                            .styledText(.white, 14)
-                            .padding(.trailing, 30)
-                    }
-                    
-                    VStack(spacing: 8) {
-                        ForEach(timer.activity) { act in
-                            HStack {
-                                Text("\(act.date)")
-                                    .styledText(.white, 14)
-                                
-                                Spacer()
-                                
-                                Text(timer.formatTime(from: act.activeDuration))
-                                    .styledText(.white, 14)
-                                    .frame(maxWidth: 62, alignment: .leading)
+                        VStack(spacing: 8) {
+                            ForEach(timer.activity) { act in
+                                HStack {
+                                    Text("\(act.date)")
+                                        .styledText(.white, 14)
+                                    
+                                    Spacer()
+                                    
+                                    Text(timer.formatTime(from: act.activeDuration))
+                                        .styledText(.white, 14)
+                                        .frame(maxWidth: 62, alignment: .leading)
+                                }
                             }
                         }
                     }
                 }
-                .padding(.vertical, 30)
-                .padding(.horizontal, 15)
-                .background(.cardCol)
-                .frame(maxWidth: .infinity)
-                .clipShape(RoundedRectangle(cornerRadius: 16))
-                .padding(.horizontal, 15)
+                .frame(maxHeight: 350)
             }
-            .background(.primaryCol)
-            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .padding(.vertical, 30)
+            .padding(.horizontal, 15)
+            .background(.cardCol)
+            .frame(maxWidth: .infinity)
+            .clipShape(RoundedRectangle(cornerRadius: 16))
+            .padding(.horizontal, 15)
         }
         .background(.primaryCol)
-        .ignoresSafeArea()
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
     }
