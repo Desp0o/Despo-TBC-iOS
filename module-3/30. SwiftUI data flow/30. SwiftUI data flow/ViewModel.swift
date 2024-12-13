@@ -27,31 +27,33 @@ class ViewModel: ObservableObject {
     }
     
     func startTimer(for timer: TimerModel) {
-        guard let index = timersArray.firstIndex(where: { $0.id == timer.id }) else { return }
-        
-        feedbackGenerator.prepare()
-        
-        timersArray[index].isStarted = true
-        
-        if timersArray[index].duration == 0 {
-            timersArray[index].duration = timer.defaultDuration
-        }
-        
-        timerCancellables[timer.id]?.cancel()
-        timerCancellables[timer.id] = Timer.publish(every: 1, on: .main, in: .common)
-            .autoconnect()
-            .sink { [weak self] _ in
-                if self?.timersArray[index].duration ?? 0 > 0 {
-                    self?.timersArray[index].duration -= 1
-                } else {
-                    self?.playAudio()
-                    self?.feedbackGenerator.impactOccurred()
-                    print("🔴 feedbackGenerator.impactOccurred()")
-                    self?.stopTimer(for: timer)
-                    self?.timersArray[index].isPaused = false
-                }
+            guard let index = timersArray.firstIndex(where: { $0.id == timer.id }) else { return }
+            
+            feedbackGenerator.prepare()
+            
+            timersArray[index].isStarted = true
+            
+            if timersArray[index].duration == 0 {
+                timersArray[index].duration = timer.defaultDuration
             }
-    }
+            
+            timerCancellables[timer.id]?.cancel()
+            timerCancellables[timer.id] = Timer.publish(every: 1, on: .main, in: .common)
+                .autoconnect()
+                .sink { [weak self] _ in
+                    if let index = self?.timersArray.firstIndex(where: { $0.id == timer.id }) {
+                        if self?.timersArray[index].duration ?? 0 > 0 {
+                            self?.timersArray[index].duration -= 1
+                        } else {
+                            self?.playAudio()
+                            self?.feedbackGenerator.impactOccurred()
+                            print("🔴 feedbackGenerator.impactOccurred()")
+                            self?.stopTimer(for: timer)
+                            self?.timersArray[index].isPaused = false
+                        }
+                    }
+                }
+        }
     
     func stopTimer(for timer: TimerModel) {
         if let index = timersArray.firstIndex(where: { $0.id == timer.id }) {
