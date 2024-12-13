@@ -37,11 +37,9 @@ struct DetailsView: View {
                 Image("timerIcon")
                 
                 Text("ხანგრძლივობა")
-                    .foregroundStyle(.white)
-                    .font(.system(size: 18))
-                    .fontWeight(.regular)
+                    .styledText(.white, 18, .regular)
                 
-                Text("\(timer.formatTime(from: timer.defaultDuration))")
+                Text(timer.fullActiveTime())
                     .styledText(.azure, 36, .bold)
             }
             .padding(.vertical, 63)
