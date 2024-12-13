@@ -64,7 +64,8 @@ class ViewModel: ObservableObject {
     func stopTimer(for timer: TimerModel) {
         if let index = timersArray.firstIndex(where: { $0.id == timer.id }) {
             addActivityToTimer(with: index)
-            
+            activityDurationCount = 0
+
             timersArray[index].isStarted = false
             timersArray[index].isPaused = true
             timerCancellables[timer.id]?.cancel()
@@ -73,8 +74,9 @@ class ViewModel: ObservableObject {
     
     func resetTimer(for timer: TimerModel) {
         if let index = timersArray.firstIndex(where: { $0.id == timer.id }) {
-            addActivityToTimer(with: index)
-            
+//            addActivityToTimer(with: index)
+            activityDurationCount = 0
+
             timersArray[index].duration = timer.defaultDuration
             timersArray[index].isStarted = false
             timersArray[index].isPaused = false
