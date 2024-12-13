@@ -100,6 +100,7 @@ struct DetailsView: View {
             .clipShape(RoundedRectangle(cornerRadius: 16))
             .padding(.horizontal, 15)
         }
+        .padding(.bottom, 15)
         .background(.primaryCol)
         .navigationBarHidden(true)
         .navigationBarBackButtonHidden(true)
