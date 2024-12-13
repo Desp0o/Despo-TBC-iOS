@@ -17,7 +17,16 @@ struct ContentView: View {
     var body: some View {
         NavigationView{
             VStack(spacing: 15) {
-                HeaderView(name: "ტაიმერები")
+                
+                HStack {
+                    Text("ტაიმერები")
+                        .styledText(.white, 24, .bold)
+                        .multilineTextAlignment(.leading)
+                }
+                .frame(maxWidth: .infinity, maxHeight: 100, alignment: .leading)
+                .padding(.horizontal, 15)
+                .background(.cardCol)
+                
                 VStack(spacing: 50) {
                     ScrollView {
                         VStack {
@@ -83,9 +92,9 @@ struct ContentView: View {
             }
             .background(.primaryCol)
         }
+        .navigationBarHidden(true)
     }
 }
-
 
 struct CardView: View {
     @Binding var timer: TimerModel
@@ -111,9 +120,7 @@ struct CardView: View {
             
             HStack {
                 Text(timer.formatTime(from: timer.duration))
-                    .font(.system(size: 36))
-                    .fontWeight(.bold)
-                    .foregroundStyle(.azure)
+                    .styledText(.azure, 36, .bold)
             }
             
             HStack {
@@ -147,26 +154,4 @@ struct CardView: View {
 
 #Preview {
     ContentView()
-}
-
-extension Button{
-    func timerButtonStyles(bgColor: Color) -> some View {
-        self
-            .foregroundStyle(.white)
-            .padding(.horizontal, 20)
-            .padding(.vertical, 10)
-            .background(bgColor)
-            .clipShape(RoundedRectangle(cornerRadius: 8))
-    }
-}
-
-extension TextField {
-    func styledField() -> some View {
-        self
-            .frame(height: 40)
-            .padding(.horizontal, 12)
-            .background(.shipGray)
-            .clipShape(RoundedRectangle(cornerRadius: 8))
-            .foregroundStyle(.white)
-    }
 }

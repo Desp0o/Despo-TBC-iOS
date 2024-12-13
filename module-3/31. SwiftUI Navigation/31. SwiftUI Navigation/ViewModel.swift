@@ -15,6 +15,7 @@ class ViewModel: ObservableObject {
     var audioPlayer: AVAudioPlayer?
     private var timerCancellables: [UUID: AnyCancellable] = [:]
     private var feedbackGenerator = UIImpactFeedbackGenerator(style: .medium)
+    private var activityDurationCount = 0
     
     @Published var timersArray: [TimerModel] = [
         TimerModel(name: "ძილი", duration: 5, defaultDuration: 5,  isStarted: false),
@@ -48,6 +49,7 @@ class ViewModel: ObservableObject {
                 if let index = self?.timersArray.firstIndex(where: { $0.id == timer.id }) {
                     if self?.timersArray[index].duration ?? 0 > 0 {
                         self?.timersArray[index].duration -= 1
+                        self?.activityDurationCount += 1
                     } else {
                         self?.playAudio()
                         self?.feedbackGenerator.impactOccurred()
@@ -61,6 +63,8 @@ class ViewModel: ObservableObject {
     
     func stopTimer(for timer: TimerModel) {
         if let index = timersArray.firstIndex(where: { $0.id == timer.id }) {
+            addActivityToTimer(with: index)
+            
             timersArray[index].isStarted = false
             timersArray[index].isPaused = true
             timerCancellables[timer.id]?.cancel()
@@ -69,6 +73,8 @@ class ViewModel: ObservableObject {
     
     func resetTimer(for timer: TimerModel) {
         if let index = timersArray.firstIndex(where: { $0.id == timer.id }) {
+            addActivityToTimer(with: index)
+            
             timersArray[index].duration = timer.defaultDuration
             timersArray[index].isStarted = false
             timersArray[index].isPaused = false
@@ -100,6 +106,20 @@ class ViewModel: ObservableObject {
         )
         
         timersArray.append(currentTimer)
+    }
+    
+    func addActivityToTimer(with index: Int) {
+        let currentDateISO = ISO8601DateFormatter().string(from: Date.now)
+        let formattedDate = izziFormater.isoTimeFormatter(
+            currentDate: currentDateISO,
+            finalFormat: "dd MMM yyyy",
+            timeZoneOffset: 4,
+            localeIdentifier: "ka_GE"
+        )
+        
+        let activity = ActivityModel(date: formattedDate, activeDuration: TimeInterval(activityDurationCount))
+        
+        timersArray[index].activity.append(activity)
     }
     
     func playAudio() {

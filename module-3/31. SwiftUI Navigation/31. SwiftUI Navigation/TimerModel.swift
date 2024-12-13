@@ -14,6 +14,7 @@ struct TimerModel: Identifiable, Codable {
     let defaultDuration: TimeInterval
     var isStarted: Bool = false
     var isPaused: Bool = false
+    var activity: [ActivityModel] = []
     
     func formatTime(from seconds: TimeInterval) -> String {
         let totalSeconds = Int(seconds)
@@ -23,4 +24,10 @@ struct TimerModel: Identifiable, Codable {
         
         return String(format: "%02d:%02d:%02d", hours, minutes, secs)
     }
+}
+
+struct ActivityModel: Identifiable, Codable {
+    var id = UUID()
+    var date: String
+    var activeDuration: TimeInterval
 }

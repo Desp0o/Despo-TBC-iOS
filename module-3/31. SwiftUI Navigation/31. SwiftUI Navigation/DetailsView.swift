@@ -8,12 +8,33 @@
 import SwiftUI
 
 struct DetailsView: View {
+    @Environment(\.dismiss) var dismiss
     let timer: TimerModel
     
     var body: some View {
         ScrollView {
             VStack(spacing: 15) {
-                HeaderView(name: timer.name )
+                VStack {
+                    Spacer(minLength: 40)
+                    
+                    HStack(alignment: .center) {
+                        Button {
+                            dismiss()
+                        } label: {
+                            Image("backButton")
+                        }
+                        
+                        Spacer()
+                        
+                        Text(timer.name)
+                            .styledText(.white, 24, .bold)
+                        
+                        Spacer()
+                    }
+                    .padding(.horizontal, 15)
+                    .frame(height: 100)
+                }
+                .background(.cardCol)
                 
                 VStack(spacing: 22) {
                     Image("timerIcon")
@@ -24,9 +45,7 @@ struct DetailsView: View {
                         .fontWeight(.regular)
                     
                     Text("\(timer.formatTime(from: timer.defaultDuration))")
-                        .foregroundStyle(.azure)
-                        .font(.system(size: 36))
-                        .fontWeight(.bold)
+                        .styledText(.azure, 36, .bold)
                 }
                 .padding(.vertical, 63)
                 .background(.cardCol)
@@ -38,36 +57,38 @@ struct DetailsView: View {
                 VStack(spacing: 16) {
                     HStack {
                         Text("აქტივობებების ისტორია")
-                            .foregroundStyle(.white)
-                            .font(.system(size: 18))
+                            .styledText(.white, 18)
                         
                         Spacer()
                     }
-        
-                    Color.white.frame(width: .infinity, height: 1)
+                    
+                    Divider()
+                        .background(.white)
                     
                     HStack {
                         Text("თარიღი")
-                            .foregroundStyle(.white)
-                            .font(.system(size: 14))
+                            .styledText(.white, 14)
                         
                         Spacer()
                         
                         Text("დრო")
-                            .foregroundStyle(.white)
-                            .font(.system(size: 14))
+                            .styledText(.white, 14)
+                            .padding(.trailing, 30)
                     }
                     
-                    HStack {
-                        Text("\(Date.now)")
-                            .foregroundStyle(.white)
-                            .font(.system(size: 14))
-                        
-                        Spacer()
-                        
-                        Text("დრო")
-                            .foregroundStyle(.white)
-                            .font(.system(size: 14))
+                    VStack(spacing: 8) {
+                        ForEach(timer.activity) { act in
+                            HStack {
+                                Text("\(act.date)")
+                                    .styledText(.white, 14)
+                                
+                                Spacer()
+                                
+                                Text(timer.formatTime(from: act.activeDuration))
+                                    .styledText(.white, 14)
+                                    .frame(maxWidth: 62, alignment: .leading)
+                            }
+                        }
                     }
                 }
                 .padding(.vertical, 30)
@@ -78,10 +99,26 @@ struct DetailsView: View {
                 .padding(.horizontal, 15)
             }
             .background(.primaryCol)
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
+        .background(.primaryCol)
+        .ignoresSafeArea()
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .navigationBarHidden(true)
+        .navigationBarBackButtonHidden(true)
     }
 }
 
 #Preview {
-    DetailsView(timer: TimerModel(name: "Example Timer", duration: 2700, defaultDuration: 2700,isStarted: false, isPaused: false))
+    DetailsView(timer: TimerModel(
+        name: "test",
+        duration: 227200,
+        defaultDuration: 227200,
+        isStarted: false,
+        isPaused: false,
+        activity: [
+            ActivityModel(date: "13 Dec 2024", activeDuration: 222700),
+            ActivityModel(date: "13 Dec 2024", activeDuration: 13)
+        ]
+    ))
 }
