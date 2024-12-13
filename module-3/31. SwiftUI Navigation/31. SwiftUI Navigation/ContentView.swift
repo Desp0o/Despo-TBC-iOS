@@ -15,70 +15,74 @@ struct ContentView: View {
     @State var seconds = ""
     
     var body: some View {
-        VStack(spacing: 15) {
-            HeaderView(name: "ტაიმერები")
-            VStack(spacing: 50) {
-                ScrollView {
-                    VStack {
-                        ForEach($viewModel.timersArray) { $timer in
-                            CardView(timer: $timer)
+        NavigationView{
+            VStack(spacing: 15) {
+                HeaderView(name: "ტაიმერები")
+                VStack(spacing: 50) {
+                    ScrollView {
+                        VStack {
+                            ForEach($viewModel.timersArray) { $timer in
+                                NavigationLink(destination: DetailsView(timer: timer)) {
+                                    CardView(timer: $timer)
+                                }
+                            }
                         }
                     }
-                }
-                .scrollIndicators(.hidden)
-                
-                VStack(spacing: 15) {
-                    TextField("", text: $name, prompt: Text("ტაიმერის სახელი...").foregroundColor(.boulder))
-                        .styledField()
-                        .onChange(of: name) {newValue, oldValue in
-                            name = newValue
+                    .scrollIndicators(.hidden)
+                    
+                    VStack(spacing: 15) {
+                        TextField("", text: $name, prompt: Text("ტაიმერის სახელი...").foregroundColor(.boulder))
+                            .styledField()
+                            .onChange(of: name) {newValue, oldValue in
+                                name = newValue
+                            }
+                        
+                        HStack(spacing: 10) {
+                            TextField("", text: $hours, prompt: Text("სთ").foregroundColor(.boulder))
+                                .styledField()
+                                .onChange(of: hours) {newValue, oldValue in
+                                    hours = newValue
+                                }
+                            
+                            TextField("", text: $minutes, prompt: Text("წთ").foregroundColor(.boulder))
+                                .styledField()
+                                .onChange(of: minutes) {newValue, oldValue in
+                                    minutes = newValue
+                                }
+                            
+                            TextField("", text: $seconds, prompt: Text("წმ").foregroundColor(.boulder))
+                                .styledField()
+                                .onChange(of: seconds) {newValue, oldValue in
+                                    seconds = newValue
+                                }
                         }
-                    
-                    HStack(spacing: 10) {
-                        TextField("", text: $hours, prompt: Text("სთ").foregroundColor(.boulder))
-                            .styledField()
-                            .onChange(of: hours) {newValue, oldValue in
-                                hours = newValue
-                            }
                         
-                        TextField("", text: $minutes, prompt: Text("წთ").foregroundColor(.boulder))
-                            .styledField()
-                            .onChange(of: minutes) {newValue, oldValue in
-                                minutes = newValue
-                            }
-                        
-                        TextField("", text: $seconds, prompt: Text("წმ").foregroundColor(.boulder))
-                            .styledField()
-                            .onChange(of: seconds) {newValue, oldValue in
-                                seconds = newValue
-                            }
+                        Button("დამატება") {
+                            viewModel.addTimer(
+                                name: name,
+                                hh: hours,
+                                mm: minutes,
+                                ss: seconds
+                            )
+                            
+                            name = ""
+                            hours = ""
+                            minutes = ""
+                            seconds = ""
+                        }
+                        .foregroundStyle(.white)
+                        .frame(width: 155, height: 42)
+                        .background(.azure)
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
                     }
-                    
-                    Button("დამატება") {
-                        viewModel.addTimer(
-                            name: name,
-                            hh: hours,
-                            mm: minutes,
-                            ss: seconds
-                        )
-                        
-                        name = ""
-                        hours = ""
-                        minutes = ""
-                        seconds = ""
-                    }
-                    .foregroundStyle(.white)
-                    .frame(width: 155, height: 42)
-                    .background(.azure)
-                    .clipShape(RoundedRectangle(cornerRadius: 8))
+                    .frame(maxHeight: 130)
+                    .padding(.bottom, 20)
                 }
-                .frame(maxHeight: 130)
-                .padding(.bottom, 20)
+                .padding(.horizontal, 15)
+                .environmentObject(viewModel)
             }
-            .padding(.horizontal, 15)
-            .environmentObject(viewModel)
+            .background(.primaryCol)
         }
-        .background(.primaryCol)
     }
 }
 

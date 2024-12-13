@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		E3D867AA2D0C225700E5D71B /* izziDateFormatter in Frameworks */ = {isa = PBXBuildFile; productRef = E3D867A92D0C225700E5D71B /* izziDateFormatter */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		E3D867172D0C152000E5D71B /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -52,6 +56,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E3D867AA2D0C225700E5D71B /* izziDateFormatter in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -112,6 +117,7 @@
 			);
 			name = "31. SwiftUI Navigation";
 			packageProductDependencies = (
+				E3D867A92D0C225700E5D71B /* izziDateFormatter */,
 			);
 			productName = "31. SwiftUI Navigation";
 			productReference = E3D867062D0C151E00E5D71B /* 31. SwiftUI Navigation.app */;
@@ -195,6 +201,9 @@
 			);
 			mainGroup = E3D866FD2D0C151E00E5D71B;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				E3D867A82D0C225700E5D71B /* XCRemoteSwiftPackageReference "izziDateFormatter" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = E3D867072D0C151E00E5D71B /* Products */;
 			projectDirPath = "";
@@ -558,6 +567,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E3D867A82D0C225700E5D71B /* XCRemoteSwiftPackageReference "izziDateFormatter" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Desp0o/izziDateFormatter";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E3D867A92D0C225700E5D71B /* izziDateFormatter */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E3D867A82D0C225700E5D71B /* XCRemoteSwiftPackageReference "izziDateFormatter" */;
+			productName = izziDateFormatter;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E3D866FE2D0C151E00E5D71B /* Project object */;
 }
