@@ -156,15 +156,15 @@ class ViewModel: ObservableObject {
     
     func durationSum(for timer: TimerModel) -> String {
         var sum = 0
-
+        
         if let index = timersArray.firstIndex(where: { $0.id == timer.id }) {
             sum = timersArray[index].activity.reduce(0) { $0 + Int($1.activeDuration) }
         }
-
+        
         let hours = sum / 3600
         let minutes = (sum % 3600) / 60
         let seconds = sum % 60
-
+        
         if hours > 0 {
             return String(format: "%0d სთ %0d წთ", hours, minutes)
         } else if minutes > 0 {
@@ -183,7 +183,14 @@ class ViewModel: ObservableObject {
             localeIdentifier: "ka_GE"
         )
         
-        let activity = ActivityModel(date: formattedDate, activeDuration: TimeInterval(activityDurationCount))
+        let currentTime = izziFormater.isoTimeFormatter(
+            currentDate: currentDateISO,
+            finalFormat: "HH:mm",
+            timeZoneOffset: 4,
+            localeIdentifier: "ka_GE"
+        )
+        
+        let activity = ActivityModel(addedTime: currentTime, date: formattedDate, activeDuration: TimeInterval(activityDurationCount))
         
         timersArray[index].activity.append(activity)
     }

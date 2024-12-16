@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import izziDateFormatter
 
 struct TimerModel: Identifiable, Codable {
     var id = UUID()
@@ -34,10 +35,15 @@ struct TimerModel: Identifiable, Codable {
             
             return String(format: "%02d:%02d:%02d", hours, minutes, seconds)
     }
+    
+    func groupedActivities() -> [String: [ActivityModel]] {
+        return Dictionary(grouping: activity, by: { $0.date })
+    }
 }
 
 struct ActivityModel: Identifiable, Codable {
     var id = UUID()
+    var addedTime: String
     var date: String
     var activeDuration: TimeInterval
 }

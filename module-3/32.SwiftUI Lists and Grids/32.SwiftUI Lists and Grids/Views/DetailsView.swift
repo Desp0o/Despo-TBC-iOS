@@ -88,37 +88,38 @@ struct DetailsView: View {
             .clipShape(RoundedRectangle(cornerRadius: 10))
             .padding(.horizontal, 15)
             
-            VStack(spacing: 16) {
-                ScrollView {
-                    VStack(spacing: 15) {
-                        HStack {
-                            Text("აქტივობებების ისტორია")
-                                .styledText(.white, 18)
-                            
-                            Spacer()
-                        }
-                        
-                        VStack(spacing: 8) {
-                            ForEach(timer.activity) { act in
+            VStack {
+                HStack {
+                    Text("აქტივობებების ისტორია")
+                        .styledText(.white, 18)
+                    
+                    Spacer()
+                }
+                
+                List {
+                    ForEach(timer.groupedActivities().sorted(by: { $0.key > $1.key }), id: \.key) { date, activities in
+                        Section(header: Text(date).headerProminence(.standard)) {
+                            ForEach(activities) { activity in
                                 HStack {
-                                    Text("\(act.date)")
-                                        .styledText(.white, 14)
+                                    Text("\(activity.addedTime)")
+                                        .styledText(.white, 14, .regular)
                                     
                                     Spacer()
                                     
-                                    Text(timer.formatTime(from: act.activeDuration))
-                                        .styledText(.white, 14)
-                                        .frame(maxWidth: 62, alignment: .leading)
+                                    Text("\(timer.formatTime(from: activity.activeDuration))")
+                                        .styledText(.white, 14, .regular)
+                                        .padding(EdgeInsets(top: 0, leading: 0, bottom: 0, trailing: -20))
                                 }
+                                .listRowBackground(Color.clear)
+                                .listRowSeparatorTint(.boulder)
                             }
                         }
                     }
                 }
-                .frame(maxHeight: 350)
+                .listStyle(PlainListStyle())
+                .padding(EdgeInsets(top: -25, leading: -20, bottom: -20, trailing: 0))
+                .background(.primaryCol)
             }
-            .padding(.top)
-            .frame(maxWidth: .infinity)
-            .clipShape(RoundedRectangle(cornerRadius: 16))
             .padding(.horizontal, 15)
         }
         .padding(.bottom, 15)
@@ -136,8 +137,8 @@ struct DetailsView: View {
         isStarted: false,
         isPaused: false,
         activity: [
-            ActivityModel(date: "13 Dec 2024", activeDuration: 222700),
-            ActivityModel(date: "13 Dec 2024", activeDuration: 13)
+            ActivityModel(addedTime:"12:34", date: "13 Dec 2024", activeDuration: 222700),
+            ActivityModel(addedTime:"12:34", date: "13 Dec 2024", activeDuration: 13)
         ]
     ))
     .environmentObject(ViewModel())
