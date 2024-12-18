@@ -14,9 +14,9 @@ struct WheelSpin: View {
     var body: some View {
         VStack {
             ZStack {
-                ForEach(0..<vm.segmentCount, id: \.self) { index in
-                    let startAngle = Double(index) / Double(vm.segmentCount) * 360
-                    let endAngle = Double(index + 1) / Double(vm.segmentCount) * 360
+                ForEach(0..<vm.colorCount, id: \.self) { index in
+                    let startAngle = vm.createStartAngle(with: index)
+                    let endAngle = vm.createEndAngle(with: index)
                     
                     WheelModel(
                         startAngle: .degrees(startAngle),
@@ -30,9 +30,8 @@ struct WheelSpin: View {
                 DragGesture()
                     .onEnded{ value in
                         if value.translation.height > 100 {
-                            print("test")
                             withAnimation(.spring(response: 2.5, dampingFraction: 0.8)) {
-                                spin += 360 * 5 + Double.random(in: 0..<360)
+                                spin += vm.makeWheelSpin()
                             }
                         }
                         

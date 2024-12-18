@@ -8,22 +8,33 @@
 import SwiftUI
 
 final class WheelViewModel {
-    let segmentCount = 14
     
-    let colors = [
+    let colors: [Color] = [
         Color.red,
-        Color.orange,
-        Color.yellow,
         Color.green,
         Color.blue,
+        Color.yellow,
+        Color.orange,
         Color.purple,
         Color.pink,
-        Color.brown,
-        Color.gray,
-        Color.black,
         Color.cyan,
-        Color.mint,
-        Color.teal,
-        Color.indigo
+        Color.gray,
+        Color.mint
     ]
+    
+    var colorCount: Int {
+        colors.count
+    }
+
+    func createStartAngle(with index: Int) -> Double {
+        Double(index) / Double(colors.count) * 360
+    }
+    
+    func createEndAngle(with index: Int) -> Double {
+        Double(index + 1) / Double(colors.count) * 360
+    }
+    
+    func makeWheelSpin() -> Double {
+        360 * 5 + Double.random(in: 0..<360)
+    }
 }
