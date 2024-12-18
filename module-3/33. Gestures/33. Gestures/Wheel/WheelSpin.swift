@@ -39,6 +39,7 @@ struct WheelSpin: View {
             )
         }
         .padding()
+        .background(.customGreen)
     }
 }
 

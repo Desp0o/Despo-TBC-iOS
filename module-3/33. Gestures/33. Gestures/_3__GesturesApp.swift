@@ -11,7 +11,7 @@ import SwiftUI
 struct _3__GesturesApp: App {
     var body: some Scene {
         WindowGroup {
-            WheelSpin()
+            ContentView()
         }
     }
 }

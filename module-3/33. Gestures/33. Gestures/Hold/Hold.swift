@@ -45,6 +45,7 @@ struct Hold: View {
             }
         }
         .padding()
+        .background(.customGreen)
     }
 }
 
