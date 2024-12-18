@@ -30,6 +30,12 @@ struct ContentView: View {
                         Label("Hold", image: activeTab == 2 ? "rotateActive" : "rotateInactive")
                     })
                     .tag(2)
+                
+                Trash()
+                    .tabItem({
+                        Label("Hold", image: activeTab == 3 ? "trashActive" : "trashInactive")
+                    })
+                    .tag(3)
             }
             .toolbarBackground(.white, for: .tabBar)
             .toolbarBackground(.visible, for: .tabBar)
