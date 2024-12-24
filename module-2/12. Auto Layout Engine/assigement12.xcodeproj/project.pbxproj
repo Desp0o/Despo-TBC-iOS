@@ -10,22 +10,9 @@
 		E3ED92CB2CB6AE6C0075B637 /* assigement12.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = assigement12.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
-		E3ED92DD2CB6AE6E0075B637 /* Exceptions for "assigement12" folder in "assigement12" target */ = {
-			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
-			membershipExceptions = (
-				Info.plist,
-			);
-			target = E3ED92CA2CB6AE6C0075B637 /* assigement12 */;
-		};
-/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
-
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		E3ED92CD2CB6AE6C0075B637 /* assigement12 */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
-			exceptions = (
-				E3ED92DD2CB6AE6E0075B637 /* Exceptions for "assigement12" folder in "assigement12" target */,
-			);
 			path = assigement12;
 			sourceTree = "<group>";
 		};
