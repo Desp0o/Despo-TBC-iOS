@@ -85,16 +85,25 @@ struct FullMusicView: View {
                 Spacer()
                 
                 HStack {
-                  Image(systemName: "arrowtriangle.backward.fill")
+                  Button {
+                    vm.playPrev()
+                  } label: {
+                    Image(systemName: "arrowtriangle.backward.fill")
+                  }
                   
                   Image(systemName: !vm.isPlaying ? "arrowtriangle.right.circle.fill" : "pause.circle.fill")
                     .onTapGesture {
                       vm.playAudio(with: song.songName, and: song.id)
                     }
                   
-                  Image(systemName: "arrowtriangle.right.fill")
+                  Button {
+                    vm.playNext()
+                  } label: {
+                    Image(systemName: "arrowtriangle.right.fill")
+                  }
                 }
                 .font(.system(size: 50))
+
                 
                 Spacer()
                 

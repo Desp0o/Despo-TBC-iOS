@@ -121,6 +121,35 @@ final class ContentViewModel: ObservableObject {
     return mySongs[index]
   }
   
+  func playNext() {
+    var nextSong: SongModel?
+    guard let index = mySongs.firstIndex(where: { $0.id == currentSongID }) else {return}
+    
+    if index < mySongs.count - 1 {
+      nextSong = mySongs[index + 1]
+    } else {
+      nextSong = mySongs[0]
+    }
+    
+    guard let next = nextSong else { return }
+    playAudio(with: next.songName, and: next.id)
+  }
+  
+  func playPrev() {
+    var prevSong: SongModel?
+    guard let index = mySongs.firstIndex(where: { $0.id == currentSongID }) else {return}
+    
+    if index > 0 {
+      prevSong = mySongs[index - 1]
+    } else {
+      let fullLength = mySongs.count
+      prevSong = mySongs[fullLength - 1]
+    }
+    
+    guard let song = prevSong else { return }
+    playAudio(with: song.songName, and: song.id)
+  }
+  
   func formatIntervalToSeconds(timeInterval: TimeInterval) -> String {
     let formatter = DateComponentsFormatter()
     formatter.allowedUnits = [.minute, .second]
