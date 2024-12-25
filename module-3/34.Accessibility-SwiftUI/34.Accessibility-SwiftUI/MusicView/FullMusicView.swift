@@ -79,8 +79,14 @@ struct FullMusicView: View {
               }
               
               HStack {
-                Image(systemName: "shuffle")
-                  .font(.system(size: 25))
+                Button {
+                  vm.isShuffled.toggle()
+                  vm.isLooped = false
+                } label: {
+                  Image(systemName: "shuffle")
+                    .foregroundStyle(vm.isShuffled ? .green : .customWhite)
+                    .font(.system(size: 25))
+                }
                 
                 Spacer()
                 
@@ -112,6 +118,7 @@ struct FullMusicView: View {
                   .foregroundStyle(vm.isLooped ? .green : .customWhite)
                   .onTapGesture {
                     vm.isLooped.toggle()
+                    vm.isShuffled = false
                   }
                 
               }

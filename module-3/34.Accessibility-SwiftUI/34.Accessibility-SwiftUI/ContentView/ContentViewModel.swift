@@ -17,6 +17,7 @@ final class ContentViewModel: ObservableObject {
   var currentBackWardCount: TimeInterval = 0
   var isPlaying = false
   var isLooped = false
+  var isShuffled = false
   private var wasPaused = false
   private var musicCancellables: [UUID: AnyCancellable] = [:]
   private var backWardCancellables: [UUID: AnyCancellable] = [:]
@@ -106,6 +107,10 @@ final class ContentViewModel: ObservableObject {
             let currentSong = self?.mySongs[index]
             self?.playAudio(with: currentSong?.songName ?? "", and: currentSong?.id ?? UUID())
           }
+          
+          if self?.isShuffled == true {
+            self?.shuffleMusic()
+          }
         } else {
           self?.currentBackWardCount -= 0.5
         }
@@ -155,6 +160,13 @@ final class ContentViewModel: ObservableObject {
     
     guard let song = prevSong else { return }
     playAudio(with: song.songName, and: song.id)
+  }
+  
+  func shuffleMusic() {
+    let randomIndex = Int.random(in: 0..<mySongs.count)
+    let randomSong = mySongs[randomIndex]
+    
+    playAudio(with: randomSong.songName, and: randomSong.id)
   }
   
   private func formatIntervalToSeconds(timeInterval: TimeInterval) -> String {
