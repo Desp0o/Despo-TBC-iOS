@@ -9,9 +9,9 @@ import SwiftUI
 
 @main
 struct _4_Accessibility_SwiftUIApp: App {
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-        }
+  var body: some Scene {
+    WindowGroup {
+      ContentView()
     }
+  }
 }

@@ -55,7 +55,7 @@ struct ContentView: View {
         
         List {
           ForEach(vm.mySongs, id: \.self) { song in
-            MusicView(
+            SingleMusicView(
               cover: song.cover,
               songName: song.name,
               author: song.author
@@ -86,7 +86,12 @@ struct ContentView: View {
       }
       .padding(.top, 20)
     }
+    
+    .fullScreenCover(isPresented: $isPresented) {
+      FullMusicView()
+    }
     .environment(vm)
+
   }
 }
 

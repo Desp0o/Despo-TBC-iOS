@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct MusicView: View {
+struct SingleMusicView: View {
     let cover: String
     let songName: String
     let author: String

@@ -1,0 +1,125 @@
+//
+//  FullView.swift
+//  34.Accessibility-SwiftUI
+//
+//  Created by Despo on 25.12.24.
+//
+
+import SwiftUI
+
+struct FullMusicView: View {
+  @Environment(\.dismiss) var mode
+  @EnvironmentObject var vm: ContentViewModel
+  @State var isLooped = false
+  
+  var body: some View {
+    ZStack {
+      LinearGradient(
+        colors: [.customRed, .customBlack],
+        startPoint: .top,
+        endPoint: .bottom
+      )
+      .ignoresSafeArea()
+      
+      VStack {
+        HStack {
+          Image(systemName: "chevron.down")
+            .foregroundStyle(.white)
+            .onTapGesture {
+              mode()
+            }
+          
+          Spacer()
+          
+          Text("My Album")
+            .styledText(.white, 14)
+          
+          Spacer()
+          
+          Image(systemName: "ellipsis")
+            .foregroundStyle(.white)
+        }
+        
+        if let song = vm.singleSong() {
+          VStack(spacing: 15) {
+            Image(song.cover)
+              .resizable()
+              .scaledToFill()
+              .frame(maxWidth: 350, maxHeight: 350)
+              .shadow(color: Color.black.opacity(0.3), radius: 10, x: 0, y: 6)
+            
+            HStack {
+              VStack(alignment: .leading) {
+                Text(song.name)
+                  .font(.system(size: 26))
+                  .fontWeight(.bold)
+                  .foregroundStyle(.white)
+                  .styledText(.white, 26, .bold)
+                
+                Text(song.author)
+                  .styledText(.customGray, 16, .bold)
+                
+              }
+              
+              Spacer()
+            }
+            .frame(maxWidth: .infinity)
+            
+            VStack {
+              SUIProgressView(
+                currentProgres: $vm.currentSongProgress,
+                currentSongDuration: vm.currentSongDuration
+              )
+              
+              HStack {
+                Text(vm.getDurationtInMinutes())
+                  .styledText(.customGray, 16)
+                
+                Spacer()
+                
+                Text("-\(vm.getBackwardInMinutes())")
+                  .styledText(.customGray, 16)
+                
+              }
+              
+              HStack {
+                Image(systemName: "shuffle")
+                  .font(.system(size: 25))
+                
+                Spacer()
+                
+                HStack {
+                  Image(systemName: "arrowtriangle.backward.fill")
+                  
+                  Image(systemName: !vm.isPlaying ? "arrowtriangle.right.circle.fill" : "pause.circle.fill")
+                    .onTapGesture {
+                      vm.playAudio(with: song.songName, and: song.id)
+                    }
+                  
+                  Image(systemName: "arrowtriangle.right.fill")
+                }
+                .font(.system(size: 50))
+                
+                Spacer()
+                
+                Image(systemName: "point.forward.to.point.capsulepath.fill")
+                  .font(.system(size: 25))
+                  .foregroundStyle(isLooped ? .green : .white)
+                  .onTapGesture {
+                    isLooped.toggle()
+                  }
+                
+              }
+              .foregroundStyle(.white)
+              .padding(.top, 5)
+            }
+          }
+          .padding(.top, 70)
+        }
+        
+        Spacer()
+      }
+      .padding(.horizontal, 15)
+    }
+  }
+}

@@ -83,7 +83,6 @@ struct SUIProgressView: UIViewRepresentable {
   func makeUIView(context: Context) -> UIProgressView {
     let progressView = UIProgressView(progressViewStyle: .default)
     progressView.progress = 0.0
-    progressView.setProgress(Float(currentProgres), animated: true)
     progressView.tintColor = .white
     progressView.backgroundColor = .customBlack
     return progressView
