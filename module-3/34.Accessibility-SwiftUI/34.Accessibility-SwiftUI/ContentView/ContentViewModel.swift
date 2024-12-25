@@ -89,7 +89,7 @@ final class ContentViewModel: ObservableObject {
       }
   }
   
-  func backwardCount() {
+  private func backwardCount() {
     backWardCancellables[currentSongID]?.cancel()
     backWardCancellables[currentSongID] = Timer.publish(every: 0.5, on: .main, in: .common)
       .autoconnect()
@@ -99,13 +99,20 @@ final class ContentViewModel: ObservableObject {
           self?.currentBackWardCount = self?.currentSongDuration ?? 0
           self?.currentSongProgress = 0
           self?.isPlaying = false
+          
+          if self?.isLooped == true {
+            guard let index = self?.mySongs.firstIndex(where: { $0.id == self?.currentSongID }) else {return}
+
+            let currentSong = self?.mySongs[index]
+            self?.playAudio(with: currentSong?.songName ?? "", and: currentSong?.id ?? UUID())
+          }
         } else {
           self?.currentBackWardCount -= 0.5
         }
       }
   }
   
-  func stopMusic(width id: UUID) {
+  private func stopMusic(width id: UUID) {
     wasPaused = true
     musicCancellables[id]?.cancel()
     backWardCancellables[id]?.cancel()
@@ -150,7 +157,7 @@ final class ContentViewModel: ObservableObject {
     playAudio(with: song.songName, and: song.id)
   }
   
-  func formatIntervalToSeconds(timeInterval: TimeInterval) -> String {
+  private func formatIntervalToSeconds(timeInterval: TimeInterval) -> String {
     let formatter = DateComponentsFormatter()
     formatter.allowedUnits = [.minute, .second]
     var formattedTime = formatter.string(from: timeInterval) ?? "00:00"
