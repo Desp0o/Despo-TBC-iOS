@@ -9,6 +9,7 @@ import Foundation
 import AVFoundation
 import Combine
 
+@Observable
 final class ContentViewModel: ObservableObject {
     var audioPlayer: AVAudioPlayer?
     var currentSongDuration: TimeInterval = 0
@@ -77,7 +78,6 @@ final class ContentViewModel: ObservableObject {
                     self?.stopMusic(width: id)
                 } else {
                     self?.currentSongProgress += 1
-                    print(self?.currentSongProgress)
                 }
             }
     }

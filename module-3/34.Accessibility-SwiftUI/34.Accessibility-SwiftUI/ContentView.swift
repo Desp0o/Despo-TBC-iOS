@@ -81,6 +81,7 @@ struct ContentView: View {
             }
             .padding(.top, 20)
         }
+        .environment(vm)
     }
 }
 
