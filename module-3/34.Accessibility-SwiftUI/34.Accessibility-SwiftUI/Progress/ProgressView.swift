@@ -30,7 +30,7 @@ struct ProgressView: View {
               
               VStack(alignment: .leading) {
                 Text(song.name)
-                  .foregroundStyle(.white)
+                  .foregroundStyle(.customWhite)
                   .font(.system(size: 16))
                 
                 Text(song.author)
@@ -45,7 +45,7 @@ struct ProgressView: View {
           HStack {
             Image(systemName: "hifispeaker.2")
               .font(.system(size: 18))
-              .foregroundStyle(.white)
+              .foregroundStyle(.customWhite)
             
             Button {
               vm.playAudio(
@@ -55,7 +55,7 @@ struct ProgressView: View {
             } label: {
               Image(systemName: !vm.isPlaying ? "play.fill" : "pause.fill")
                 .font(.system(size: 18))
-                .foregroundStyle(.white)
+                .foregroundStyle(.customWhite)
             }
           }
         }
@@ -83,7 +83,7 @@ struct SUIProgressView: UIViewRepresentable {
   func makeUIView(context: Context) -> UIProgressView {
     let progressView = UIProgressView(progressViewStyle: .default)
     progressView.progress = 0.0
-    progressView.tintColor = .white
+    progressView.tintColor = .customWhite
     progressView.backgroundColor = .customBlack
     return progressView
   }

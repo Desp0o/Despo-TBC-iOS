@@ -16,10 +16,11 @@ final class ContentViewModel: ObservableObject {
   var currentSongProgress: TimeInterval = 0
   var currentBackWardCount: TimeInterval = 0
   var isPlaying = false
+  var isLooped = false
   private var wasPaused = false
   private var musicCancellables: [UUID: AnyCancellable] = [:]
   private var backWardCancellables: [UUID: AnyCancellable] = [:]
-
+  
   private var currentSongID = UUID()
   
   var mySongs: [SongModel] = [
@@ -61,9 +62,10 @@ final class ContentViewModel: ObservableObject {
       audioPlayer = try AVAudioPlayer(contentsOf: audioURL)
       
       if let audioPlayer = audioPlayer {
+        audioPlayer.numberOfLoops = isLooped ? -1 : 0
         currentSongDuration = audioPlayer.duration
         currentBackWardCount = audioPlayer.duration
-
+        
         audioPlayer.play()
         startMusicTimer(with: songID, duration: currentSongDuration)
         isPlaying = true
@@ -94,6 +96,9 @@ final class ContentViewModel: ObservableObject {
       .sink { [weak self] _ in
         if self?.currentBackWardCount ?? 0 <= 0 {
           self?.stopMusic(width: self?.currentSongID ?? UUID())
+          self?.currentBackWardCount = self?.currentSongDuration ?? 0
+          self?.currentSongProgress = 0
+          self?.isPlaying = false
         } else {
           self?.currentBackWardCount -= 0.5
         }

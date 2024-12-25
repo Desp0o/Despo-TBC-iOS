@@ -31,9 +31,7 @@ struct ContentView: View {
         VStack(spacing: 0) {
           HStack {
             Text("My Album")
-              .font(.title2)
-              .fontWeight(.bold)
-              .foregroundStyle(.white)
+              .styledText(.customWhite, 24, .bold)
             
             Spacer()
           }
@@ -47,7 +45,7 @@ struct ContentView: View {
               .shadow(color: Color.black.opacity(0.3), radius: 5, x: 0, y: 4)
             
             Text("Hablo Escobar")
-              .foregroundStyle(.customGray)
+              .styledText(.customGray)
             Spacer()
           }
         }
@@ -91,7 +89,7 @@ struct ContentView: View {
       FullMusicView()
     }
     .environment(vm)
-
+    
   }
 }
 

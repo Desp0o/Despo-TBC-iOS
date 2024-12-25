@@ -22,16 +22,16 @@ struct SingleMusicView: View {
             
             VStack(alignment: .leading) {
                 Text(songName)
-                    .foregroundStyle(.white)
+                    .styledText(.customWhite)
                 
                 Text(author)
-                    .foregroundStyle(.customGray)
+                    .styledText(.customGray)
             }
             
             Spacer()
             
             Image(systemName: "ellipsis")
-                .foregroundStyle(.white)
+                .foregroundStyle(.customWhite)
         }
     }
 }

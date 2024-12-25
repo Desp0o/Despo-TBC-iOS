@@ -10,7 +10,6 @@ import SwiftUI
 struct FullMusicView: View {
   @Environment(\.dismiss) var mode
   @EnvironmentObject var vm: ContentViewModel
-  @State var isLooped = false
   
   var body: some View {
     ZStack {
@@ -24,7 +23,7 @@ struct FullMusicView: View {
       VStack {
         HStack {
           Image(systemName: "chevron.down")
-            .foregroundStyle(.white)
+            .foregroundStyle(.customWhite)
             .onTapGesture {
               mode()
             }
@@ -32,12 +31,12 @@ struct FullMusicView: View {
           Spacer()
           
           Text("My Album")
-            .styledText(.white, 14)
+            .styledText(.customWhite, 14)
           
           Spacer()
           
           Image(systemName: "ellipsis")
-            .foregroundStyle(.white)
+            .foregroundStyle(.customWhite)
         }
         
         if let song = vm.singleSong() {
@@ -51,10 +50,7 @@ struct FullMusicView: View {
             HStack {
               VStack(alignment: .leading) {
                 Text(song.name)
-                  .font(.system(size: 26))
-                  .fontWeight(.bold)
-                  .foregroundStyle(.white)
-                  .styledText(.white, 26, .bold)
+                  .styledText(.customWhite, 26, .bold)
                 
                 Text(song.author)
                   .styledText(.customGray, 16, .bold)
@@ -104,13 +100,13 @@ struct FullMusicView: View {
                 
                 Image(systemName: "point.forward.to.point.capsulepath.fill")
                   .font(.system(size: 25))
-                  .foregroundStyle(isLooped ? .green : .white)
+                  .foregroundStyle(vm.isLooped ? .green : .customWhite)
                   .onTapGesture {
-                    isLooped.toggle()
+                    vm.isLooped.toggle()
                   }
                 
               }
-              .foregroundStyle(.white)
+              .foregroundStyle(.customWhite)
               .padding(.top, 5)
             }
           }
