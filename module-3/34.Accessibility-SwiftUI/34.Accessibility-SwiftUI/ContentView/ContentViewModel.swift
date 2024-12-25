@@ -21,10 +21,10 @@ final class ContentViewModel: ObservableObject {
   private var wasPaused = false
   private var musicCancellables: [UUID: AnyCancellable] = [:]
   private var backWardCancellables: [UUID: AnyCancellable] = [:]
-  
   private var currentSongID = UUID()
   
   var mySongs: [SongModel] = [
+    SongModel(cover: "naiveMan", name: "Small Talks", author: "Naive Man", songName: "smallTalks"),
     SongModel(cover: "muntity", name: "My Favorite Mutiny", author: "The Coup", songName: "mutiny"),
     SongModel(cover: "gunsNroses", name: "Paradise City", author: "Guns N' Roses", songName: "paradiseCity"),
     SongModel(cover: "hegotagame", name: "He Got Game", author: "Public Enemy", songName: "heGotGame"),
@@ -103,7 +103,7 @@ final class ContentViewModel: ObservableObject {
           
           if self?.isLooped == true {
             guard let index = self?.mySongs.firstIndex(where: { $0.id == self?.currentSongID }) else {return}
-
+            
             let currentSong = self?.mySongs[index]
             self?.playAudio(with: currentSong?.songName ?? "", and: currentSong?.id ?? UUID())
           }

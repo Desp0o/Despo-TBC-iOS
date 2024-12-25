@@ -94,7 +94,7 @@ struct FullMusicView: View {
                   Button {
                     vm.playPrev()
                   } label: {
-                    Image(systemName: "arrowtriangle.backward.fill")
+                    Image(systemName: "backward.end.fill")
                   }
                   
                   Image(systemName: !vm.isPlaying ? "arrowtriangle.right.circle.fill" : "pause.circle.fill")
@@ -105,7 +105,7 @@ struct FullMusicView: View {
                   Button {
                     vm.playNext()
                   } label: {
-                    Image(systemName: "arrowtriangle.right.fill")
+                    Image(systemName: "forward.end.fill")
                   }
                 }
                 .font(.system(size: 50))
@@ -113,7 +113,7 @@ struct FullMusicView: View {
                 
                 Spacer()
                 
-                Image(systemName: "point.forward.to.point.capsulepath.fill")
+                Image(systemName: "repeat")
                   .font(.system(size: 25))
                   .foregroundStyle(vm.isLooped ? .green : .customWhite)
                   .onTapGesture {
