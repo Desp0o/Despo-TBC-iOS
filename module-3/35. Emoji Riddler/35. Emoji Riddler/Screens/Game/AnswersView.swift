@@ -2,7 +2,7 @@ import SwiftUI
 
 struct SwiftUIListView: View {
   let item: GameModel
-  var vm: GameViewModel
+  @StateObject var vm: GameViewModel
   @State private var selectedAnswer: Answer? = nil
   @State private var isDisabled = false
   
@@ -47,3 +47,8 @@ struct SwiftUIListView: View {
     }
   }
 }
+
+
+
+
+

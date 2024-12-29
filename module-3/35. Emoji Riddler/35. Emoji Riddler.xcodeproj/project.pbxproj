@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		E3932C1A2D218C5D0044208C /* NetworkManagerFramework in Frameworks */ = {isa = PBXBuildFile; productRef = E3932C192D218C5D0044208C /* NetworkManagerFramework */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		E3932BD92D2126F80044208C /* 35. Emoji Riddler.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "35. Emoji Riddler.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +40,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				E3932C1A2D218C5D0044208C /* NetworkManagerFramework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +83,7 @@
 			);
 			name = "35. Emoji Riddler";
 			packageProductDependencies = (
+				E3932C192D218C5D0044208C /* NetworkManagerFramework */,
 			);
 			productName = "35. Emoji Riddler";
 			productReference = E3932BD92D2126F80044208C /* 35. Emoji Riddler.app */;
@@ -107,6 +113,9 @@
 			);
 			mainGroup = E3932BD02D2126F80044208C;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				E3932C182D218C5D0044208C /* XCRemoteSwiftPackageReference "webService" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = E3932BDA2D2126F80044208C /* Products */;
 			projectDirPath = "";
@@ -335,6 +344,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		E3932C182D218C5D0044208C /* XCRemoteSwiftPackageReference "webService" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Desp0o/webService.git";
+			requirement = {
+				branch = master;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		E3932C192D218C5D0044208C /* NetworkManagerFramework */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = E3932C182D218C5D0044208C /* XCRemoteSwiftPackageReference "webService" */;
+			productName = NetworkManagerFramework;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = E3932BD12D2126F80044208C /* Project object */;
 }
