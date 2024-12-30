@@ -8,7 +8,7 @@
 import UIKit
 import SwiftUI
 
-final class GameView: UIViewController, PointsDelegate, AttemptsDelegate, QuestionDelegate, IndicatorDelegate, LoserDelegate {
+final class GameView: UIViewController {
   private let loadingIndicator: LoadingIndicator
   private var hostingController: UIHostingController<SwiftUIListView>?
   let gameCategory: Categories
@@ -273,6 +273,66 @@ final class GameView: UIViewController, PointsDelegate, AttemptsDelegate, Questi
     ])
   }
   
+  private func setupPoints() {
+    scoreLabel.configureCustomText(
+      text: "Points: \(vm?.points ?? 0)",
+      color: .mainGreen,
+      isBold: true,
+      size: 16)
+  }
+  
+  private func setupAttepmts() {
+    attemptsLabel.configureCustomText(
+      text: "Try: \(vm?.attempts ?? 0)",
+      color: .mainGreen,
+      isBold: true,
+      size: 16
+    )
+  }
+      
+  func showHint() {
+    hintLabel.isHidden = false
+    hintLabel.alpha = 0
+    UIView.animate(withDuration: 0.2, animations: {
+      self.hintLabel.alpha = 1
+    })
+  }
+  
+  @objc func hideHint() {
+    UIView.animate(withDuration: 0.2, animations: {
+      self.hintLabel.alpha = 0
+    }, completion: { _ in
+      self.hintLabel.isHidden = true
+    })
+  }
+  
+  @objc func goBack() {
+    navigationController?.popViewController(animated: true)
+  }
+}
+
+extension GameView: PointsDelegate {
+  func updateScore(to score: Int) {
+    DispatchQueue.main.async {[weak self] in
+      self?.scoreLabel.text = "Points: \(score)"
+    }
+  }
+}
+
+extension GameView: AttemptsDelegate {
+  func updateAttpemts(to tries: Int) {
+    DispatchQueue.main.async{[weak self] in
+      self?.attemptsLabel.configureCustomText(
+        text: "Try: \(tries)",
+        color: .mainGreen,
+        isBold: true,
+        size: 16
+      )
+    }
+  }
+}
+
+extension GameView: QuestionDelegate {
   private func showNextQuestion() {
     if let nextQuestion = vm?.loadNextQuestion(cat: gameCategory) {
       DispatchQueue.main.async {
@@ -286,41 +346,9 @@ final class GameView: UIViewController, PointsDelegate, AttemptsDelegate, Questi
   func updateQuestion() {
     showNextQuestion()
   }
-  
-  private func setupPoints() {
-    scoreLabel.configureCustomText(
-      text: "Points: \(vm?.points ?? 0)",
-      color: .mainGreen,
-      isBold: true,
-      size: 16)
-  }
-  
-  func updateScore(to score: Int) {
-    DispatchQueue.main.async {[weak self] in
-      self?.scoreLabel.text = "Points: \(score)"
-    }
-  }
-  
-  private func setupAttepmts() {
-    attemptsLabel.configureCustomText(
-      text: "Try: \(vm?.attempts ?? 0)",
-      color: .mainGreen,
-      isBold: true,
-      size: 16
-    )
-  }
-  
-  func updateAttpemts(to tries: Int) {
-    DispatchQueue.main.async{[weak self] in
-      self?.attemptsLabel.configureCustomText(
-        text: "Try: \(tries)",
-        color: .mainGreen,
-        isBold: true,
-        size: 16
-      )
-    }
-  }
-  
+}
+
+extension GameView: IndicatorDelegate {
   func updateLoadingIndicator() {
     if vm?.isLoading == true {
       DispatchQueue.main.asyncAfter(deadline: .now() + 1) {[weak self] in
@@ -335,15 +363,9 @@ final class GameView: UIViewController, PointsDelegate, AttemptsDelegate, Questi
       }
     }
   }
-  
-  func showHint() {
-    hintLabel.isHidden = false
-    hintLabel.alpha = 0
-    UIView.animate(withDuration: 0.2, animations: {
-      self.hintLabel.alpha = 1
-    })
-  }
+}
 
+extension GameView: LoserDelegate {
   func updateLooserState() {
       let alert = UIAlertController(
           title: "Game Over",
@@ -356,17 +378,5 @@ final class GameView: UIViewController, PointsDelegate, AttemptsDelegate, Questi
       }))
       
       present(alert, animated: true)
-  }
-  
-  @objc func hideHint() {
-    UIView.animate(withDuration: 0.2, animations: {
-      self.hintLabel.alpha = 0
-    }, completion: { _ in
-      self.hintLabel.isHidden = true
-    })
-  }
-  
-  @objc func goBack() {
-    navigationController?.popViewController(animated: true)
   }
 }
